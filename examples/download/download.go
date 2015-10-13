@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"github.com/datagoes/sciter"
-	"github.com/datagoes/sciter/window"
+	"github.com/oskca/sciter"
+	"github.com/oskca/sciter/window"
 	"log"
 )
 
@@ -76,7 +76,11 @@ func test() {
 }
 
 func main() {
+	log.Println("Sciter Version:", sciter.VersionAsString())
 	flag.Parse()
+	if flag.NArg() == 0 {
+		log.Fatalln("at least one Sciter compatible page url is needed")
+	}
 	log.Println(flag.Arg(0))
 	w, err := window.New(sciter.SW_ENABLE_DEBUG|sciter.SW_GLASSY, sciter.DefaultRect)
 	if err != nil {
@@ -84,7 +88,7 @@ func main() {
 	}
 
 	w.SetTitle("Download Element Content")
-	w.LoadHtml("<html><body><span id='url'>Url To Load</span><div id='content'></div></body></html>", "/")
+	w.LoadHtml("<html><body><span id='url'>Url To Load</span><frame id='content'></frame></body></html>", "/")
 	test()
 	load(w, flag.Arg(0))
 	w.Show()
