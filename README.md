@@ -22,6 +22,13 @@ Things that are not supported:
  * Sciter Node API
  * TIScript Engine API
 
+# Getting Started
+
+ 1. Download the [sciter-sdk][] 
+ 2. Extract the sciter runtime library from [sciter-sdk][] to system PATH
+ 3. `go get -x github.com/oskca/sciter`
+ 4. Run the example and enjoy :)
+
 # The Tailered Sciter C Headers
 This binding ueses a tailored version of the sciter C Headers, which lives in directory: `include`. The included c headers are a modified version of the 
 [sciter-sdk][] standard headers.
@@ -35,7 +42,7 @@ modification and hope [Andrew Fedoniouk][author] the author would provide
 pure C header files for Sciter. :)
 
 # Sciter Version Support
-Currently supports [Sciter][] version `3.3.0.3` - `3.3.0.6`
+Currently supports [Sciter][] version `3.3.0.3` - `latest`
 
 [Sciter]: http://sciter.com/
 [sciter-sdk]: http://sciter.com/sdk/sciter-sdk-3.zip
@@ -58,3 +65,19 @@ non-commercial applications.
 [electron]:https://github.com/atom/electron
 
 [author]: http://sciter.com/about/
+
+# Sciter Desktop UI Examples
+
+![](http://sciter.com/screenshots/slide-norton360.png)
+
+![](http://sciter.com/screenshots/slide-norton-nis.png)
+
+![](http://sciter.com/screenshots/slide-surveillance.png)
+
+![](http://sciter.com/screenshots/slide-technology.png)
+
+![](http://sciter.com/screenshots/slide-sciter-ide.png)
+
+![](http://sciter.com/screenshots/slide-sciter-osx.png)
+
+![](http://sciter.com/screenshots/slide-sciter-gtk.png)
