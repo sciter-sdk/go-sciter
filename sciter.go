@@ -67,6 +67,12 @@ func Version(major bool) uint {
 	return uint(v)
 }
 
+func VersionAsString() string {
+	major := Version(true)
+	minor := Version(false)
+	return fmt.Sprintf("0x%x %x", major, minor)
+}
+
 func (s *Sciter) GetHwnd() C.HWINDOW {
 	return s.hwnd
 }
