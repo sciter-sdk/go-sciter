@@ -26,6 +26,13 @@ Things that are not supported:
 
  1. Download the [sciter-sdk][] 
  2. Extract the sciter runtime library from [sciter-sdk][] to system PATH
+    
+    The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix
+    like `dll` `so` or `dylib` (osx is not tested)
+
+    The `system PATH` is os specific, under Windows simply copying `sciter32.dll` or `sciter64.dll` to `c:\windows\system32` is just enough.
+
+
  3. `go get -x github.com/oskca/sciter`
  4. Run the example and enjoy :)
 
