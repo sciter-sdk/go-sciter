@@ -1111,10 +1111,13 @@ type EventHandler struct {
 	// Calls from TIScript. Override this if you want your own methods accessible directly from tiscript engine.
 	// Use tiscript::args to access parameters.
 	OnTiscriptMethodCall func(he *Element, params *TiscriptMethodParams) bool
-	OnDataArrived        func(he *Element, params *DataArrivedParams) bool
-	OnSize               func(he *Element)
-	OnScroll             func(he *Element, params *ScrollParams) bool
-	OnGesture            func(he *Element, params *GestureParams) bool
+	// call when resource is loaded but not used
+	// return true would cancel the resource usage
+	// return false would follow the normal procedure
+	OnDataArrived func(he *Element, params *DataArrivedParams) bool
+	OnSize        func(he *Element)
+	OnScroll      func(he *Element, params *ScrollParams) bool
+	OnGesture     func(he *Element, params *GestureParams) bool
 }
 
 // case SC_LOAD_DATA:          return static_cast<BASE*>(this)->on_load_data((LPSCN_LOAD_DATA) pnm);
