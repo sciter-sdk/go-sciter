@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>angles demo</title>
+    <style>
+    
+      #gradient-rotated
+      {
+        position:absolute;
+        top:40px; left:40px;
+        width:300px; height:300px; 
+        background: linear-gradient(45deg, red, yellow);
+          background-image: -moz-linear-gradient(top left -45deg, red, yellow); // these guys use CCW direction in gradients for some reasons
+          background-image: -webkit-linear-gradient(-45deg, red, yellow);
+      }
+      
+      #rotated { 
+        position:absolute;
+        top:40px; left:40px;
+        border:1px dashed brown; 
+        width:424px; height:50px; 
+        transform:rotate(45deg);
+        transform-origin:top left;
+          -moz-transform:rotate(45deg);
+          -webkit-transform:rotate(45deg);
+          -moz-transform-origin:top left;
+          -webkit-transform-origin:top left;
+        background: linear-gradient(left, red, yellow);
+          background-image: -moz-linear-gradient(left, red, yellow);
+          background-image: -webkit-linear-gradient(left, red, yellow);
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id=gradient-rotated>gradient rotated +45&deg;</div>
+    <div id=rotated>element rotated +45&deg;</div>
+  </body>
+</html>

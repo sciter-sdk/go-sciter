@@ -1,0 +1,68 @@
+<html resizeable>
+  <head>
+    <style type="text/css">
+      html{
+        /*overflow: hidden;*/
+        padding-left: 20dip;
+        min-width:20%;
+        width: 300dip;
+        max-width: 30%;
+        height: 400dip;
+      }
+      ol {
+        margin-left: 20dip;
+        padding-left: 20dip;
+        /*overflow: scroll;*/
+      }
+      div#btns {
+      }
+      div#output{
+        size:*;
+        overflow: scroll;
+      }
+      button#csss {
+        click!:gprintln("hello world", 11,22,33,44);
+      }
+    </style>
+    <script type="text/tiscript" src="res/decorators.tis"></script>
+    <script type="text/tiscript">
+          // for host calls
+          function gFunc(a,b){
+            return String.printf("script defined function with arg, a:%v, b:%v", a, b)
+          }
+          var root = view.root
+          root.mfn = function(a, b){return String.printf("script defined method function with arg, a:%v, b:%v", a, b)}
+          // handlers
+          self.$(#functor).on("click", function(){
+            var k = view.kkk()
+            view.gprintln("gprintln kkkk")
+            view.gprintln("k.f(1,2,3,4.5):", k.f(1,2,3,4.5))
+          })
+
+          root.$(#sumall).on("click", function(){
+            view.gprintln("sumall(1,2,3,45):", view.sumall(1,2,3,45))
+          })
+
+          self.$(#mcall).on("click", function(){
+            root.mcall("nice to see you", 100.5, 123)
+          })
+    </script>
+  </head>
+<body>
+  <H1>Sciter Testing Page</H1>
+  <div id="btns">
+    <button id="csss">CSS!!! Button</button>
+    <button id="functor">Tiscript Native Functor Button</button>
+    <button id="native">Native Handler Button</button>
+    <button id="sumall">Do Sum</button>
+    <button id="mcall">Method Call</button>
+    <form >
+      <label>X (Ctrl+1):</label><input type="integer" name="x" step="20" accesskey="^1" />
+      <label>Y (Ctrl+2):</label><input type="integer" name="y" step="20" accesskey="^2" />
+    </form>
+  </div>
+  <div id="output">
+    
+  </div>
+</body>
+</html>
