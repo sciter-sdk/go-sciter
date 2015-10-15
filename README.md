@@ -9,6 +9,7 @@ Most [Sciter][] API are supported, including:
  * Html string/file loading
  * DOM manipulation/callback/event handling
  * DOM state/attribute handling
+ * Custom resource loading
  * Sciter Behavior
  * Sciter Options
  * Sciter Value support
