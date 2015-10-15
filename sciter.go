@@ -1,3 +1,7 @@
+// This package provides a Golang bindings of Sciter using cgo.
+// Using go sciter you must have the platform specified sciter dynamic library
+// downloaded from sciter-sdk,
+// the library itself is rather small (under 5MB, less than 2MB when upxed) .
 package sciter
 
 /*
