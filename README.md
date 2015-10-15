@@ -21,16 +21,17 @@ Things that are not supported:
  * Sciter Node API
  * TIScript Engine API
 
-# The Tailered Sciter C API
-This binding ueses a tailored version of the sciter C api, which lives in directory: `include`. The included c headers are mostly copied from the 
-[sciter-sdk][].
+# The Tailered Sciter C Headers
+This binding ueses a tailored version of the sciter C Headers, which lives in directory: `include`. The included c headers are a modified version of the 
+[sciter-sdk][] standard headers.
 
 It seems [Sciter][] is developed using C++, and the included headers in the 
 [Sciter SDK][sciter-sdk] are a mixture of C and C++, which is not 
 quite suitable for an easy golang binding. 
 
-I'm not much fond of C++ since I started to use Golang, so I hope 
-[Andrew Fedoniouk][author] the author would provide an pure C header for Sciter. :)
+I'm not much fond of C++ since I started to use Golang, so I made this
+modification and hope [Andrew Fedoniouk][author] the author would provide 
+pure C header files for Sciter. :)
 
 # Sciter Version Support
 Currently supports [Sciter][] version `3.3.0.3` - `3.3.0.6`
