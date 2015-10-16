@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/datagoes/sciter"
-	"github.com/datagoes/sciter/window"
+	"github.com/oskca/sciter"
+	"github.com/oskca/sciter/window"
 	"log"
 )
 

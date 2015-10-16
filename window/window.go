@@ -1,7 +1,7 @@
 package window
 
 import (
-	"github.com/datagoes/sciter"
+	"github.com/oskca/sciter"
 	// "runtime"
 )
 

@@ -2,7 +2,7 @@ package rice
 
 import (
 	"github.com/GeertJohan/go.rice"
-	"github.com/datagoes/sciter"
+	"github.com/oskca/sciter"
 	"log"
 	"strings"
 )

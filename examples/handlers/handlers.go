@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/datagoes/sciter"
-	"github.com/datagoes/sciter/rice"
-	"github.com/datagoes/sciter/window"
+	"github.com/oskca/sciter"
+	"github.com/oskca/sciter/rice"
+	"github.com/oskca/sciter/window"
 	"log"
 )
 

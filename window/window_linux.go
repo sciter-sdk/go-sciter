@@ -17,7 +17,7 @@ GtkWindow* gshow(GtkWidget* hwnd){
 import "C"
 import (
 	"fmt"
-	"github.com/Archs/sciter"
+	"github.com/oskca/sciter"
 	"unsafe"
 )
 

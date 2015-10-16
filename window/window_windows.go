@@ -6,8 +6,8 @@ package window
 import "C"
 import (
 	"fmt"
-	"github.com/datagoes/sciter"
 	"github.com/lxn/win"
+	"github.com/oskca/sciter"
 	"log"
 	"syscall"
 	"unsafe"
