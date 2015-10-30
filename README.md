@@ -32,9 +32,19 @@ Things that are not supported:
 
     The `system PATH` is os specific, under Windows simply copying `sciter32.dll` or `sciter64.dll` to `c:\windows\system32` is just enough.
 
+ 3. Set up GCC envrionmnet for CGO
 
- 3. `go get -x github.com/oskca/sciter`
- 4. Run the example and enjoy :)
+    [mingw64-gcc][] is recommended for Windows users.
+
+    OSX is not yet tested.
+
+    Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
+    Due to the dependencies of gkt version of [Sciter][] runtime library, only
+    `debian 8` is tested but not for other distributions.
+
+ 4. `go get -x github.com/oskca/sciter`
+
+ 5. Run the example and enjoy :)
 
 # The Tailered Sciter C Headers
 This binding ueses a tailored version of the sciter C Headers, which lives in directory: `include`. The included c headers are a modified version of the 
@@ -72,6 +82,8 @@ non-commercial applications.
 [electron]:https://github.com/atom/electron
 
 [author]: http://sciter.com/about/
+[mingw64-gcc]: http://sourceforge.net/projects/mingw-w64/
+
 
 # Sciter Desktop UI Examples
 
