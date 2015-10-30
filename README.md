@@ -34,7 +34,7 @@ Things that are not supported:
 
  3. Set up GCC envrionmnet for CGO
 
-    [mingw64-gcc][] is recommended for Windows users.
+    [mingw64-gcc][] (5.2.0 is tested) is recommended for Windows users.
 
     OSX is not yet tested.
 
