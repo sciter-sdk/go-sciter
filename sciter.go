@@ -1275,6 +1275,11 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 			p := (*FocusParams)(params)
 			handled = handler.OnFocus(el, p)
 		}
+	case HANDLE_DRAW:
+		if handler.OnDraw != nil {
+			p := (*DrawParams)(params)
+			handled = handler.OnDraw(el, p)
+		}
 	case HANDLE_TIMER:
 		if handler.OnTimer != nil {
 			p := (*TimerParams)(params)

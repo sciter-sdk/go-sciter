@@ -1091,6 +1091,7 @@ type EventHandler struct {
 	OnMouse    func(he *Element, params *MouseParams) bool
 	OnKey      func(he *Element, params *KeyParams) bool
 	OnFocus    func(he *Element, params *FocusParams) bool
+	OnDraw    func(he *Element, params *DrawParams) bool
 	OnTimer    func(he *Element, params *TimerParams) bool
 	// notification events from builtin behaviors - synthesized events: BUTTON_CLICK, VALUE_CHANGED
 	// see enum BEHAVIOR_EVENTS
