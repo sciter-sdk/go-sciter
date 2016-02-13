@@ -749,8 +749,8 @@ func (e *Element) NthAttr(n int) (value string, err error) {
 	cn := C.UINT(n)
 	cparam := C.LPVOID(unsafe.Pointer(&value))
 	// cgo call
-	r := C.SciterGetNthAttributeNameCB(e.handle, cn, lpcstr_receiver, cparam)
-	err = wrapDomResult(r, "SciterGetNthAttributeNameCB")
+	r := C.SciterGetNthAttributeValueCB(e.handle, cn, lpcwstr_receiver, cparam)
+	err = wrapDomResult(r, "SciterGetNthAttributeValueCB")
 	return
 }
 
