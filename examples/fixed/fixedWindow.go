@@ -14,7 +14,7 @@ func main() {
 	}
 	rect := sciter.NewRect(300, 300, 300, 400)
 	// create window
-	w, err := window.New(sciter.DefaultWindowCreaetFlag, rect)
+	w, err := window.New(sciter.DefaultWindowCreateFlag, rect)
 	if err != nil {
 		log.Fatal(err)
 	}

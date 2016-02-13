@@ -107,7 +107,7 @@ func main() {
 		log.Fatal("no html file found")
 	}
 	// create window
-	w, err := window.New(sciter.DefaultWindowCreaetFlag, sciter.DefaultRect)
+	w, err := window.New(sciter.DefaultWindowCreateFlag, sciter.DefaultRect)
 	if err != nil {
 		log.Fatal(err)
 	}

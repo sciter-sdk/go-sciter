@@ -41,7 +41,7 @@ const (
 var (
 	// create an resizable main window with minimize/maximize controls
 	// linux must use this combination to create the main window correctly
-	DefaultWindowCreaetFlag = SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_MAIN | SW_ENABLE_DEBUG
+	DefaultWindowCreateFlag = SW_TITLEBAR | SW_RESIZEABLE | SW_CONTROLS | SW_MAIN | SW_ENABLE_DEBUG
 )
 
 // enum OUTPUT_SUBSYTEMS
@@ -1091,7 +1091,7 @@ type EventHandler struct {
 	OnMouse    func(he *Element, params *MouseParams) bool
 	OnKey      func(he *Element, params *KeyParams) bool
 	OnFocus    func(he *Element, params *FocusParams) bool
-	OnDraw    func(he *Element, params *DrawParams) bool
+	OnDraw     func(he *Element, params *DrawParams) bool
 	OnTimer    func(he *Element, params *TimerParams) bool
 	// notification events from builtin behaviors - synthesized events: BUTTON_CLICK, VALUE_CHANGED
 	// see enum BEHAVIOR_EVENTS
