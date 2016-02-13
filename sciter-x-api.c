@@ -46,7 +46,7 @@
        }
        // assert(_api);
        if( !_api ) {
-         //::MessageBox(NULL, TEXT("Sciter engine not found, quiting"),TEXT("Error"),MB_OK);
+         MessageBox(NULL, TEXT("Sciter engine not found, quiting"),TEXT("Error"),MB_OK);
          exit(-1);
        }
        return _api;
