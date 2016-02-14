@@ -1175,7 +1175,7 @@ func (e *Element) Insert(el *Element, index int) error {
 	// args
 	cindex := C.UINT(index)
 	// cgo call
-	r := C.SciterInsertElement(e.handle, el.handle, cindex)
+	r := C.SciterInsertElement(el.handle, e.handle, cindex)
 	return wrapDomResult(r, "SciterInsertElement")
 }
 
