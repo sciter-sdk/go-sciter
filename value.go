@@ -181,6 +181,36 @@ func (v *Value) IsObject() bool {
 	return v.t == T_OBJECT
 }
 
+// bool is_object_native() const   {  return t == T_OBJECT && u == UT_OBJECT_NATIVE; }
+func (v *Value) IsObjectNative() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_NATIVE
+}
+
+// bool is_object_array() const    {  return t == T_OBJECT && u == UT_OBJECT_ARRAY; }
+func (v *Value) IsObjectArray() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_ARRAY
+}
+
+// bool is_object_function() const {  return t == T_OBJECT && u == UT_OBJECT_FUNCTION; }
+func (v *Value) IsObjecFunction() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_FUNCTION
+}
+
+// bool is_object_object() const   {  return t == T_OBJECT && u == UT_OBJECT_OBJECT; } // that is plain TS object
+func (v *Value) IsObjectObject() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_OBJECT
+}
+
+// bool is_object_class() const    {  return t == T_OBJECT && u == UT_OBJECT_CLASS; }  // that is TS class
+func (v *Value) IsObjectClass() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_CLASS
+}
+
+// bool is_object_error() const    {  return t == T_OBJECT && u == UT_OBJECT_ERROR; }  // that is TS error
+func (v *Value) IsObjectE() bool {
+	return v.t == T_OBJECT && v.u == UT_OBJECT_ERROR
+}
+
 // bool is_dom_element() const { return t == T_DOM_OBJECT; }
 func (v *Value) IsDomElement() bool {
 	return v.t == T_DOM_OBJECT
