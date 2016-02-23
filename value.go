@@ -195,5 +195,6 @@ func (v *Value) IsNull() bool {
 func NullValue() *Value {
 	v := new(Value)
 	v.t = T_NULL
+	v.init()
 	return v
 }
