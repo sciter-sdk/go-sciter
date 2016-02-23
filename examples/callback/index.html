@@ -1,0 +1,12 @@
+<div>
+    <button id="btn">Click Me</button>
+</div>
+<script type="text/tiscript">
+function callback(abc){
+    view.msgbox(#information,abc);
+}
+
+$(#btn).on("click",function(){
+    view.getNetInformation(1,"test",callback);
+});
+</script>
