@@ -24,7 +24,7 @@ func setEventHandler(w *window.Window) {
 		log.Println("Arg 0:", args[0], args[0].IsInt())
 		log.Println("Arg 1:", args[1], args[1].IsString())
 		log.Println("Arg 2: IsFunction", args[2], args[2].IsFunction())
-		log.Println("Arg 2: IsObjecFunction", args[2], args[2].IsObjecFunction())
+		log.Println("Arg 2: IsObjectFunction", args[2], args[2].IsObjectFunction())
 		fn := args[2]
 		fn.Invoke(sciter.NullValue(), "[Native Script]", sciter.NewValue("OK"))
 		ret := sciter.NewValue()

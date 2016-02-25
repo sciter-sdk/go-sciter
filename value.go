@@ -192,7 +192,7 @@ func (v *Value) IsObjectArray() bool {
 }
 
 // bool is_object_function() const {  return t == T_OBJECT && u == UT_OBJECT_FUNCTION; }
-func (v *Value) IsObjecFunction() bool {
+func (v *Value) IsObjectFunction() bool {
 	return v.t == T_OBJECT && v.u == UT_OBJECT_FUNCTION
 }
 
