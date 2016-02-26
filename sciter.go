@@ -965,31 +965,31 @@ func (e *Element) CombineURL(url string) (combinedUrl string, err error) {
 
 //export goSciterElementCallback
 func goSciterElementCallback(he C.HELEMENT, param unsafe.Pointer) int {
-	slice := globalResults[int(uintptr(param))]
+	idx := int(uintptr(param))
 	e := WrapElement(he)
-	slice = append(slice, e)
-	globalResults[int(uintptr(param))] = slice
+	globalElementCallbackResults[idx] = append(globalElementCallbackResults[idx], e)
 	return 0
 }
 
 var (
-	sciterElementCallback = (*C.SciterElementCallback)(unsafe.Pointer(C.SciterElementCallback_cgo))
-	globalResults         = make([][]*Element, 0)
+	sciterElementCallback        = (*C.SciterElementCallback)(unsafe.Pointer(C.SciterElementCallback_cgo))
+	globalElementCallbackResults = make([][]*Element, 0)
 )
 
 // SCDOM_RESULT  SciterSelectElementsW(HELEMENT  he, LPCWSTR   CSS_selectors, SciterElementCallback* callback, LPVOID param)
 func (e *Element) Select(css_selectors string) ([]*Element, error) {
 	results := make([]*Element, 0, 32)
-	globalResults = append(globalResults, results)
-	idx := len(globalResults) - 1
+	globalElementCallbackResults = append(globalElementCallbackResults, results)
+	idx := len(globalElementCallbackResults) - 1
 	// args
 	cselectors := C.LPCWSTR(StringToWcharPtr(css_selectors))
 	cparam := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// cgo call
-	// r := C.SciterSelectElementsW(e.handle, cselectors, sciterElementCallback, cparam)
 	r := C.SciterSelectElementsW(e.handle, cselectors, sciterElementCallback, cparam)
-	// FIXME relesea result in globalResults
-	return globalResults[idx], wrapDomResult(r, "SciterSelectElementsW")
+	err := wrapDomResult(r, "SciterSelectElementsW")
+	results = globalElementCallbackResults[idx]
+	globalElementCallbackResults[idx] = nil
+	return results, err
 }
 
 func (e *Element) SelectFirst(css_selectors string) (*Element, error) {
