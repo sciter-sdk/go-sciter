@@ -1360,25 +1360,23 @@ var (
 
 // SCDOM_RESULT  SciterDetachEventHandler( HELEMENT he, LPELEMENT_EVENT_PROC pep, LPVOID tag )
 func (e *Element) DetachEventHandler(handler *EventHandler) error {
-	// args
-	idx := findEventHandlerIdx(handler)
-	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// test
 	hm, ok := elementHandlerMap[e]
 	if !ok {
 		hm = make(map[*EventHandler]struct{}, 0)
 		elementHandlerMap[e] = hm
 	}
-	_, exists := hm[handler]
-	if !exists {
+	if _, exists := hm[handler]; !exists {
 		return nil
 	}
+	// args
+	idx := findEventHandlerIdx(handler)
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// cgo call
 	if ret := C.SciterDetachEventHandler(e.handle, element_event_proc, tag); SCDOM_RESULT(ret) != SCDOM_OK {
 		return wrapDomResult(ret, "SciterDetachEventHandler")
 	} else {
 		globalEventHandlers[idx] = nil
-		// remove from the map
 		delete(hm, handler)
 	}
 	return nil
