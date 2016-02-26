@@ -31,8 +31,6 @@ import (
 
 type Sciter struct {
 	hwnd C.HWINDOW
-	// EventHandler for hwnd
-	eventHandlers map[*EventHandler]struct{} // sciter can have this
 	// because it live with the PROGRAM
 	callbacks map[*CallbackHandler]struct{}
 	// map scripting function name to NativeFunctor
@@ -45,9 +43,8 @@ var (
 
 func Wrap(hwnd C.HWINDOW) *Sciter {
 	s := &Sciter{
-		hwnd:          hwnd,
-		eventHandlers: make(map[*EventHandler]struct{}),
-		callbacks:     make(map[*CallbackHandler]struct{}),
+		hwnd:      hwnd,
+		callbacks: make(map[*CallbackHandler]struct{}),
 	}
 	return s
 }
@@ -1233,15 +1230,18 @@ var (
 	behaviors           = make(map[*EventHandler]int, 32)
 )
 
+const (
+	handlerNotFound = -1
+)
+
+// -1 indacates not found
 func findEventHandlerIdx(eh *EventHandler) int {
 	for i, v := range globalEventHandlers {
 		if v == eh {
 			return i
 		}
 	}
-	// unreachable
-	panic("EventHandler not used yet")
-	return -1
+	return handlerNotFound
 }
 
 //export goElementEventProc
@@ -1393,20 +1393,19 @@ func (e *Element) isValid() bool {
 // Any Element that calls this function would not be gc collected any more
 // thus prevent the handler missing in sciter callbacks
 func (e *Element) AttachEventHandler(handler *EventHandler) error {
-	// args
-	globalEventHandlers = append(globalEventHandlers, handler)
-	idx := len(globalEventHandlers) - 1
-	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	hm, ok := elementHandlerMap[e]
 	if !ok {
 		hm = make(map[*EventHandler]struct{}, 0)
 		elementHandlerMap[e] = hm
 	}
-	_, exists := hm[handler]
 	// allready attached
-	if exists {
+	if _, exists := hm[handler]; exists {
 		return nil
 	}
+	// args
+	globalEventHandlers = append(globalEventHandlers, handler)
+	idx := len(globalEventHandlers) - 1
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// do attach
 	hm[handler] = struct{}{}
 	// Don't let the caller disable ATTACH/DETACH events, otherwise we
@@ -1430,10 +1429,13 @@ func (e *Element) attachBehavior(handler *EventHandler) {
 
 // SCDOM_RESULT  SciterWindowAttachEventHandler( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag, UINT subscription )
 func (s *Sciter) AttachWindowEventHandler(handler *EventHandler) error {
-	if _, ok := s.eventHandlers[handler]; ok {
-		return nil
+	// prevent duplicated attachement
+	for _, v := range globalEventHandlers {
+		if v == handler {
+			return nil
+		}
 	}
-	s.eventHandlers[handler] = struct{}{}
+	// new attach
 	// args
 	globalEventHandlers = append(globalEventHandlers, handler)
 	idx := len(globalEventHandlers) - 1
@@ -1455,18 +1457,15 @@ func (s *Sciter) AttachWindowEventHandler(handler *EventHandler) error {
 
 // SCDOM_RESULT  SciterWindowDetachEventHandler( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag )
 func (s *Sciter) DetachWindowEventHandler(handler *EventHandler) error {
-	if _, ok := s.eventHandlers[handler]; !ok {
-		return nil
-	}
-	delete(s.eventHandlers, handler)
 	// if s.WindowEventHandler != nil {
 	idx := findEventHandlerIdx(handler)
+	if idx == handlerNotFound {
+		return nil
+	}
 	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	ret := C.SciterWindowDetachEventHandler(s.hwnd, element_event_proc, tag)
 	globalEventHandlers[idx] = nil
 	return wrapDomResult(ret, "SciterWindowDetachEventHandler")
-	// }
-	// return nil
 }
 
 // SCDOM_RESULT  SciterSendEvent( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT reason, /*out*/ BOOL* handled) ;//{ return SAPI()->SciterSendEvent( he,appEventCode,heSource,reason,handled); }
