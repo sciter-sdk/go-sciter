@@ -1221,12 +1221,24 @@ func (e *Element) SetTimer(milliseconds int) error {
 var (
 	// Hold a reference to handlers that are in-use so that they don't
 	// get garbage collected.
-	behaviors = make(map[*EventHandler]int, 32)
+	globalEventHandlers = make([]*EventHandler, 0)
+	behaviors           = make(map[*EventHandler]int, 32)
 )
+
+func findEventHandlerIdx(eh *EventHandler) int {
+	for i, v := range globalEventHandlers {
+		if v == eh {
+			return i
+		}
+	}
+	// unreachable
+	panic("EventHandler not used yet")
+	return -1
+}
 
 //export goElementEventProc
 func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params unsafe.Pointer) int {
-	handler := (*EventHandler)(tag)
+	handler := globalEventHandlers[int(uintptr(tag))]
 	handled := false
 	// el := WrapElement(he)
 	el := WrapElement(he)
@@ -1341,7 +1353,8 @@ var (
 // SCDOM_RESULT  SciterDetachEventHandler( HELEMENT he, LPELEMENT_EVENT_PROC pep, LPVOID tag )
 func (e *Element) DetachEventHandler(handler *EventHandler) error {
 	// args
-	tag := C.LPVOID(unsafe.Pointer(handler))
+	idx := findEventHandlerIdx(handler)
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// test
 	hm, ok := elementHandlerMap[e]
 	if !ok {
@@ -1356,6 +1369,7 @@ func (e *Element) DetachEventHandler(handler *EventHandler) error {
 	if ret := C.SciterDetachEventHandler(e.handle, element_event_proc, tag); SCDOM_RESULT(ret) != SCDOM_OK {
 		return wrapDomResult(ret, "SciterDetachEventHandler")
 	} else {
+		globalEventHandlers[idx] = nil
 		// remove from the map
 		delete(hm, handler)
 	}
@@ -1372,7 +1386,9 @@ func (e *Element) isValid() bool {
 // thus prevent the handler missing in sciter callbacks
 func (e *Element) AttachEventHandler(handler *EventHandler) error {
 	// args
-	tag := C.LPVOID(unsafe.Pointer(handler))
+	globalEventHandlers = append(globalEventHandlers, handler)
+	idx := len(globalEventHandlers) - 1
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	hm, ok := elementHandlerMap[e]
 	if !ok {
 		hm = make(map[*EventHandler]struct{}, 0)
@@ -1411,8 +1427,9 @@ func (s *Sciter) AttachWindowEventHandler(handler *EventHandler) error {
 	}
 	s.eventHandlers[handler] = struct{}{}
 	// args
-	tag := C.LPVOID(unsafe.Pointer(handler))
-
+	globalEventHandlers = append(globalEventHandlers, handler)
+	idx := len(globalEventHandlers) - 1
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// // detach first
 	// s.DetachWindowEventHandler()
 
@@ -1435,8 +1452,10 @@ func (s *Sciter) DetachWindowEventHandler(handler *EventHandler) error {
 	}
 	delete(s.eventHandlers, handler)
 	// if s.WindowEventHandler != nil {
-	tag := C.LPVOID(unsafe.Pointer(handler))
+	idx := findEventHandlerIdx(handler)
+	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	ret := C.SciterWindowDetachEventHandler(s.hwnd, element_event_proc, tag)
+	globalEventHandlers[idx] = nil
 	return wrapDomResult(ret, "SciterWindowDetachEventHandler")
 	// }
 	// return nil
