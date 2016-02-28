@@ -7,6 +7,7 @@ function callback(abc){
 }
 
 $(#btn).on("click",function(){
-    view.getNetInformation(1,"test",callback);
+    var obj = {num:100, str:"Hello World"};
+    view.getNetInformation(1,"test",callback, obj);
 });
 </script>

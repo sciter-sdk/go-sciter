@@ -25,6 +25,12 @@ func setEventHandler(w *window.Window) {
 		log.Println("Arg 1:", args[1], args[1].IsString())
 		log.Println("Arg 2: IsFunction", args[2], args[2].IsFunction())
 		log.Println("Arg 2: IsObjectFunction", args[2], args[2].IsObjectFunction())
+		log.Println("args[3].IsMap():", args[3].IsMap(), args[3].Length())
+		log.Println("args[3].IsObject():", args[3].IsObject(), args[3].Length(), args[3].Get("str"))
+		args[3].EnumerateKeyValue(func(key, val *sciter.Value) bool {
+			log.Println(key, val)
+			return true
+		})
 		fn := args[2]
 		fn.Invoke(sciter.NullValue(), "[Native Script]", sciter.NewValue("OK"))
 		ret := sciter.NewValue()
