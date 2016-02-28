@@ -20,6 +20,8 @@ extern VOID NATIVE_FUNCTOR_INVOKE_cgo( VOID* tag, UINT argc, const VALUE* argv, 
 extern VOID NATIVE_FUNCTOR_RELEASE_cgo( VOID* tag );
 // cmp
 extern INT SC_CALLBACK ELEMENT_COMPARATOR_cgo( HELEMENT he1, HELEMENT he2, LPVOID param );
+// ValueEnumElements
+extern BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval );
 */
 import "C"
 import (
@@ -2051,7 +2053,33 @@ func (pdst *Value) NthElementKey(idx int) (val *Value) {
 	return val
 }
 
+/**Callback function used with #ValueEnumElements().
+ * return TRUE to continue enumeration
+ */
+// typedef BOOL SC_CALLBACK KeyValueCallback( LPVOID param, const VALUE* pkey, const VALUE* pval );
+
+type KeyValueCallback func(key, value *Value) bool
+
+//export goKeyValueCallback
+func goKeyValueCallback(param unsafe.Pointer, key, value *Value) bool {
+	fn := *(*KeyValueCallback)(param)
+	return fn(key, value)
+}
+
+/**
+ * ValueEnumElements - enumeartes key/value pairs of T_MAP, T_FUNCTION and T_OBJECT values
+ * - T_MAP - key of nth key/value pair in the map;
+ * - T_FUNCTION - name of nth argument of the function (if any);
+ */
 // UINT  ValueEnumElements ( VALUE* pval, KeyValueCallback* penum, LPVOID param) ;//{ return SAPI()->ValueEnumElements (pval,penum,param); }
+func (pdst *Value) EnumerateKeyValue(fn KeyValueCallback) error {
+	// args
+	cpval := (*C.VALUE)(unsafe.Pointer(pdst))
+	cpenum := (*C.KeyValueCallback)(unsafe.Pointer(C.KeyValueCallback_cgo))
+	cparam := unsafe.Pointer(&fn)
+	// cgo call
+	return wrapValueResult(VALUE_RESULT(C.ValueEnumElements(cpval, cpenum, cparam)), "ValueEnumElements")
+}
 
 // UINT  ValueSetValueToKey ( VALUE* pval, const VALUE* pkey, const VALUE* pval_to_set) ;//{ return SAPI()->ValueSetValueToKey ( pval, pkey, pval_to_set); }
 

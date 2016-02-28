@@ -3,19 +3,19 @@
 
 // typedef BOOL SC_CALLBACK SciterElementCallback( HELEMENT he, LPVOID param );
 
-BOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param) 
+BOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param)
 {
     return goSciterElementCallback(he, param);
 }
 
 // typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE bytes, UINT num_bytes, LPVOID param );
-VOID SC_CALLBACK LPCBYTE_RECEIVER_cgo( LPCBYTE bytes, UINT num_bytes, LPVOID param ) 
+VOID SC_CALLBACK LPCBYTE_RECEIVER_cgo( LPCBYTE bytes, UINT num_bytes, LPVOID param )
 {
     goLPCBYTE_RECEIVER(bytes, num_bytes, param);
 }
 
 // typedef VOID SC_CALLBACK LPCWSTR_RECEIVER( LPCWSTR str, UINT str_length, LPVOID param );
-VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo( LPCWSTR str, UINT str_length, LPVOID param ) 
+VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo( LPCWSTR str, UINT str_length, LPVOID param )
 {
     goLPCWSTR_RECEIVER(str, str_length, param);
 }
@@ -23,7 +23,7 @@ VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo( LPCWSTR str, UINT str_length, LPVOID para
 // typedef VOID SC_CALLBACK LPCSTR_RECEIVER( LPCSTR str, UINT str_length, LPVOID param );
 VOID SC_CALLBACK LPCSTR_RECEIVER_cgo( LPCSTR str, UINT str_length, LPVOID param )
 {
-    goLPCSTR_RECEIVER(str, str_length, param); 
+    goLPCSTR_RECEIVER(str, str_length, param);
 }
 
 // typedef BOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
@@ -55,4 +55,11 @@ VOID NATIVE_FUNCTOR_RELEASE_cgo( VOID* tag )
 INT SC_CALLBACK ELEMENT_COMPARATOR_cgo( HELEMENT he1, HELEMENT he2, LPVOID param )
 {
     goELEMENT_COMPARATOR(he1, he2, param);
+}
+
+// typedef BOOL SC_CALLBACK KeyValueCallback( LPVOID param, const VALUE* pkey, const VALUE* pval );
+
+BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval )
+{
+    return goKeyValueCallback( param,  pkey,  pval );
 }
