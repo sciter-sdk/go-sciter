@@ -99,10 +99,9 @@
   #endif
 
 #elif defined(OSX)
-
-  //#ifdef __OBJC__
-  //  #define char16_t uint16_t
-  //#endif
+  #include <stddef.h>  // size_t
+  #include <stdint.h>  // uint8_t, etc
+	
   #ifndef BOOL
     typedef signed char BOOL;
   #endif
