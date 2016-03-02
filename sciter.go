@@ -2076,7 +2076,7 @@ func (pdst *Value) EnumerateKeyValue(fn KeyValueCallback) error {
 	// args
 	cpval := (*C.VALUE)(unsafe.Pointer(pdst))
 	cpenum := (*C.KeyValueCallback)(unsafe.Pointer(C.KeyValueCallback_cgo))
-	cparam := unsafe.Pointer(&fn)
+	cparam := C.LPVOID(unsafe.Pointer(&fn))
 	// cgo call
 	return wrapValueResult(VALUE_RESULT(C.ValueEnumElements(cpval, cpenum, cparam)), "ValueEnumElements")
 }
