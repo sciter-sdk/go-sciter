@@ -2,17 +2,35 @@
 
 package window
 
+/*
+#cgo CFLAGS: -x objective-c
+#cgo LDFLAGS: -framework Cocoa
+#import <Cocoa/Cocoa.h>
+#import <AppKit/NSApplication.h>
+
+int Run(void) {
+    [NSApplication sharedApplication];
+    [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+
+    [NSApp activateIgnoringOtherApps:YES];
+    [NSApp run];
+    return 0;
+}
+
+void SetWindowTitle(void * w, char * title) {
+	[[(NSView*)w window] setTitle:[NSString stringWithUTF8String:title]];
+}
+
+void ShowWindow(void * w) {
+	[[(NSView*)w window] makeKeyAndOrderFront:nil];
+}
+*/
+import "C"
 import (
 	"fmt"
-	"log"
-
 	"github.com/oskca/sciter"
-	// "runtime"
+	"unsafe"
 )
-
-// func (w *Window) run() {
-// 	// runtime.LockOSThread()
-// }
 
 func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, error) {
 	w := new(Window)
@@ -33,15 +51,14 @@ func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, e
 	return w, nil
 }
 func (s *Window) SetTitle(title string) {
-	log.Print("SetTitle in window_darwin.go not implemented")
+	C.SetWindowTitle(unsafe.Pointer(s.GetHwnd()), C.CString(title))
 }
 
 func (s *Window) Show() {
-	log.Print("Show in window_darwin.go not implemented")
+	C.ShowWindow(unsafe.Pointer(s.GetHwnd()))
 }
 
 func (s *Window) Run() {
-	log.Print("OS X not yet supported in Sciter, so Run isn't doing anything yet.")
 	s.run()
-	//C.gtk_main()
+	C.Run()
 }

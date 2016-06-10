@@ -2,7 +2,6 @@ package sciter
 
 /*
 #cgo CFLAGS: -Iinclude
-#cgo LDFLAGS: -framework Cocoa
 #include "sciter-x.h"
 */
 import "C"
