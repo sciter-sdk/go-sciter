@@ -99,6 +99,9 @@
   #endif
 
 #elif defined(OSX)
+  #include <stddef.h> 
+  #include <stdint.h>
+
 
   //#ifdef __OBJC__
   //  #define char16_t uint16_t

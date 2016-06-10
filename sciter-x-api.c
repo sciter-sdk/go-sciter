@@ -175,7 +175,7 @@
 #endif
     BOOL    SCAPI SciterLoadFile (HWINDOW hWndSciter, LPCWSTR filename) { return SAPI(NULL)->SciterLoadFile (hWndSciter,filename); }
     BOOL    SCAPI SciterLoadHtml (HWINDOW hWndSciter, LPCBYTE html, UINT htmlSize, LPCWSTR baseUrl) { return SAPI(NULL)->SciterLoadHtml (hWndSciter,html,htmlSize,baseUrl); }
-    VOID    SCAPI SciterSetCallback (HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam) { SAPI(NULL)->SciterSetCallback (hWndSciter,cb,cbParam); }
+    LPVOID    SCAPI SciterSetCallback (HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam) { SAPI(NULL)->SciterSetCallback (hWndSciter,cb,cbParam); }
     BOOL    SCAPI SciterSetMasterCSS (LPCBYTE utf8, UINT numBytes) { return SAPI(NULL)->SciterSetMasterCSS (utf8,numBytes); }
     BOOL    SCAPI SciterAppendMasterCSS (LPCBYTE utf8, UINT numBytes) { return SAPI(NULL)->SciterAppendMasterCSS (utf8,numBytes); }
     BOOL    SCAPI SciterSetCSS (HWINDOW hWndSciter, LPCBYTE utf8, UINT numBytes, LPCWSTR baseUrl, LPCWSTR mediaType) { return SAPI(NULL)->SciterSetCSS (hWndSciter,utf8,numBytes,baseUrl,mediaType); }
@@ -185,7 +185,7 @@
     UINT    SCAPI SciterGetMinHeight (HWINDOW hWndSciter, UINT width) { return SAPI(NULL)->SciterGetMinHeight (hWndSciter,width); }
     BOOL    SCAPI SciterCall (HWINDOW hWnd, LPCSTR functionName, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE* retval) { return SAPI(NULL)->SciterCall (hWnd,functionName, argc,argv,retval); }
     BOOL    SCAPI SciterEval ( HWINDOW hwnd, LPCWSTR script, UINT scriptLength, SCITER_VALUE* pretval) { return SAPI(NULL)->SciterEval ( hwnd, script, scriptLength, pretval); }
-    VOID    SCAPI SciterUpdateWindow(HWINDOW hwnd) { SAPI(NULL)->SciterUpdateWindow(hwnd); }
+    LPVOID    SCAPI SciterUpdateWindow(HWINDOW hwnd) { SAPI(NULL)->SciterUpdateWindow(hwnd); }
 #ifdef WINDOWS
     BOOL    SCAPI SciterTranslateMessage (MSG* lpMsg) { return SAPI(NULL)->SciterTranslateMessage (lpMsg); }
 #endif
