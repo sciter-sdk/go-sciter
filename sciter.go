@@ -351,8 +351,12 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 func (s *Sciter) Eval(script string) (retval *Value, ok bool) {
 	retval = NewValue()
 	// args
-	cscript := C.LPCWSTR(unsafe.Pointer(StringToWcharPtr(script)))
-	cscriptLength := C.UINT(len(script))
+	u16, err := Utf16FromString(script)
+	if err != nil {
+		return nil, false
+	}
+	cscriptLength := C.UINT(len(u16))
+	cscript := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
 	r := C.SciterEval(s.hwnd, cscript, cscriptLength, cretval)
@@ -701,8 +705,12 @@ func (e *Element) Text() (string, error) {
 //   \return \b #SCDOM_RESULT SCAPI
 func (e *Element) SetText(text string) error {
 	// args
-	ctext := C.LPCWSTR(StringToWcharPtr(text))
-	clength := C.UINT(len(text))
+	u16, err := Utf16FromString(text)
+	if err != nil {
+		return err
+	}
+	clength := C.UINT(len(u16))
+	ctext := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	// cgo call
 	r := C.SciterSetElementText(e.handle, ctext, clength)
 	return wrapDomResult(r, "SciterSetElementText")
@@ -2149,8 +2157,12 @@ func (pdst *Value) ConvertToString(how ValueStringConvertType) error {
 func (pdst *Value) ConvertFromString(str string, how ValueStringConvertType) error {
 	cval := (*C.VALUE)(unsafe.Pointer(pdst))
 	// args
-	cstr := C.LPCWSTR(unsafe.Pointer(StringToUTF16Ptr(str)))
-	clen := C.UINT(len(str))
+	u16, err := Utf16FromString(str)
+	if err != nil {
+		return err
+	}
+	clen := C.UINT(len(u16))
+	cstr := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	chow := C.UINT(how)
 	// cgo call
 	return wrapValueResult(VALUE_RESULT(C.ValueFromString(cval, cstr, clen, chow)), "ValueFromString")
