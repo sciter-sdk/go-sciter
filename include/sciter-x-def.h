@@ -303,7 +303,7 @@ typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
  * \param[in] cb \b SCITER_NOTIFY*, \link #SCITER_NOTIFY() callback function \endlink.
  * \param[in] cbParam \b LPVOID, parameter that will be passed to \link #SCITER_NOTIFY() callback function \endlink as vParam paramter.
  **/
- VOID SCAPI     SciterSetCallback(HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam);
+ LPVOID SCAPI     SciterSetCallback(HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam);
 
 /**Set Master style sheet.
  *
@@ -373,7 +373,7 @@ typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
  * \param[in] hwnd \b HWINDOW, Sciter window handle.
  *
  **/
- VOID SCAPI     SciterUpdateWindow(HWINDOW hwnd);
+ LPVOID SCAPI     SciterUpdateWindow(HWINDOW hwnd);
 
 /** Try to translate message that sciter window is interested in.
  *
