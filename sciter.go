@@ -626,12 +626,15 @@ func (e *Element) ParentElement() (*Element, error) {
 
 //export goLPCBYTE_RECEIVER
 func goLPCBYTE_RECEIVER(bs *byte, n uint, param unsafe.Pointer) int {
-	r := *(*[]byte)(param)
+	var r []byte
 	p := uintptr(unsafe.Pointer(bs))
+	println("goLPCBYTE_RECEIVER:", n)
 	for i := 0; i < int(n); i++ {
 		u := *(*byte)(unsafe.Pointer(p + uintptr(i)))
 		r = append(r, u)
 	}
+	println("in:", string(r))
+	*(*[]byte)(param) = r
 	return 0
 }
 
@@ -668,15 +671,16 @@ var (
 //  \param[in] rcv_param \b parameter that passed to rcv as it is.
 //  \return \b #SCDOM_RESULT SCAPI
 func (e *Element) Html(outer bool) (string, error) {
-	var str string
+	var bs []byte
 	// args
 	couter := C.BOOL(C.FALSE)
 	if outer {
 		couter = C.BOOL(C.TRUE)
 	}
-	cparam := C.LPVOID(unsafe.Pointer(&str))
+	cparam := C.LPVOID(unsafe.Pointer(&bs))
 	// cgo call
 	r := C.SciterGetElementHtmlCB(e.handle, couter, lpcbyte_receiver, cparam)
+	str := string(bs)
 	return str, wrapDomResult(r, "SciterGetElementHtmlCB")
 }
 

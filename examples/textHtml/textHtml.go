@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/oskca/sciter"
 	"github.com/oskca/sciter/window"
-	"log"
 )
 
 const (
@@ -48,4 +49,9 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println("text:", text)
+	text, err = root.Html(false)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("html:", text)
 }
