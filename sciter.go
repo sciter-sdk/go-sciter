@@ -1720,10 +1720,10 @@ func (e *Element) GetValue() (*Value, error) {
 //  \param[in] pval \b VALUE*, pointer to the VALUE to set.
 func (e *Element) SetValue(v *Value) error {
 	// args
-	cv := (*C.VALUE)(unsafe.Pointer(&v))
+	cv := (*C.VALUE)(unsafe.Pointer(v))
 	// cgo call
 	r := C.SciterSetValue(e.handle, cv)
-	return wrapDomResult(r, "SciterGetValue")
+	return wrapDomResult(r, "SciterSetValue")
 }
 
 // SCDOM_RESULT  SciterGetExpando( HELEMENT he, VALUE* pval, BOOL forceCreation ) ;//{ return SAPI()->SciterGetExpando( he, pval, forceCreation ); }
