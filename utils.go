@@ -78,6 +78,12 @@ func StringToUTF16Ptr(s string) *uint16 {
 	return &us[0]
 }
 
+func StringToUTF16PtrWithLen(s string) (*uint16, int) {
+	us, _ := Utf16FromString(s)
+	length := len(us) - 1
+	return &us[0], length
+}
+
 func BytePtrToBytes(bp *byte, size uint) []byte {
 	bs := []byte{}
 	p := uintptr(unsafe.Pointer(bp))
