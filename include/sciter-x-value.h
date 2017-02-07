@@ -1,18 +1,17 @@
 /*
- * Terra Informatica Sciter Engine
- * http://terrainformatica.com/sciter
- * 
- * Sciter value class. 
+ * The Sciter Engine of Terra Informatica Software, Inc.
+ * http://sciter.com
  * 
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
  * 
- * (C) 2003-2015, Andrew Fedoniouk (andrew@terrainformatica.com)
+ * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
-/**\file
- * \brief value, aka variant, aka discriminated union
- **/
+/*
+ * sciter::value, aka variant, aka discriminated union
+ */
+
 
 #ifndef __sciter_x_value_h__
 #define __sciter_x_value_h__

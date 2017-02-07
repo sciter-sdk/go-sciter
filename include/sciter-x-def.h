@@ -1,27 +1,18 @@
+/*
+ * The Sciter Engine of Terra Informatica Software, Inc.
+ * http://sciter.com
+ * 
+ * The code and information provided "as-is" without
+ * warranty of any kind, either expressed or implied.
+ * 
+ * (C) 2003-2015, Terra Informatica Software, Inc.
+ */
+
 #ifndef __SCITER_X_DEF__
 #define __SCITER_X_DEF__
 
-/** \mainpage Terra Informatica Sciter engine.
- *
- * \section legal_sec In legalese
- *
- * The code and information provided "as-is" without
- * warranty of any kind, either expressed or implied.
- *
- * <a href="http://terrainformatica.com/sciter">Sciter Home</a>
- *
- * (C) 2003-2015, Terra Informatica Software, Inc. and Andrew Fedoniouk
- *
- * \section structure_sec Structure of the documentation
- *
- * See <a href="files.html">Files</a> section.
- **/
-
-/**\file sciter-x.h
- * Main include file.
- **/
-
 #include "sciter-x-types.h"
+#include "sciter-x-request.h"
 #include "value.h"
 #ifdef __cplusplus
   #include "aux-cvt.h"
@@ -37,15 +28,6 @@
 /** Resource data type.
  *  Used by SciterDataReadyAsync() function.
  **/
-typedef enum SciterResourceType
-{
-  RT_DATA_HTML = 0,
-  RT_DATA_IMAGE = 1,
-  RT_DATA_STYLE = 2,
-  RT_DATA_CURSOR = 3,
-  RT_DATA_SCRIPT = 4,
-  RT_DATA_RAW = 5,
-} SciterResourceType;
 
 #define  HAS_TISCRIPT // in sciter
 
@@ -64,21 +46,25 @@ typedef enum SciterResourceType
 LPCWSTR SCAPI SciterClassName();
 
 /**Returns major and minor version of Sciter engine.
+  * \return UINT, hiword (16-bit) contains major number and loword contains minor number;
  **/
  UINT  SCAPI SciterVersion(BOOL major);
 
-enum
+/** #SC_LOAD_DATA notification return codes */
+enum SC_LOAD_DATA_RETURN_CODES
 {
-  LOAD_OK = 0,      // do default loading if data not set
-  LOAD_DISCARD = 1, // discard request completely
-  LOAD_DELAYED = 2, // data will be delivered later by the host application.
-                    // Host application must call SciterDataReadyAsync(,,, requestId) on each LOAD_DELAYED request to avoid memory leaks.
+  LOAD_OK = 0,      /**< do default loading if data not set */
+  LOAD_DISCARD = 1, /**< discard request completely */
+  LOAD_DELAYED = 2, /**< data will be delivered later by the host application.
+                         Host application must call SciterDataReadyAsync(,,, requestId) on each LOAD_DELAYED request to avoid memory leaks. */
+  LOAD_MYSELF  = 3, /**< you return LOAD_MYSELF result to indicate that your (the host) application took or will take care about HREQUEST in your code completely.
+                         Use sciter-x-request.h[pp] API functions with SCN_LOAD_DATA::requestId handle . */
 };
 
 /**Notifies that Sciter is about to download a referred resource.
  *
  * \param lParam #LPSCN_LOAD_DATA.
- * \return #LOAD_OK or #LOAD_DISCARD
+ * \return #SC_LOAD_DATA_RETURN_CODES
  *
  * This notification gives application a chance to override built-in loader and
  * implement loading of resources in its own way (for example images can be loaded from
@@ -138,6 +124,15 @@ enum
 #define SC_POSTED_NOTIFICATION 0x06
 
 
+/**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
+   Most probably bad gfx drivers.
+ 
+ * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
+ *
+ **/
+#define SC_GRAPHICS_CRITICAL_FAILURE 0x07
+
+
 /**Notification callback structure.
  **/
 typedef struct SCITER_CALLBACK_NOTIFICATION
@@ -153,14 +148,14 @@ typedef UINT SC_CALLBACK SciterHostCallback( LPSCITER_CALLBACK_NOTIFICATION pns,
 typedef SciterHostCallback * LPSciterHostCallback;
 
 
-/**This structure is used by #SCN_LOAD_DATA notification.
- *\copydoc SCN_LOAD_DATA
+/**This structure is used by #SC_LOAD_DATA notification.
+ *\copydoc SC_LOAD_DATA
  **/
 
 typedef struct SCN_LOAD_DATA
 {
-    UINT code; /**< [in] one of the codes above.*/
-    HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+    UINT code;                 /**< [in] one of the codes above.*/
+    HWINDOW hwnd;              /**< [in] HWINDOW of the window this callback was attached to.*/
 
     LPCWSTR  uri;              /**< [in] Zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".*/
 
@@ -168,7 +163,7 @@ typedef struct SCN_LOAD_DATA
     UINT     outDataSize;      /**< [in,out] loaded data size to return.*/
     UINT     dataType;         /**< [in] SciterResourceType */
 
-    LPVOID   requestId;        /**< [in] request id that needs to be passed as is to the SciterDataReadyAsync call */
+    HREQUEST requestId;        /**< [in] request handle that can be used with sciter-x-request API */
 
     HELEMENT principal;
     HELEMENT initiator;
@@ -176,17 +171,17 @@ typedef struct SCN_LOAD_DATA
 
 typedef SCN_LOAD_DATA*  LPSCN_LOAD_DATA;
 
-/**This structure is used by #SCN_DATA_LOADED notification.
- *\copydoc SCN_DATA_LOADED
+/**This structure is used by #SC_DATA_LOADED notification.
+ *\copydoc SC_DATA_LOADED
  **/
 typedef struct SCN_DATA_LOADED
 {
-    UINT code; /**< [in] one of the codes above.*/
-    HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+    UINT code;                 /**< [in] one of the codes above.*/
+    HWINDOW hwnd;              /**< [in] HWINDOW of the window this callback was attached to.*/
 
     LPCWSTR  uri;              /**< [in] zero terminated string, fully qualified uri, for example "http://server/folder/file.ext".*/
     LPCBYTE  data;             /**< [in] pointer to loaded data.*/
-    UINT    dataSize;         /**< [in] loaded data size (in bytes).*/
+    UINT     dataSize;         /**< [in] loaded data size (in bytes).*/
     UINT     dataType;         /**< [in] SciterResourceType */
     UINT     status;           /**< [in]
                                          status = 0 (dataSize == 0) - unknown error.
@@ -197,15 +192,15 @@ typedef struct SCN_DATA_LOADED
 
 typedef SCN_DATA_LOADED * LPSCN_DATA_LOADED;
 
-/**This structure is used by #SCN_ATTACH_BEHAVIOR notification.
- *\copydoc SCN_ATTACH_BEHAVIOR **/
+/**This structure is used by #SC_ATTACH_BEHAVIOR notification.
+ *\copydoc SC_ATTACH_BEHAVIOR **/
 typedef struct SCN_ATTACH_BEHAVIOR
 {
-    UINT code; /**< [in] one of the codes above.*/
-    HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+    UINT code;                        /**< [in] one of the codes above.*/
+    HWINDOW hwnd;                     /**< [in] HWINDOW of the window this callback was attached to.*/
 
-    HELEMENT element;          /**< [in] target DOM element handle*/
-    LPCSTR   behaviorName;     /**< [in] zero terminated string, string appears as value of CSS behavior:"???" attribute.*/
+    HELEMENT element;                 /**< [in] target DOM element handle*/
+    LPCSTR   behaviorName;            /**< [in] zero terminated string, string appears as value of CSS behavior:"???" attribute.*/
 
     ElementEventProc* elementProc;    /**< [out] pointer to ElementEventProc function.*/
     LPVOID            elementTag;     /**< [out] tag value, passed as is into pointer ElementEventProc function.*/
@@ -214,7 +209,7 @@ typedef struct SCN_ATTACH_BEHAVIOR
 typedef SCN_ATTACH_BEHAVIOR* LPSCN_ATTACH_BEHAVIOR;
 
 /**This structure is used by #SC_ENGINE_DESTROYED notification.
- *\copydoc SCN_ENGINE_DESTROYED **/
+ *\copydoc SC_ENGINE_DESTROYED **/
 typedef struct SCN_ENGINE_DESTROYED
 {
     UINT code; /**< [in] one of the codes above.*/
@@ -224,7 +219,7 @@ typedef struct SCN_ENGINE_DESTROYED
 typedef SCN_ENGINE_DESTROYED* LPSCN_ENGINE_DESTROYED;
 
 /**This structure is used by #SC_ENGINE_DESTROYED notification.
- *\copydoc SCN_ENGINE_DESTROYED **/
+ *\copydoc SC_ENGINE_DESTROYED **/
 typedef struct SCN_POSTED_NOTIFICATION
 {
     UINT      code; /**< [in] one of the codes above.*/
@@ -235,6 +230,17 @@ typedef struct SCN_POSTED_NOTIFICATION
 } SCN_POSTED_NOTIFICATION;
 
 typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
+
+/**This structure is used by #SC_GRAPHICS_CRITICAL_FAILURE notification.
+ *\copydoc SC_GRAPHICS_CRITICAL_FAILURE **/
+typedef struct SCN_GRAPHICS_CRITICAL_FAILURE
+{
+    UINT      code; /**< [in] = SC_GRAPHICS_CRITICAL_FAILURE */
+    HWINDOW   hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+} SCN_GRAPHICS_CRITICAL_FAILURE;
+
+typedef SCN_GRAPHICS_CRITICAL_FAILURE* LPSCN_GRAPHICS_CRITICAL_FAILURE;
+
 
 #include "sciter-x-behavior.h"
 
@@ -260,7 +266,7 @@ typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
  * \param[in] uri \b LPCWSTR, URI of the data requested by Sciter.
  * \param[in] data \b LPBYTE, pointer to data buffer.
  * \param[in] dataLength \b UINT, length of the data in bytes.
- * \param[in] requestId \b LPVOID, SCN_LOAD_DATA requestId.
+ * \param[in] requestId \b LPVOID, SCN_LOAD_DATA requestId, can be NULL.
  * \return \b BOOL, TRUE if Sciter accepts the data or \c FALSE if error occured
  **/
 
@@ -303,7 +309,7 @@ typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
  * \param[in] cb \b SCITER_NOTIFY*, \link #SCITER_NOTIFY() callback function \endlink.
  * \param[in] cbParam \b LPVOID, parameter that will be passed to \link #SCITER_NOTIFY() callback function \endlink as vParam paramter.
  **/
- LPVOID SCAPI     SciterSetCallback(HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam);
+ VOID SCAPI     SciterSetCallback(HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam);
 
 /**Set Master style sheet.
  *
@@ -373,7 +379,7 @@ typedef SCN_POSTED_NOTIFICATION* LPSCN_POSTED_NOTIFICATION;
  * \param[in] hwnd \b HWINDOW, Sciter window handle.
  *
  **/
- LPVOID SCAPI     SciterUpdateWindow(HWINDOW hwnd);
+ VOID SCAPI     SciterUpdateWindow(HWINDOW hwnd);
 
 /** Try to translate message that sciter window is interested in.
  *
@@ -492,6 +498,39 @@ typedef VOID SC_CALLBACK URL_DATA_RECEIVER( const URL_DATA* pUrlData, LPVOID par
 
 #ifdef WINDOWS
 
+/**Creates instance of Sciter Engine on window controlled by DirectX
+*
+* \param[in] hwnd \b HWINDOW, window handle to create Sciter on.
+* \param[in] IDXGISwapChain \b pSwapChain,  reference of IDXGISwapChain created on the window.
+* \return \b BOOL, \c TRUE if engine instance is created, FALSE otherwise.
+*
+**/
+
+BOOL SCAPI SciterCreateOnDirectXWindow(HWINDOW hwnd, IUnknown* pSwapChain); // IDXGISwapChain
+
+/**Renders content of the document loaded into the window
+* Optionally allows to render parts of document (separate DOM elements) as layers
+*
+* \param[in] hwnd \b HWINDOW, window handle to create Sciter on.
+* \param[in] HELEMENT \b elementToRenderOrNull,  html element to render. If NULL then the engine renders whole document.
+* \param[in] BOOL \b frontLayer,  TRUE if elementToRenderOrNull is not NULL and this is the topmost layer.
+* \return \b BOOL, \c TRUE if layer was rendered successfully.
+*
+**/
+BOOL SCAPI SciterRenderOnDirectXWindow(HWINDOW hwnd, HELEMENT elementToRenderOrNull = NULL, BOOL frontLayer = FALSE);
+
+/**Renders content of the document loaded to DXGI texture
+* Optionally allows to render parts of document (separate DOM elements) as layers
+*
+* \param[in] HWINDOW \b hwnd, window handle to create Sciter on.
+* \param[in] HELEMENT \b elementToRenderOrNull,  html element to render. If NULL then the engine renders whole document.
+* \param[in] IDXGISurface \b surface, DirectX 2D texture to render in.
+* \return \b BOOL, \c TRUE if layer was rendered successfully.
+*
+**/
+BOOL SCAPI SciterRenderOnDirectXTexture(HWINDOW hwnd, HELEMENT elementToRenderOrNull, IUnknown* surface); // IDXGISurface
+
+
 /**Render document to ID2D1RenderTarget
  *
  * \param[in] hWndSciter \b HWINDOW, Sciter window handle.
@@ -526,6 +565,8 @@ typedef VOID SC_CALLBACK URL_DATA_RECEIVER( const URL_DATA* pUrlData, LPVOID par
 
  BOOL SCAPI     SciterDWFactory(IDWriteFactory ** ppf);
 
+#endif
+
 /** Get graphics capabilities of the system
  *
  * \pcaps[in] LPUINT \b pcaps, address of variable receiving:
@@ -535,8 +576,6 @@ typedef VOID SC_CALLBACK URL_DATA_RECEIVER( const URL_DATA* pUrlData, LPVOID par
  * \return \b BOOL, \c TRUE if pcaps is valid pointer.
  *
  **/
-
-#endif
 
  BOOL SCAPI     SciterGraphicsCaps(LPUINT pcaps);
 
@@ -594,6 +633,7 @@ enum SCITER_CREATE_WINDOW_FLAGS {
                                             LPVOID delegateParam,
                                             HWINDOW parent);
 
+
 /** SciterSetupDebugOutput - setup debug output function.
  *
  *  This output function will be used for reprting problems
@@ -622,53 +662,6 @@ typedef VOID (SC_CALLBACK* DEBUG_OUTPUT_PROC)(LPVOID param, UINT subsystem /*OUT
                 LPVOID                param,     // param to be passed "as is" to the pfOutput
                 DEBUG_OUTPUT_PROC     pfOutput   // output function, output stream alike thing.
                 );
-
-enum TISCRIPT_DEBUG_COMMANDS
-{
-  SCRIPT_DEBUG_CONTINUE = 1,
-  SCRIPT_DEBUG_STEP_INTO,
-  SCRIPT_DEBUG_STEP_OVER,
-  SCRIPT_DEBUG_STEP_OUT,
-  //SCRIPT_DEBUG_GET_CONTEXT, // will cause onDataReady() call
-};
-
-enum TISCRIPT_DEBUG_DATA_REQUESTS
-{
-  SCRIPT_DEBUG_CONTEXT = 0x100,
-  SCRIPT_DEBUG_NAMESPACES = 0x200,
-  SCRIPT_DEBUG_STACKTRACE = 0x300,
-};
-
-typedef UINT (SC_CALLBACK* SCITER_DEBUG_BP_HIT_CB)(LPCWSTR inFile, UINT atLine,  const VALUE* envData, LPVOID param); // breakpoint hit event receiver
-typedef VOID (SC_CALLBACK* SCITER_DEBUG_DATA_CB)(UINT onCmd, const VALUE* data, LPVOID param); // requested data ready receiver
-
- BOOL SCAPI SciterDebugSetupClient(
-                HWINDOW                        hwnd,      // HWINDOW of the sciter
-                LPVOID                      param,     // param to be passed "as is" to these functions:
-                SCITER_DEBUG_BP_HIT_CB      onBreakpointHit,  // breakpoint hit event receiver
-                SCITER_DEBUG_DATA_CB        onDataRead        // receiver of requested data
-              );
-
- BOOL SCAPI SciterDebugAddBreakpoint(
-                HWINDOW     hwnd,      // HWINDOW of the sciter
-                LPCWSTR  fileUrl,
-                UINT     lineNo
-              );
-
- BOOL SCAPI SciterDebugRemoveBreakpoint(
-                HWINDOW     hwnd,      // HWINDOW of the sciter
-                LPCWSTR  fileUrl,
-                UINT     lineNo
-              );
-
-typedef BOOL (SC_CALLBACK* SCITER_DEBUG_BREAKPOINT_CB)(LPCWSTR fileUrl, UINT lineNo, LPVOID param);
-
- BOOL SCAPI SciterDebugEnumBreakpoints(
-                HWINDOW                        hwnd,      // HWINDOW of the sciter
-                LPVOID                      param,     // param to be passed "as is" to the pfOutput
-                SCITER_DEBUG_BREAKPOINT_CB  receiver
-              );
-
 
 #endif
 

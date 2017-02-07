@@ -1,7 +1,6 @@
 #ifndef __tis_h__
 #define __tis_h__
 
-#include <stdbool.h>
 #include "sciter-x-types.h"
 
 #if defined(__GNUC__)
@@ -43,7 +42,6 @@ typedef struct tiscript_pvalue
 struct tiscript_stream;
 typedef bool TISAPI  tiscript_stream_input(struct tiscript_stream* tag, int* pv);
 typedef bool TISAPI  tiscript_stream_output(struct tiscript_stream* tag, int v);
-
 typedef const WCHAR* TISAPI tiscript_stream_name(struct tiscript_stream* tag);
 typedef void TISAPI  tiscript_stream_close(struct tiscript_stream* tag);
 
@@ -93,6 +91,7 @@ typedef struct tiscript_method_def
   const char*       name;
   tiscript_method*  handler;  // or tiscript_tagged_method if tag is not 0
   void*             tag;
+  tiscript_value    payload;  // must be zero
 } tiscript_method_def;
 
 typedef struct tiscript_prop_def
