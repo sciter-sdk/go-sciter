@@ -57,6 +57,8 @@ Things that are not supported:
 
 ![](http://sciter.com/screenshots/slide-norton-nis.png)
 
+![](http://sciter.com/screenshots/slide-cardio.png)
+
 ![](http://sciter.com/screenshots/slide-surveillance.png)
 
 ![](http://sciter.com/screenshots/slide-technology.png)
