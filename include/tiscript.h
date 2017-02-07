@@ -1,25 +1,17 @@
 #ifndef __tis_h__
 #define __tis_h__
 
-#include "sciter-x-types.h"
-
 #if defined(__GNUC__)
   #define __cdecl __attribute__((__cdecl__))
 #endif
 
-#if !defined(WINDOWS)
-  #define EXTAPI __cdecl
-#else
+#if defined(_WINDOWS) || defined(WIN32) || defined(WIN64)
   #define EXTAPI __stdcall
+#else
+  #define EXTAPI __cdecl
 #endif
 
 #define TISAPI __cdecl
-
-#if !defined(WINDOWS)
-  #define EXTAPI __cdecl
-#else
-  #define EXTAPI __stdcall
-#endif
 
 #pragma pack(push,8)
 
@@ -177,7 +169,7 @@ typedef struct tiscript_native_interface
   bool (TISAPI *get_symbol_value)(tiscript_value v, const WCHAR** psz);
   bool (TISAPI *get_string_value)(tiscript_value v, const WCHAR** pdata, unsigned* plength);
   bool (TISAPI *get_bytes)(tiscript_value v, unsigned char** pb, unsigned* pblen);
-  bool (TISAPI *get_datetime)(tiscript_VM*, tiscript_value v, unsigned long long* dt); 
+  bool (TISAPI *get_datetime)(tiscript_VM*, tiscript_value v, unsigned long long* dt);
                                             // dt - 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC)
                                             // a.k.a. FILETIME in Windows
 

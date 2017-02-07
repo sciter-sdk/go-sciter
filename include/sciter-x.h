@@ -1,11 +1,11 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- * 
+ *
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- * 
- * 
+ *
+ *
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -22,6 +22,7 @@
 #include "sciter-x-dom.h"
 #include "sciter-x-value.h"
 #include "sciter-x-api.h"
+#include "sciter-x-msg.h"
 
 #if defined(__cplusplus) && !defined( PLAIN_API_ONLY )
 

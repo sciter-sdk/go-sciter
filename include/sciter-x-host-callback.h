@@ -188,7 +188,7 @@ namespace sciter
         SCITER_VALUE rv;
         BOOL r = SciterCall(hwnd, name, argc, argv, &rv);
 #if !defined(SCITER_SUPPRESS_SCRIPT_ERROR_THROW)
-        if( (r != SCDOM_OK) && rv.is_error_string()) {
+        if( (r == FALSE) && rv.is_error_string()) {
           aux::w2a u8 (rv.get(WSTR("")));
           throw sciter::script_error(u8.c_str());
         }

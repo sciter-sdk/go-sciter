@@ -1,10 +1,10 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- * 
+ *
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- * 
+ *
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -79,9 +79,9 @@
   struct METHOD_PARAMS {
     UINT methodID;
   };
-  struct REQUEST_PARAM { 
-    LPCWSTR name; 
-    LPCWSTR value; 
+  struct REQUEST_PARAM {
+    LPCWSTR name;
+    LPCWSTR value;
   };
 
   typedef struct METHOD_PARAMS METHOD_PARAMS;
@@ -919,14 +919,14 @@ enum CTL_TYPE
     CTL_HIDDEN,
     CTL_URL,            ///< URL input element.
     CTL_TOOLBAR,
-    
+
     CTL_FORM,
     CTL_FILE,           ///< file input element.
     CTL_PATH,           ///< path input element.
     CTL_WINDOW,         ///< has HWND attached to it
 
-    CTL_LABEL,            
-    CTL_IMAGE,            ///< image/object.  
+    CTL_LABEL,
+    CTL_IMAGE,            ///< image/object.
 
 };
 

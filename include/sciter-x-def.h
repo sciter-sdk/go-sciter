@@ -1,10 +1,10 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- * 
+ *
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- * 
+ *
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -117,7 +117,7 @@ enum SC_LOAD_DATA_RETURN_CODES
 #define SC_ENGINE_DESTROYED 0x05
 
 /**Posted notification.
- 
+
  * \param lParam #LPSCN_POSTED_NOTIFICATION
  *
  **/
@@ -126,7 +126,7 @@ enum SC_LOAD_DATA_RETURN_CODES
 
 /**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
    Most probably bad gfx drivers.
- 
+
  * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
  *
  **/
@@ -416,14 +416,6 @@ enum SCRIPT_RUNTIME_FEATURES
   ALLOW_SYSINFO = 0x00000008
 };
 
-enum GFX_LAYER
-{
-  GFX_LAYER_GDI      = 1,
-  GFX_LAYER_WARP     = 2,
-  GFX_LAYER_D2D      = 3,
-  GFX_LAYER_AUTO     = 0xFFFF,
-};
-
 enum SCITER_RT_OPTIONS
 {
    SCITER_SMOOTH_SCROLL = 1,      // value:TRUE - enable, value:FALSE - disable, enabled by default
@@ -439,7 +431,7 @@ enum SCITER_RT_OPTIONS
    SCITER_SET_SCRIPT_RUNTIME_FEATURES = 8, // value - combination of SCRIPT_RUNTIME_FEATURES flags.
    SCITER_SET_GFX_LAYER = 9,      // hWnd = NULL, value - GFX_LAYER
    SCITER_SET_DEBUG_MODE = 10,    // hWnd, value - TRUE/FALSE
-   SCITER_SET_UX_THEMING = 11,    // hWnd = NULL, value - BOOL, TRUE - the engine will use "unisex" theme that is common for all platforms. 
+   SCITER_SET_UX_THEMING = 11,    // hWnd = NULL, value - BOOL, TRUE - the engine will use "unisex" theme that is common for all platforms.
                                   // That UX theme is not using OS primitives for rendering input elements. Use it if you want exactly
                                   // the same (modulo fonts) look-n-feel on all platforms.
 

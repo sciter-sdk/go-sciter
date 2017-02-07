@@ -370,7 +370,7 @@ struct SciterGraphicsAPI
 
   GRAPHIN_RESULT
         SCFN(vWrapImage) ( HIMG himg, VALUE* toValue);
-  
+
   GRAPHIN_RESULT
         SCFN(vWrapPath) ( HPATH hpath, VALUE* toValue);
 
@@ -382,7 +382,7 @@ struct SciterGraphicsAPI
 
   GRAPHIN_RESULT
         SCFN(vUnWrapImage) ( const VALUE* fromValue, HIMG *phimg );
-  
+
   GRAPHIN_RESULT
         SCFN(vUnWrapPath) ( const VALUE* fromValue, HPATH *phpath);
 
