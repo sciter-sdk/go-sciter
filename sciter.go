@@ -1866,8 +1866,9 @@ func (pdst *Value) SetString(str string, uintType ...int) error {
 	}
 	cpdst := (*C.VALUE)(unsafe.Pointer(pdst))
 	// args
-	chars := (C.LPCWSTR)(unsafe.Pointer(StringToUTF16Ptr(str)))
-	numChars := (C.UINT)(len(str))
+	pStr, length := StringToUTF16PtrWithLen(str)
+	chars := (C.LPCWSTR)(unsafe.Pointer(pStr))
+	numChars := (C.UINT)(length)
 	// cgo call
 	return wrapValueResult(VALUE_RESULT(C.ValueStringDataSet(cpdst, chars, numChars, sType)), "ValueStringDataSet")
 }
