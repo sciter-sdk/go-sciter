@@ -79,7 +79,7 @@ Finally, according to [Andrew Fedoniouk][author] the author and the Sciter
 dynamic libraries are totally free to use for commercial or
 non-commercial applications.
 
-# The Tailered Sciter C Headers
+# The Tailored Sciter C Headers
 This binding ueses a tailored version of the sciter C Headers, which lives in directory: `include`. The included c headers are a modified version of the
 [sciter-sdk][] standard headers.
 
