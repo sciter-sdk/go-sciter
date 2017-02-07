@@ -1,3 +1,10 @@
+# Attention !!
+
+This project is not maintained for a quite long time and is 
+looking for a new project owner or some active contributors. 
+
+# Introduction
+
 This package provides a Golang bindings of [Sciter][] using cgo.
 Using go sciter you must have the platform specified `sciter dynamic library`
 downloaded from [sciter-sdk][], the library itself is rather small
@@ -61,7 +68,7 @@ Things that are not supported:
 
 
 # Sciter Version Support
-Currently supports [Sciter][] version `3.3.0.3` - `latest`
+Currently supports [Sciter][] version `3.3.0.3` - `before 4.0.0.0`
 
 [Sciter]: http://sciter.com/
 [sciter-sdk]: http://sciter.com/sdk/sciter-sdk-3.zip
