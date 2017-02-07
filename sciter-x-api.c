@@ -127,6 +127,7 @@
 
             void* lib_sciter_handle = dlopen(SCITER_DLL_NAME, RTLD_LOCAL|RTLD_LAZY);
             if( !lib_sciter_handle ) {
+                fprintf(stderr, "[%s] Unable to load library: %s\n", __FILE__, dlerror());
                 const char* lookup_paths[] =
                 {
                     "/" SCITER_DLL_NAME,
