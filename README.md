@@ -72,7 +72,7 @@ Things that are not supported:
 Currently supports [Sciter][] version `3.3.0.3` - `before 4.0.0.0`
 
 [Sciter]: http://sciter.com/
-[sciter-sdk]: http://sciter.com/sdk/sciter-sdk-3.zip
+[sciter-sdk]: http://sciter.com/download/
 
 # About Sciter
 
