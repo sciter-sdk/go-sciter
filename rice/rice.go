@@ -1,10 +1,10 @@
 package rice
 
 import (
-	"github.com/GeertJohan/go.rice"
-	"github.com/oskca/sciter"
 	"log"
 	"strings"
+
+	"github.com/sciter-sdk/go-sciter"
 )
 
 var (

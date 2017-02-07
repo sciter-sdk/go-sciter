@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/oskca/sciter"
-	"github.com/oskca/sciter/window"
 	"log"
+
+	"github.com/sciter-sdk/go-sciter"
+	"github.com/sciter-sdk/go-sciter/window"
 )
 
 func main() {

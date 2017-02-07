@@ -17,8 +17,9 @@ GtkWindow* gshow(GtkWidget* hwnd){
 import "C"
 import (
 	"fmt"
-	"github.com/oskca/sciter"
 	"unsafe"
+
+	"github.com/sciter-sdk/go-sciter"
 )
 
 // Linux/gtk3 must (at least) use sciter.DefaultWindowCreationFlag to create the main window correctly

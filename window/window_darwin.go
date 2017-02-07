@@ -28,8 +28,9 @@ void ShowWindow(void * w) {
 import "C"
 import (
 	"fmt"
-	"github.com/oskca/sciter"
 	"unsafe"
+
+	"github.com/sciter-sdk/go-sciter"
 )
 
 func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, error) {

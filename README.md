@@ -1,7 +1,8 @@
-# Attention !!
+# Attention
 
-This project is not maintained for a quite long time and is 
-looking for a new project owner or some active contributors. 
+The ownership of project is transferred to this new organization. 
+Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, 
+but the package name is still `sciter`.
 
 # Introduction
 
@@ -46,7 +47,7 @@ Things that are not supported:
     Due to the dependencies of gkt version of [Sciter][] runtime library, only
     `debian 8` is tested but not for other distributions.
 
- 4. `go get -x github.com/oskca/sciter`
+ 4. `go get -x github.com/sciter-sdk/go-sciter`
 
  5. Run the example and enjoy :)
 
