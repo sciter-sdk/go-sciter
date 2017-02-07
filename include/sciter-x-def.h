@@ -509,7 +509,7 @@ BOOL SCAPI SciterCreateOnDirectXWindow(HWINDOW hwnd, IUnknown* pSwapChain); // I
 * \return \b BOOL, \c TRUE if layer was rendered successfully.
 *
 **/
-BOOL SCAPI SciterRenderOnDirectXWindow(HWINDOW hwnd, HELEMENT elementToRenderOrNull = NULL, BOOL frontLayer = FALSE);
+BOOL SCAPI SciterRenderOnDirectXWindow(HWINDOW hwnd, HELEMENT elementToRenderOrNull, BOOL frontLayer);
 
 /**Renders content of the document loaded to DXGI texture
 * Optionally allows to render parts of document (separate DOM elements) as layers

@@ -44,6 +44,8 @@
   typedef void*  HRANGE;
   typedef void*  HSARCHIVE;
   typedef struct hposition { HNODE hn; INT pos; } HPOSITION;
+
+  struct BEHAVIOR_EVENT_PARAMS;
 #endif
 
 //#include <string>

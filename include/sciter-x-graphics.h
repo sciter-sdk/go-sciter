@@ -20,6 +20,8 @@
 
 #include "sciter-x-types.h"
 
+#ifdef __cplusplus
+
 namespace gool
 {
   class graphics;
@@ -33,6 +35,15 @@ typedef gool::image*        HIMG;
 typedef gool::path*         HPATH;
 typedef gool::text_layout*  HTEXT;
 
+#else
+
+typedef void*               HGFX;
+typedef void*               HIMG;
+typedef void*               HPATH;
+typedef void*               HTEXT;
+
+#endif
+
 typedef float SC_REAL;
 
 typedef SC_REAL  SC_POS;        // position
@@ -40,60 +51,60 @@ typedef SC_REAL  SC_DIM;        // dimension
 typedef SC_REAL  SC_ANGLE;      // angle (radians)
 typedef unsigned int SC_COLOR;  // color
 
-struct SC_COLOR_STOP
+typedef struct SC_COLOR_STOP
 {
   SC_COLOR color;
   float offset; // 0.0 ... 1.0
-};
+}SC_COLOR_STOP;
 
-enum GRAPHIN_RESULT
+typedef enum GRAPHIN_RESULT
 {
   GRAPHIN_PANIC = -1, // e.g. not enough memory
   GRAPHIN_OK = 0,
   GRAPHIN_BAD_PARAM = 1,  // bad parameter
   GRAPHIN_FAILURE = 2,    // operation failed, e.g. restore() without save()
   GRAPHIN_NOTSUPPORTED = 3 // the platform does not support requested feature
-};
+}GRAPHIN_RESULT;
 
-enum DRAW_PATH_MODE
+typedef enum DRAW_PATH_MODE
 {
   DRAW_FILL_ONLY = 1,
   DRAW_STROKE_ONLY = 2,
   DRAW_FILL_AND_STROKE = 3,
-};
+}DRAW_PATH_MODE;
 
-enum SCITER_LINE_JOIN_TYPE
+typedef enum SCITER_LINE_JOIN_TYPE
 {
   SCITER_JOIN_MITER = 0,
   SCITER_JOIN_ROUND = 1,
   SCITER_JOIN_BEVEL = 2,
   SCITER_JOIN_MITER_OR_BEVEL = 3,
-};
+}SCITER_LINE_JOIN_TYPE;
 
-enum SCITER_LINE_CAP_TYPE
+typedef enum SCITER_LINE_CAP_TYPE
 {
   SCITER_LINE_CAP_BUTT = 0,
   SCITER_LINE_CAP_SQUARE = 1,
   SCITER_LINE_CAP_ROUND = 2,
-};
+}SCITER_LINE_CAP_TYPE;
 
-enum SCITER_TEXT_ALIGNMENT
+typedef enum SCITER_TEXT_ALIGNMENT
 {
   TEXT_ALIGN_DEFAULT,
   TEXT_ALIGN_START,
   TEXT_ALIGN_END,
   TEXT_ALIGN_CENTER,
-};
+}SCITER_TEXT_ALIGNMENT;
 
-enum SCITER_TEXT_DIRECTION
+typedef enum SCITER_TEXT_DIRECTION
 {
   TEXT_DIRECTION_DEFAULT,
   TEXT_DIRECTION_LTR,
   TEXT_DIRECTION_RTL,
   TEXT_DIRECTION_TTB,
-};
+}SCITER_TEXT_DIRECTION;
 
-struct SCITER_TEXT_FORMAT
+typedef struct SCITER_TEXT_FORMAT
 {
     LPWSTR                fontFamily;
     UINT                  fontWeight; // 100...900, 400 - normal, 700 - bold
@@ -104,7 +115,7 @@ struct SCITER_TEXT_FORMAT
     SCITER_TEXT_ALIGNMENT textAlignment; // horizontal alignment
     SCITER_TEXT_ALIGNMENT lineAlignment; // a.k.a. vertical alignment for roman writing systems
     LPWSTR                localeName;
-};
+}SCITER_TEXT_FORMAT;
 
 // imageSave callback:
 typedef BOOL SCAPI image_write_function(LPVOID prm, const BYTE* data, UINT data_length);

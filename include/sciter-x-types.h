@@ -24,6 +24,10 @@
     #define CPP11
   #endif
   #include <string>
+#else
+
+  #include <stdbool.h>
+
 #endif
 
 enum GFX_LAYER
@@ -54,7 +58,7 @@ enum GFX_LAYER
 
 #elif defined(__linux__)
   #ifndef LINUX
-    #define LINUX
+  #define LINUX
   #endif
 #else
   #error "This platform is not supported yet"
@@ -129,7 +133,7 @@ enum GFX_LAYER
     #define FALSE (0)
   #endif
 
-typedef unsigned int UINT;
+  typedef unsigned int UINT;
   typedef int INT;
   typedef unsigned long long UINT64;
   typedef int INT64;
@@ -145,10 +149,10 @@ typedef unsigned int UINT;
   typedef void* LPVOID;
   typedef const void* LPCVOID;
 
-  #define SCAPI
+  #define SCAPI  
   #define SCFN(name) (*name)
-  #define SC_CALLBACK
-  #define CALLBACK
+  #define SC_CALLBACK 
+  #define CALLBACK 
 
 
 
@@ -194,7 +198,7 @@ typedef unsigned int UINT;
   #include <string.h>
   #include <wctype.h>
 
-  #ifndef BOOL
+#ifndef BOOL
     typedef signed char BOOL;
   #endif
   typedef unsigned int UINT;

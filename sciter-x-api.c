@@ -24,7 +24,7 @@
        if( ext ) _api = ext;
        if( !_api )
        {
-          HMODULE hm = LoadLibrary( TEXT(SCITER_DLL_NAME) );
+          HMODULE hm = LoadLibrary( TEXT("sciter.dll") );
           //#if defined(WIN64) || defined(_WIN64)
           //  TEXT("sciter64.dll")
           //#else
@@ -164,6 +164,23 @@
 
 #endif
 
+  LPSciterGraphicsAPI gapi()
+  {
+    static LPSciterGraphicsAPI _gapi = NULL;
+    if(!_gapi)
+      _gapi = SAPI(NULL)->GetSciterGraphicsAPI();
+    return _gapi;
+  }
+
+  LPSciterRequestAPI rapi()
+  {
+    static LPSciterRequestAPI _rapi = NULL;
+    if(!_rapi)
+      _rapi = SAPI(NULL)->GetSciterRequestAPI();
+    return _rapi;
+  }
+
+
   // defining "official" API functions:
 
     LPCWSTR SCAPI SciterClassName () { return SAPI(NULL)->SciterClassName(); }
@@ -176,7 +193,7 @@
 #endif
     BOOL    SCAPI SciterLoadFile (HWINDOW hWndSciter, LPCWSTR filename) { return SAPI(NULL)->SciterLoadFile (hWndSciter,filename); }
     BOOL    SCAPI SciterLoadHtml (HWINDOW hWndSciter, LPCBYTE html, UINT htmlSize, LPCWSTR baseUrl) { return SAPI(NULL)->SciterLoadHtml (hWndSciter,html,htmlSize,baseUrl); }
-    LPVOID    SCAPI SciterSetCallback (HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam) { SAPI(NULL)->SciterSetCallback (hWndSciter,cb,cbParam); }
+    VOID    SCAPI SciterSetCallback (HWINDOW hWndSciter, LPSciterHostCallback cb, LPVOID cbParam) { SAPI(NULL)->SciterSetCallback (hWndSciter,cb,cbParam); }
     BOOL    SCAPI SciterSetMasterCSS (LPCBYTE utf8, UINT numBytes) { return SAPI(NULL)->SciterSetMasterCSS (utf8,numBytes); }
     BOOL    SCAPI SciterAppendMasterCSS (LPCBYTE utf8, UINT numBytes) { return SAPI(NULL)->SciterAppendMasterCSS (utf8,numBytes); }
     BOOL    SCAPI SciterSetCSS (HWINDOW hWndSciter, LPCBYTE utf8, UINT numBytes, LPCWSTR baseUrl, LPCWSTR mediaType) { return SAPI(NULL)->SciterSetCSS (hWndSciter,utf8,numBytes,baseUrl,mediaType); }
@@ -186,7 +203,7 @@
     UINT    SCAPI SciterGetMinHeight (HWINDOW hWndSciter, UINT width) { return SAPI(NULL)->SciterGetMinHeight (hWndSciter,width); }
     BOOL    SCAPI SciterCall (HWINDOW hWnd, LPCSTR functionName, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE* retval) { return SAPI(NULL)->SciterCall (hWnd,functionName, argc,argv,retval); }
     BOOL    SCAPI SciterEval ( HWINDOW hwnd, LPCWSTR script, UINT scriptLength, SCITER_VALUE* pretval) { return SAPI(NULL)->SciterEval ( hwnd, script, scriptLength, pretval); }
-    LPVOID    SCAPI SciterUpdateWindow(HWINDOW hwnd) { SAPI(NULL)->SciterUpdateWindow(hwnd); }
+    VOID    SCAPI SciterUpdateWindow(HWINDOW hwnd) { SAPI(NULL)->SciterUpdateWindow(hwnd); }
 #ifdef WINDOWS
     BOOL    SCAPI SciterTranslateMessage (MSG* lpMsg) { return SAPI(NULL)->SciterTranslateMessage (lpMsg); }
 #endif
@@ -325,15 +342,17 @@
   UINT SCAPI ValueNthElementValue ( const VALUE* pval, INT n, VALUE* pretval) { return SAPI(NULL)->ValueNthElementValue ( pval, n, pretval); }
   UINT SCAPI ValueNthElementValueSet ( VALUE* pval, INT n, const VALUE* pval_to_set) { return SAPI(NULL)->ValueNthElementValueSet ( pval,n,pval_to_set); }
   UINT SCAPI ValueNthElementKey ( const VALUE* pval, INT n, VALUE* pretval) { return SAPI(NULL)->ValueNthElementKey ( pval,n,pretval); }
-  UINT SCAPI ValueEnumElements ( VALUE* pval, KeyValueCallback* penum, LPVOID param) { return SAPI(NULL)->ValueEnumElements (pval,penum,param); }
+  UINT SCAPI ValueEnumElements ( const VALUE* pval, KeyValueCallback* penum, LPVOID param) { return SAPI(NULL)->ValueEnumElements (pval,penum,param); }
   UINT SCAPI ValueSetValueToKey ( VALUE* pval, const VALUE* pkey, const VALUE* pval_to_set) { return SAPI(NULL)->ValueSetValueToKey ( pval, pkey, pval_to_set); }
   UINT SCAPI ValueGetValueOfKey ( const VALUE* pval, const VALUE* pkey, VALUE* pretval) { return SAPI(NULL)->ValueGetValueOfKey ( pval, pkey,pretval); }
   UINT SCAPI ValueToString ( VALUE* pval, UINT how ) { return SAPI(NULL)->ValueToString ( pval,how ); }
   UINT SCAPI ValueFromString ( VALUE* pval, LPCWSTR str, UINT strLength, UINT how ) { return SAPI(NULL)->ValueFromString ( pval, str,strLength,how ); }
-  UINT SCAPI ValueInvoke ( VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url) { return SAPI(NULL)->ValueInvoke ( pval, pthis, argc, argv, pretval, url); }
+  UINT SCAPI ValueInvoke ( const VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url) { return SAPI(NULL)->ValueInvoke ( pval, pthis, argc, argv, pretval, url); }
   UINT SCAPI ValueNativeFunctorSet (VALUE* pval, NATIVE_FUNCTOR_INVOKE*  pinvoke, NATIVE_FUNCTOR_RELEASE* prelease, VOID* tag ) { return SAPI(NULL)->ValueNativeFunctorSet ( pval, pinvoke,prelease,tag); }
   BOOL SCAPI ValueIsNativeFunctor ( const VALUE* pval) { return SAPI(NULL)->ValueIsNativeFunctor (pval); }
 
   // conversion between script (managed) value and the VALUE ( com::variant alike thing )
   BOOL SCAPI Sciter_v2V(HVM vm, const tiscript_value script_value, VALUE* out_value, BOOL isolate) { return SAPI(NULL)->Sciter_v2V(vm,script_value,out_value, isolate); }
   BOOL SCAPI Sciter_V2v(HVM vm, const VALUE* value, tiscript_value* out_script_value) { return SAPI(NULL)->Sciter_V2v(vm,value,out_script_value); }
+
+  BOOL SCAPI SciterProcX(HWINDOW hwnd, SCITER_X_MSG* pMsg) { return SAPI(NULL)->SciterProcX(hwnd, pMsg); }

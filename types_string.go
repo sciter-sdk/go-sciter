@@ -202,9 +202,9 @@ func (i DrawEvent) String() string {
 	return _DrawEvent_name[_DrawEvent_index[i]:_DrawEvent_index[i+1]]
 }
 
-const _EventReason_name = "BY_MOUSE_CLICKBY_KEY_CLICKSYNTHESIZED"
+const _EventReason_name = "BY_MOUSE_CLICKBY_KEY_CLICKSYNTHESIZEDBY_MOUSE_ON_ICON"
 
-var _EventReason_index = [...]uint8{0, 14, 26, 37}
+var _EventReason_index = [...]uint8{0, 14, 26, 37, 53}
 
 func (i EventReason) String() string {
 	if i+1 >= EventReason(len(_EventReason_index)) {
@@ -213,9 +213,9 @@ func (i EventReason) String() string {
 	return _EventReason_name[_EventReason_index[i]:_EventReason_index[i+1]]
 }
 
-const _EditChangedReason_name = "BY_INS_CHARBY_INS_CHARSBY_DEL_CHARBY_DEL_CHARS"
+const _EditChangedReason_name = "BY_INS_CHARBY_INS_CHARSBY_DEL_CHARBY_DEL_CHARSBY_UNDO_REDO"
 
-var _EditChangedReason_index = [...]uint8{0, 11, 23, 34, 46}
+var _EditChangedReason_index = [...]uint8{0, 11, 23, 34, 46, 58}
 
 func (i EditChangedReason) String() string {
 	if i+1 >= EditChangedReason(len(_EditChangedReason_index)) {
