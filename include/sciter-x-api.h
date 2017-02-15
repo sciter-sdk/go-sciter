@@ -1,14 +1,24 @@
+/*
+ * The Sciter Engine of Terra Informatica Software, Inc.
+ * http://sciter.com
+ *
+ * The code and information provided "as-is" without
+ * warranty of any kind, either expressed or implied.
+ *
+ * (C) 2003-2015, Terra Informatica Software, Inc.
+ */
+
+
 #ifndef __SCITER_API_X__
 #define __SCITER_API_X__
 
-//|
-//| Redirection of
-//|
-
 #include "sciter-x-types.h"
+#include "sciter-x-def.h"
 #include "sciter-x-dom.h"
+#include "sciter-x-request.h"
+#include "sciter-x-msg.h"
 #include "value.h"
-// #include "tiscript.hpp"
+#include "tiscript.h"
 
 #if !defined(WINDOWS)
   #include <stdlib.h>
@@ -21,6 +31,13 @@
 #if defined(OSX)
   #include <dlfcn.h>
 #endif
+
+#ifdef __cplusplus
+  #include <cstddef>
+#endif
+
+struct SciterGraphicsAPI;
+struct SCITER_X_MSG;
 
 typedef struct _ISciterAPI {
 
@@ -205,12 +222,12 @@ typedef struct _ISciterAPI {
   UINT SCFN( ValueNthElementValue )( const VALUE* pval, INT n, VALUE* pretval);
   UINT SCFN( ValueNthElementValueSet )( VALUE* pval, INT n, const VALUE* pval_to_set);
   UINT SCFN( ValueNthElementKey )( const VALUE* pval, INT n, VALUE* pretval);
-  UINT SCFN( ValueEnumElements )( VALUE* pval, KeyValueCallback* penum, LPVOID param);
+  UINT SCFN( ValueEnumElements )( const VALUE* pval, KeyValueCallback* penum, LPVOID param);
   UINT SCFN( ValueSetValueToKey )( VALUE* pval, const VALUE* pkey, const VALUE* pval_to_set);
   UINT SCFN( ValueGetValueOfKey )( const VALUE* pval, const VALUE* pkey, VALUE* pretval);
   UINT SCFN( ValueToString )( VALUE* pval, /*VALUE_STRING_CVT_TYPE*/ UINT how );
   UINT SCFN( ValueFromString )( VALUE* pval, LPCWSTR str, UINT strLength, /*VALUE_STRING_CVT_TYPE*/ UINT how );
-  UINT SCFN( ValueInvoke )( VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url);
+  UINT SCFN( ValueInvoke )( const VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url);
   UINT SCFN( ValueNativeFunctorSet )( VALUE* pval, NATIVE_FUNCTOR_INVOKE*  pinvoke, NATIVE_FUNCTOR_RELEASE* prelease, VOID* tag );
   BOOL SCFN( ValueIsNativeFunctor )( const VALUE* pval);
 
@@ -230,6 +247,17 @@ typedef struct _ISciterAPI {
 
   LPVOID SCFN( SciterGetCallbackParam )(HWINDOW hwnd);
   UINT_PTR SCFN( SciterPostCallback )(HWINDOW hwnd, UINT_PTR wparam, UINT_PTR lparam, UINT timeoutms);
+
+  LPSciterGraphicsAPI SCFN( GetSciterGraphicsAPI )();
+  LPSciterRequestAPI SCFN( GetSciterRequestAPI )();
+
+#ifdef WINDOWS 
+    BOOL SCFN( SciterCreateOnDirectXWindow ) (HWINDOW hwnd, IUnknown* pSwapChain); // IDXGISwapChain
+    BOOL SCFN( SciterRenderOnDirectXWindow ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, BOOL frontLayer);
+    BOOL SCFN( SciterRenderOnDirectXTexture ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, IUnknown* surface); // IDXGISurface
+#endif
+
+  BOOL SCFN(SciterProcX)(HWINDOW hwnd, SCITER_X_MSG* pMsg ); // returns TRUE if handled
 
 } ISciterAPI;
 

@@ -36,7 +36,7 @@ enum VALUE_TYPE
     T_FUNCTION,
     T_BYTES,      // sequence of bytes - e.g. image data
     T_OBJECT,     // scripting object proxy (TISCRIPT/SCITER)
-    T_DOM_OBJECT  // DOM object (CSSS!), use get_object_data to get HELEMENT 
+    T_DOM_OBJECT  // DOM object, use get_object_data to get HELEMENT
 };
 
 enum VALUE_UNIT_TYPE
@@ -218,7 +218,7 @@ typedef BOOL SC_CALLBACK KeyValueCallback( LPVOID param, const VALUE* pkey, cons
  */
 UINT SCAPI ValueNthElementKey( const VALUE* pval, INT n, VALUE* pretval);
 
-UINT SCAPI ValueEnumElements( VALUE* pval, KeyValueCallback* penum, LPVOID param);
+UINT SCAPI ValueEnumElements( const VALUE* pval, KeyValueCallback* penum, LPVOID param);
 
 /**
  * ValueSetValueToKey - sets value of sub-element by key:
@@ -279,7 +279,7 @@ UINT SCAPI ValueFromString( VALUE* pval, LPCWSTR str, UINT strLength, /*VALUE_ST
  * Returns:
  *   HV_OK, HV_BAD_PARAMETER or HV_INCOMPATIBLE_TYPE
  */
-UINT SCAPI ValueInvoke( VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url);
+UINT SCAPI ValueInvoke( const VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv, VALUE* pretval, LPCWSTR url);
 
 /**
  * ValueNativeFunctorSet - set reference to native function
@@ -292,15 +292,13 @@ UINT SCAPI ValueInvoke( VALUE* pval, VALUE* pthis, UINT argc, const VALUE* argv,
  */
 UINT SCAPI ValueNativeFunctorSet( VALUE* pval, 
     NATIVE_FUNCTOR_INVOKE*  pinvoke,
-    // NATIVE_FUNCTOR_RELEASE* prelease = NULL,
     NATIVE_FUNCTOR_RELEASE* prelease,
-    // VOID* tag = NULL );
     VOID* tag );
 
 BOOL SCAPI ValueIsNativeFunctor( const VALUE* pval);
 
 
-#if defined(__cplusplus) && !defined(__value_hpp__)
+#if defined(__cplusplus) && !defined(__value_hpp__) && !defined(PLAIN_API_ONLY)
 
   #include "value.hpp"
 

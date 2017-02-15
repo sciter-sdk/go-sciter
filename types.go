@@ -71,8 +71,8 @@ const (
 	HANDLE_DRAW           = 0x0040 /** drawing request (event) */
 	HANDLE_DATA_ARRIVED   = 0x080  /** requested data () has been delivered */
 	HANDLE_BEHAVIOR_EVENT = 0x0100 /** logical synthetic events:
-	  BUTTON_CLICK HYPERLINK_CLICK etc.
-	  a.k.a. notifications from intrinsic behaviors */
+		BUTTON_CLICK HYPERLINK_CLICK etc.
+		a.k.a. notifications from intrinsic behaviors */
 	HANDLE_METHOD_CALL           = 0x0200 /** behavior specific methods */
 	HANDLE_SCRIPTING_METHOD_CALL = 0x0400 /** behavior specific methods */
 	HANDLE_TISCRIPT_METHOD_CALL  = 0x0800 /** behavior specific methods using direct tiscript::value's */
@@ -384,6 +384,7 @@ const (
 	BY_MOUSE_CLICK EventReason = iota
 	BY_KEY_CLICK
 	SYNTHESIZED // synthesized programmatically generated.
+	BY_MOUSE_ON_ICON
 )
 
 type EditChangedReason uint
@@ -394,6 +395,7 @@ const (
 	BY_INS_CHARS                          // character range insertion clipboard
 	BY_DEL_CHAR                           // single char deletion
 	BY_DEL_CHARS                          // character range deletion (selection)
+	BY_UNDO_REDO                          // undo/redo
 )
 
 type BehaviorMethodIdentifier uint
@@ -778,7 +780,7 @@ const (
 	 * asynchronously.
 	 **/
 	/* obsolete #define SC_DOCUMENT_COMPLETE 0x03
-	   use DOCUMENT_COMPLETE DOM event.
+		 use DOCUMENT_COMPLETE DOM event.
 	*/
 
 	/**This notification is sent on parsing the document and while processing
@@ -1173,8 +1175,12 @@ const (
 // {
 const (
 	GFX_LAYER_GDI  = 1
+	GFX_LAYER_CG   = 1
+	GFX_LAYER_CAIRO= 1
 	GFX_LAYER_WARP = 2
 	GFX_LAYER_D2D  = 3
+	GFX_LAYER_SKIA = 4
+	GFX_LAYER_SKIA_OPENGL = 5
 	GFX_LAYER_AUTO = 0xFFFF
 )
 

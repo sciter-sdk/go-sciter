@@ -69,10 +69,10 @@ Things that are not supported:
 
 
 # Sciter Version Support
-Currently supports [Sciter][] version `3.3.0.3` - `before 4.0.0.0`
+Currently supports [Sciter][] version `4.0.0.0` and higher.
 
 [Sciter]: http://sciter.com/
-[sciter-sdk]: http://sciter.com/sdk/sciter-sdk-3.zip
+[sciter-sdk]: http://sciter.com/download/
 
 # About Sciter
 

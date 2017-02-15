@@ -5,7 +5,7 @@
 package sciter
 
 /*
-#cgo CFLAGS: -g -w -std=c11 -Iinclude
+#cgo CFLAGS: -g -w -std=c11 -Iinclude -DPLAIN_API_ONLY
 #cgo linux LDFLAGS: -ldl
 #cgo linux pkg-config: gtk+-3.0
 #include "sciter-x.h"
