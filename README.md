@@ -37,7 +37,7 @@ Things that are not supported:
     The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix
     like `dll` `so` or `dylib` (osx is not supported yet, due to the lack of osx computer)
 
-    The `system PATH` is os specific, under Windows simply copying `sciter32.dll` or `sciter64.dll` to `c:\windows\system32` is just enough.
+    The `system PATH` is os specific, under Windows simply copying `sciter.dll` to `c:\windows\system32` is just enough.
 
  3. Set up GCC envrionmnet for CGO
 
