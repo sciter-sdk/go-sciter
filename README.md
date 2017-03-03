@@ -34,18 +34,24 @@ Things that are not supported:
  1. Download the [sciter-sdk][]
  2. Extract the sciter runtime library from [sciter-sdk][] to system PATH
 
-    The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix
-    like `dll` `so` or `dylib` (osx is not supported yet, due to the lack of osx computer)
+    The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix like `dll` `so` or `dylib`
 
-    The `system PATH` is os specific, under Windows simply copying `sciter.dll` to `c:\windows\system32` is just enough.
+    * Windows: simply copying `bin\64\sciter.dll` to `c:\windows\system32` is just enough
+    * Linux: 
+      - `cd sciter-sdk/bin.gtk/`
+      - `echo $PWD >> libsciter.conf`
+      - `sudo cp libsciter.conf /etc/ld.so.conf.d/`
+      - `sudo ldconfig`
+      - `ldconfig -p | grep sciter` should print libsciter-gtk-64.so location
+    * OSX:
+      - `cd sciter-sdk/bin.osx/`
+      - `export DYLD_LIBRARY_PATH=$PWD`
 
  3. Set up GCC envrionmnet for CGO
 
     [mingw64-gcc][] (5.2.0 is tested) is recommended for Windows users.
 
     Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
-    Due to the dependencies of gkt version of [Sciter][] runtime library, only
-    `debian 8` is tested but not for other distributions.
 
  4. `go get -x github.com/sciter-sdk/go-sciter`
 
