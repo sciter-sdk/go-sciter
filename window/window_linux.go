@@ -1,18 +1,18 @@
 package window
 
 /*
-#include <gtk/gtk.h>
-#include <stdio.h>
 #cgo linux pkg-config: gtk+-3.0
+
+#include <gtk/gtk.h>
+
 GtkWindow* gwindow(GtkWidget* hwnd) {
-	printf("hwnd:%d\n", hwnd);
-	return GTK_WINDOW(gtk_widget_get_toplevel(hwnd));
+  return hwnd ? GTK_WINDOW(gtk_widget_get_toplevel(hwnd)) : NULL;
 }
-GtkWindow* gshow(GtkWidget* hwnd){
-	GtkWidget* gw = gtk_widget_get_toplevel(hwnd);
-	// gtk_widget_show_all(gw);
-	gtk_window_present(GTK_WINDOW(gw));
+
+void gshow(GtkWidget* hwnd){
+  if(hwnd) gtk_window_present(gwindow(hwnd));
 }
+
 */
 import "C"
 import (

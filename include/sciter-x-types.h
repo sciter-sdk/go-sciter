@@ -27,6 +27,7 @@
 #else
 
   #include <stdbool.h>
+  #include <uchar.h>
 
 #endif
 
