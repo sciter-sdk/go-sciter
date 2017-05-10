@@ -18,6 +18,9 @@ func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, e
 	w := new(Window)
 	w.creationFlags = creationFlags
 
+  // Initialize OLE for DnD and printing support
+  win.OleInitialize()
+
 	// create window
 	hwnd := sciter.CreateWindow(
 		creationFlags,
