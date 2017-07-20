@@ -492,7 +492,7 @@ func (e *Element) unUse() error {
 // elements with EventHandler attached would not be gc collected
 func (e *Element) finalize() {
 	// Detach handlers
-	log.Printf("finalizing el 0x%x", e)
+	// log.Printf("finalizing el 0x%x", e)
 	// only detach when element does have handlers
 	if handlersmap, ok := elementHandlerMap[e]; ok {
 		for handler, _ := range handlersmap {

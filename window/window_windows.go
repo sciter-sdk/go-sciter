@@ -6,7 +6,6 @@ package window
 import "C"
 import (
 	"fmt"
-	"log"
 	"syscall"
 	"unsafe"
 
@@ -67,7 +66,7 @@ func (s *Window) Run() {
 func delegateProc(hWnd win.HWND, message uint, wParam uintptr, lParam uintptr, pParam uintptr, pHandled *int) int {
 	switch message {
 	case win.WM_DESTROY:
-		log.Println("closing window ...")
+		// log.Println("closing window ...")
 		win.PostQuitMessage(0)
 		*pHandled = 1
 	}

@@ -24,7 +24,7 @@ func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 		uri := ld.Uri()
 		path := ""
 		boxname := "."
-		log.Println("loading:", uri)
+		// log.Println("loading:", uri)
 		// file:// or rice://
 		if strings.HasPrefix(uri, "file://") || strings.HasPrefix(uri, "rice://") {
 			path = uri[7:]
@@ -37,7 +37,7 @@ func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 			// do not handle file:// or rice://
 			return sciter.LOAD_OK
 		}
-		log.Println("rice loading:", path, "in box:", boxname)
+		// log.Println("rice loading:", path, "in box:", boxname)
 		// do box loading
 		box, ok := boxmap[boxname]
 		if !ok {
@@ -58,7 +58,7 @@ func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 		} else {
 			// using rice found data
 			s.DataReady(uri, dat)
-			log.Println("rice loaded:", path, "in box:", boxname)
+			// log.Println("rice loaded:", path, "in box:", boxname)
 		}
 		return sciter.LOAD_OK
 	}

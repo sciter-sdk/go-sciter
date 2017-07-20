@@ -2,7 +2,6 @@ package sciter
 
 import (
 	"fmt"
-	"log"
 	"runtime"
 )
 
@@ -54,7 +53,7 @@ func NewValue(val ...interface{}) *Value {
 }
 
 func (v *Value) finalize() {
-	log.Println("finalizing value:", v)
+	// log.Println("finalizing value:", v)
 	v.clear()
 }
 
