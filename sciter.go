@@ -1198,6 +1198,15 @@ func (e *Element) Insert(el *Element, index int) error {
 	return wrapDomResult(r, "SciterInsertElement")
 }
 
+// Append element e as last child of this element.
+func (e *Element) Append(el *Element) error {
+	// args
+	cindex := C.UINT(0x7FFFFFFF)
+	// cgo call
+	r := C.SciterInsertElement(el.handle, e.handle, cindex)
+	return wrapDomResult(r, "Element.Append")
+}
+
 // SCDOM_RESULT  SciterDetachElement( HELEMENT he )
 
 // Take element out of its container (and DOM tree).
