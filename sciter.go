@@ -1218,6 +1218,13 @@ func (e *Element) Delete() error {
 	return wrapDomResult(r, "SciterDeleteElement")
 }
 
+// Clear contents and all children of the element.
+func (e *Element) Clear() error {
+	// cgo cal
+	r := C.SciterSetElementText(e.handle, C.LPCWSTR(nil), C.UINT(0))
+	return wrapDomResult(r, "Element.Clear")
+}
+
 // SCDOM_RESULT  SciterSetTimer( HELEMENT he, UINT milliseconds, UINT_PTR timer_id )
 
 // Start Timer for the element.
