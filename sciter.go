@@ -419,7 +419,25 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 	}
 	return true
 }
-
+func (s *Sciter) OpenArchive(data []byte) {
+    s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
+}
+func (s *Sciter) GetArchiveItem(uri string) []byte {
+    var pv uintptr = 0
+    var length uint = 0
+    pBytes := (*C.LPCBYTE)(unsafe.Pointer(&pv))
+    pnBytes := (*C.UINT)(unsafe.Pointer(&length))
+    r := C.SciterGetArchiveItem(s.har, StringToWcharPtr(uri), pBytes, pnBytes)
+    if r == 0 {
+        return nil
+    }
+    ret := []byte{}
+    for i := 0; i < int(length); i++ {
+        b := *(*byte)(unsafe.Pointer(pv + uintptr(i)))
+        ret = append(ret, b)
+    }
+    return ret
+}
 // #if defined(OSX)
 // HWINDOW  SciterCreateNSView ( LPRECT frame ) ;//{ return SAPI()->SciterCreateNSView ( frame ); }
 // #endif
@@ -2285,3 +2303,5 @@ func (pdst *Value) IsNativeFunctor() bool {
 	}
 	return true
 }
+
+

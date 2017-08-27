@@ -25,6 +25,16 @@ func ProcND(hwnd win.HWND, msg uint, wParam uintptr, lParam uintptr) (ret int, h
 	return
 }
 
+//BOOL SciterLoadFile (HWINDOW hWndSciter, LPCWSTR filename) ;//{ return SAPI()->SciterLoadFile (hWndSciter,filename); }
+func LoadFileForHWND(hwnd win.HWND, filename string) error {
+
+	ret := C.SciterLoadFile(C.HWINDOW(unsafe.Pointer(hwnd)), StringToWcharPtr(filename))
+	if ret == 0 {
+		return fmt.Errorf("LoadFile with: %s failed", filename)
+	}
+	return nil
+}
+
 // HWINDOW  SciterCreateWindow ( UINT creationFlags,LPRECT frame, SciterWindowDelegate* delegate, LPVOID delegateParam, HWINDOW parent);
 
 // Create sciter window.
