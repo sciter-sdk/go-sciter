@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+ 
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+ 
+        table td:first-child {
+            white-space:nowrap;
+        }
+    </style>
+</head>
+<body>
+<form action="">
+    <table>
+        <tr>
+            <td>用户：</td>
+            <td><input type="text"></td>
+        </tr>
+        <tr>
+            <td>密码：</td>
+            <td><input type="password"></td>
+        </tr>
+        <tr>
+            <td>性别：</td>
+            <td>
+                <input type="radio" value="0">男
+                <input type="radio" value="1">女
+            </td>
+        </tr>
+        <tr>
+            <td>爱好：</td>
+            <td>
+                <input type="checkbox" value="">看书
+                <input type="checkbox" value="">打球
+                <input type="checkbox" value="">旅游
+            </td>
+        </tr>
+        <tr>
+            <td>简介：</td>
+            <td>
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="提交"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

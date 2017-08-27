@@ -1,0 +1,149 @@
+﻿<html>
+  <head>
+    <style type="text/css">
+      html { background-color:threedface; overflow:scroll-indicator; }
+      
+      div.sample 
+      { 
+        flow:horizontal; 
+        border-spacing:10px; 
+        margin:10px 0;
+      }
+      div.sample widget.canvas 
+      { 
+        width:300px; height:*; 
+        background-color: #fff;
+        prototype:Canvas; /* see code below */
+        border: 1px solid silver; 
+      }
+      div.sample pre.code 
+      { 
+        margin:0;
+        padding:4px;
+        background-color: #ffe;
+        width:*; height:*; 
+        border: 1px solid silver;
+      }
+      
+    </style>  
+    <script type="text/tiscript">
+      
+      // our Canvas behavior
+      class Canvas: Behavior
+      {
+        function attached() 
+        {
+          var funcSrc = "(function(gfx){ " + this.parent.select("pre.code").text + "})";
+          this.paintContent = eval( funcSrc );
+        }
+      }
+    
+    
+    </script>
+  </head>
+  <body>
+    <h1><a href="http://developer.mozilla.org/en/docs/Drawing_Graphics_with_Canvas">Mozilla Canvas Samples.</a></h1>
+
+    <div class="sample">
+      <widget class="canvas" />
+      <pre class="code">
+var ctx = gfx;
+
+ctx.noLine()
+   .fillColor( color(200,0,0) )
+   .rectangle(10, 10, 55, 50)
+   .fillColor( color(0, 0, 200, 0.5) )
+   .rectangle(30, 30, 55, 50);
+      </pre>
+    </div>
+
+    <div class="sample">
+      <widget class="canvas" />
+      <pre class="code">
+var ctx = gfx;
+
+ctx.fillColor(color("red"))
+   .lineWidth(1)
+   .lineColor(color(0,0,0));
+
+var path = new Graphics.Path();
+
+path.moveTo(30, 30)
+    .lineTo(150, 150)
+    .bezierCurveTo(60, 70, 60, 70, 70, 150)
+    .lineTo(30, 30)
+    .close();
+
+ctx.drawPath(path);
+      </pre>
+    </div>
+
+    <div class="sample">
+      <widget class="canvas" />
+      <pre class="code">
+var ctx = gfx;
+
+function drawBowtie(fillColor) {
+
+  ctx.fillColor(color(200,200,200,0.3));
+  ctx.rectangle(-30, -30, 60, 60);
+  
+  ctx.fillColor(fillColor);
+
+  var path = new Graphics.Path();
+    path.moveTo(25, 25)
+        .lineTo(-25, -25)
+        .lineTo(25, -25)
+        .lineTo(-25, 25)
+        .close();
+  ctx.drawPath(path);
+}
+
+function dot() {
+  ctx.save();
+    ctx.fillColor(0);
+    ctx.rectangle(-2, -2, 4, 4);
+  ctx.restore();
+}
+
+// note that all other translates are relative to this
+// one
+ctx.translate(45.5, 45.5);
+
+ctx.lineWidth(1)
+   .lineColor(color(0,0,0));
+
+ctx.save();
+//ctx.translate(0, 0); // unnecessary
+ drawBowtie(0xFF); //"red"
+ dot();
+ctx.restore();
+
+ctx.save();
+ ctx.translate(85, 0);
+ ctx.rotate(45 * Math.PI / 180);
+ drawBowtie(0x00FF00); //"green"
+ dot();
+ctx.restore();
+
+ctx.save();
+ ctx.translate(0, 85);
+ ctx.rotate(135 * Math.PI / 180);
+ drawBowtie(0xFF0000); //"blue"
+ dot();
+ctx.restore();
+
+ctx.save();
+ ctx.translate(85, 85);
+ ctx.rotate(90 * Math.PI / 180);
+ drawBowtie(color(0xFF,0xFF,0)); //"yellow"
+ dot();
+ctx.restore();
+    
+      </pre>
+    </div>
+    
+    
+  </body>
+</html>
+  

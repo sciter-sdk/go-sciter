@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tiscript脚本学习</title>
+</head>
+<body>
+<form action="">
+    <table>
+        <tr>
+            <td>用户名：</td>
+            <td>
+                <input type="text" name="name">
+            </td>
+        </tr>
+        <tr>
+            <td>密码：</td>
+            <td>
+                <input type="password" name="pwd">
+            </td>
+        </tr>
+        <tr>
+            <td>爱好：</td>
+            <td>
+                <input type="checkbox" name="love" value="0">看书
+                <input type="checkbox" name="love" value="1">打球
+                <input type="checkbox" name="love" value="2">旅游
+            </td>
+        </tr>
+        <tr>
+            <td>性别：</td>
+            <td>
+                <select name="sex">
+                    <option value="-1">请选择</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>简介：</td>
+            <td>
+                <textarea name="desc" cols="30" rows="5"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+<button id="btn1">注册</button>
+<script type="text/tiscript">
+    $(#btn1).on("click", function() {
+        //获取文本框中的值
+        var name = $(input[name='name']).value.trim();
+        if(name.length == 0) {
+            //弹出警告框
+            view.msgbox(#warning, "用户名不能为空");
+            return false;
+        }
+ 
+        //获取文本框中的值
+        var pwd = $(input[name='pwd']).value.trim();
+        if(pwd.length == 0) {
+            //弹出警告框
+            view.msgbox(#warning, "密码不能为空");
+            return false;
+        }
+ 
+        //这里使用$$返回所有，$只是返回第一个满足选择器的元素
+        var ipt = $$(input[name='love']);
+        var love = [];
+        for(var child in ipt) {
+            //获取元素的状态，判断是否选中
+            if(child.getState(Element.STATE_CHECKED)) {
+                love.push(child.value);
+            }
+        }
+ 
+        //获取select下option，先选取select，然后再$$找查它的子元素
+        var opt = $(select[name='sex']).$$(option);
+        var sex = 0;
+        for(var child in opt) {
+            //判断元素是否选中
+            if(child.getState(Element.STATE_CHECKED)) {
+                sex = child.value;
+            }
+        }
+ 
+        //获取简介
+        var desc = $(textarea[name='desc']).value.trim();
+ 
+        //表单数据
+        var formData = {
+            "name": name,
+            "pwd": pwd,
+            "love": love,
+            "sex": sex,
+            "desc": desc
+        };
+ 
+        //我们把从表单中的数据获取，并转成json字符串
+        //调用go中定义的函数reg，这样go中就可以获取到ui中的数据了。
+        view.reg(JSON.stringify(formData));
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理</title>
+</head>
+<body>
+    <button id="btn1">点我</button>
+    <button id="btn2">点我2</button>
+    <button id="btn3">点我3</button>
+    <button id="btn4">点我4</button>
+    <script type="text/tiscript">
+        //view是一个全局的视图对象，root是加载的根元素
+        var root = view.root;
+ 
+        //通过self.$()方法选择元素，类似jquery的$
+        //self.$()这里面参数不要加双引号
+        //我们调用在go中为btn1定义的方法
+        $(#btn1).on("click", function() {
+            //this指向的当前元素
+            this.test("参数1", "参数2", "参数3");
+        });
+ 
+        //在go中也可以调用我们在tis中为btn2定义的方法
+        $(#btn2).test2 = function(a, b, c) {
+            return String.printf("我是tis中为btn2定义的方法test2 %v %v %v", a, b, c);
+        };
+ 
+        //我们定义一个函数(注意函数与方法的区别)
+        //这里的函数并没有指定属于哪个对象
+        function sum(num1, num2) {
+            return num1 + num2;
+        }
+ 
+        //调用go中定义的函数
+        $(#btn3).on("click", function() {
+            view.msgbox(#alert, view.dec(5));
+        });
+        $(#btn4).on("click", function() {
+            view.msgbox(#alert, view.inc(5));
+        });
+    </script>
+</body>
+</html>

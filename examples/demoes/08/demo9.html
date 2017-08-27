@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>view对象学习</title>
+    <style>
+        .br {
+            width: 100%;
+            border: 1px solid #ccc;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+ 
+<div class="br">
+    <button id="selFile">选择文件</button>
+    <span id="filePath"></span>
+    <br>
+    <button id="selFolder">选择目录</button>
+    <span id="folderPath"></span>
+    <br>
+    <button id="moveFile">移动</button>
+    <span id="moveRet"></span>
+</div>
+<div class="br">
+    <button id="msgbox1">消息框</button>
+    <br>
+    <button id="msgbox2">信息框</button>
+    <br>
+    <button id="msgbox3">问题框</button>
+    <br>
+    <button id="msgbox4">警告框</button>
+    <br>
+    <button id="msgbox5">错误框</button>
+</div>
+ 
+<div class="br">
+    <button id="dlg1">对话框</button>
+</div>
+ 
+<div class="br">
+    <button id="win1">窗口</button>
+    <br>
+</div>
+ 
+<div class="br">
+    <button id="state1">全屏</button>
+    <button id="state2">默认</button>
+    <button id="state3">关闭</button>
+</div>
+ 
+<div class="br">
+    <button id="req">请求</button>
+    结果：
+    <iframe id="reqRet"></iframe>
+</div>
+ 
+<script type="text/tiscript">
+    self.ready = function() {
+        var file = "";
+        var folder = "";
+ 
+        //选择文件
+        $(#selFile).on("click", function() {
+            //文件筛选项
+            const filter = "Image Files (*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png|All Files (*.*)|*.*";
+            //默认后缀
+            const defaultExt = "jpg";
+            //初始化路径，就是文件选择窗打开时所在路径
+            const initialPath = System.path(#USER_DOCUMENTS);
+            //标题
+            const caption = "选择图片";
+            file = view.selectFile(#open, filter, defaultExt, initialPath, caption );
+            $(#filePath).text = file;
+            return true;
+        });
+        //选择文件夹
+        $(#selFolder).on("click", function() {
+            folder = view.selectFolder("选择你的文件夹");
+            $(#folderPath).text = folder;
+        });
+        //移动文件
+        $(#moveFile).on("click", function() {
+            if(file && folder) {
+                //调用go中定义的函数进行移动文件处理
+                var ret = view.moveFile(file, folder);
+                $(#moveRet).text = ret;
+            }
+        });
+ 
+        //消息框
+        $(#msgbox1).on("click", function() {
+            view.msgbox(#alert, "我是消息框");
+        });
+        //信息框
+        $(#msgbox2).on("click", function() {
+            view.msgbox(#information, "我是信息框", "信息框");
+        });
+        //问题框
+        $(#msgbox3).on("click", function() {
+            view.msgbox(#question,
+                        "请选择是或否",
+                        "问题框",
+                        //按钮组
+                        [{id:#yes,text:"是"},{id:#no,text:"否"}],
+                        //onLoad，窗口加载时调用
+                        function(root) {
+ 
+                        },
+                        //onClose，窗口关闭时调用
+                        function(root, id) {
+                            //id表示你选择按钮的ID
+                            if(id == "yes") {
+                                view.msgbox(#alert, "你选择的yes");
+                            } else {
+                                view.msgbox(#alert, "你选择的no");
+                            }
+                        });
+        });
+        //警告框
+        $(#msgbox4).on("click", function() {
+            view.msgbox(#warning, "我是警告框");
+        });
+        //错误框
+        $(#msgbox5).on("click", function() {
+            view.msgbox(#error, "我是错误框");
+        });
+ 
+        //新对话框
+        $(#dlg1).on("click", function() {
+            var dlg = view.dialog({
+                //加载到对话框中的URL，可加载本地文件
+                url: self.url("simple.html"),
+                //对话框的x，y坐标
+                x: 50,
+                y: 50,
+                //窗口的宽度，高度
+                width: 200,
+                height: 200,
+                //是否是客户区，如果为真，那么x，y，width，height作为客户区坐标，而不是窗口
+                client: false,
+                //对话框参数
+                parameters: {"test":"test"},
+                //对话框标题
+                caption: "新对话框",
+                //相对于屏幕窗口对齐
+                alignment: 3,
+            });
+        });
+ 
+        //新窗口
+        $(#win1).on("click", function() {
+            var win = view.window({
+                //窗口类型
+                //View.FRAME_WINDOW 框架窗口
+                //View.TOOL_WINDOW 工具窗口
+                //View.POPUP_WINDOW 弹出窗口
+                type: View.TOOL_WINDOW,
+                //加载到窗口中的URL，可加载本地文件
+                url: self.url("simple.html"),
+                //窗口的x，y坐标
+                x: 200,
+                y: 200,
+                //窗口的宽度，高度
+                width: 400,
+                height: 400,
+                //是否是客户区，如果为真，那么x，y，width，height作为客户区坐标，而不是窗口
+                client: false,
+                //窗口状态
+                //View.WINDOW_SHOWN 显示
+                //View.WINDOW_HIDDEN 隐藏
+                //View.WINDOW_MINIMIZED 最小化
+                //View.WINDOW_MAXIMIZED 最大化
+                //View.WINDOW_FULL_SCREEN 全屏
+                state: View.WINDOW_SHOWN,
+                //窗口参数
+                parameters: {"test":"test"},
+                //窗口标题
+                caption: "新窗口",
+                //相对于屏幕窗口对齐
+                alignment: 3,
+            });
+            //访问窗口中设置的参数
+            stdout.println(win.parameters["test"]);
+        });
+ 
+        //修改当前窗口的状态
+        $(#state1).on("click", function() {
+            //全屏
+            view.state = View.WINDOW_FULL_SCREEN;
+        });
+        $(#state2).on("click", function() {
+            //默认
+            view.state = View.WINDOW_SHOWN;
+        });
+        $(#state3).on("click", function() {
+            //关闭
+            view.close();
+        });
+ 
+        //view的事件响应
+        //视图窗口大小发生改变时
+        view.on("sizing", function(sizingParams) {
+            view.dump("大小改变", sizingParams.x, sizingParams.y, sizingParams.width, sizingParams.height);
+        });
+        //视图窗口移动时
+        view.on("moving", function(movingParams) {
+            view.dump("移动改变", movingParams.x, movingParams.y, movingParams.width, movingParams.height);
+        });
+        //视图窗口状态改变时
+        view.on("statechange", function() {
+            view.dump(view.state);
+        });
+ 
+        //请求方法类似jquery中的ajax
+        $(#req).on("click", function() {
+            view.request({
+                //请求类型(#get, #post, #put, #delete)
+                type: #get,
+                //请求url
+                url: "http://www.163.com",
+                //协议(#basic, #multipart, #json)
+                protocol: #basic,
+                params: {
+                    "test": "test"
+                },
+                //成功回调函数
+                success: function(data,status) {
+                    $(#reqRet).html = data;
+                },
+                //失败回调函数
+                error: function(err,status) {
+ 
+                }
+            });
+        });
+    };
+</script>
+</body>
+</html>

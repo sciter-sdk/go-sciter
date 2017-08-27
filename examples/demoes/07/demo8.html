@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tiscript脚本学习</title>
+    <style>
+        #mouse {
+            border: 1px solid #ccc;
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <ul>
+        <li>1111</li>
+        <li>2222</li>
+        <li>3333</li>
+    </ul>
+</div>
+<div id="form">
+    ID: <input type="text" name="id" value="001"><br>
+    姓名：<input type="text" name="name"><br>
+    性别：<input type="radio" name="sex" value="0">男
+    <input type="radio" name="sex" value="1">女
+    <button id="btn1">按钮</button>
+    <button id="btn2">定时</button>
+</div>
+<div id="event">
+    <input type="text" id="ipt"><br>
+    <input type="text" id="ipt2"><br>
+    <button id="btn3">单击</button>
+    <br>
+    <button id="btn4">双击</button>
+    <br>
+    <select id="sel">
+        <option value="11">11</option>
+        <option value="22">22</option>
+        <option value="33">33</option>
+    </select>
+    <div id="mouse"></div>
+</div>
+<script type="text/tiscript">
+    //类似jquery的ready();
+    self.ready = function() {
+        testDom();
+        testEvent();
+    };
+ 
+    //测试Dom操作
+    function testDom() {
+        //选择元素，不要加引号
+        var box = self.$(#box);
+        //效果同上，注意要加引号
+        var box2 = self.select("#box");
+        //选择多个元素
+        var lis = self.$$(#box > ul > li);
+        stdout.println(lis.length);
+        //同上
+        var lis2 = self.selectAll("#box > ul > li");
+        stdout.println(lis2.length);
+        //first表示元素的第一个子元素
+        stdout.println(lis.first.text);
+        //last表示元素的最后一个子元素
+        stdout.println(lis.last.text);
+ 
+        var li = self.$(#box > ul > li:nth-child(1));
+        //next表示下一个兄弟元素
+        stdout.println(li.next.text);
+ 
+        //访问元素的属性
+        stdout.println(box.attributes["id"]);
+        //设置元素的属性
+        box.attributes["status"] = "open";
+ 
+        //设置元素的样式
+        li.style["background"] = "#f00";
+ 
+        //判断元素是否可见
+        var li2 = self.$(#box > ul > li:nth-child(2));
+        li2.style["display"] = "none";
+        if(!li2.isVisible) {
+            stdout.println("li2不可见");
+        }
+ 
+        //遍历元素
+        for(var child in lis) {
+            stdout.println(child.text);
+        }
+ 
+        //动态创建元素
+        var li4 = new Element("li");
+        //将li元素追加到ul元素内部
+        $(#box > ul).append(li4);
+        //设置元素的文本
+        //注意这里需先将元素添加到dom树上，然后再设置元素文本
+        li4.text = "444";
+ 
+        //这里直接追加html内容，不要加引号
+        $(#box > ul).$append(<li>555</li>);
+        $(#box > ul).$prepend(<li>000</li>);
+        //外部追加
+        $(#box).$after(<div>after</div>);
+        $(#box).$before(<div>before</div>);
+ 
+        //删除元素
+        $(#box > ul > li:nth-child(4)).remove();
+ 
+        //设置元素的状态
+        //设置只读
+        $(input[name='id']).setState(Element.STATE_READONLY);
+        //设置焦点
+        $(input[name='name']).setState(Element.STATE_FOCUS);
+        //设置选中
+        $(input[name='sex'][value='1']).setState(Element.STATE_CHECKED);
+        //设置禁用
+        $(#btn1).setState(Element.STATE_DISABLED);
+ 
+        //定时器
+        var cnt = 5;
+        $(#btn2).timer(1000, function() {
+            if(cnt == 0) {
+                //返回false则停止定时器
+                return false;
+            }
+            this.text = "第" + cnt + "次";
+            cnt--;
+            return true;
+        });
+    }
+ 
+    //测试元素事件
+    function testEvent() {
+        //单击事件
+        $(#btn3).onClick = function() {
+            stdout.println("btn3被点击了");
+        };
+        //双击事件
+        $(#btn4).on("dblclick", function() {
+            stdout.println("btn4被双击了");
+        });
+        //按键弹起
+        $(#ipt).on("keyup", function() {
+            stdout.println(this.value);
+        });
+        //value值改变时
+        $(#sel).on("change", function() {
+            stdout.println(this.value);
+        });
+ 
+        //移除事件函数
+        $(#btn4).off("dblclick");
+        //或者如下
+        $(#btn4).unsubscribe("dblclick");
+ 
+        //判断事件类型和按键码值
+        $(#ipt2).on("keyup", function(evt) {
+            //evt.type表示事件类型
+            //evt.keyCode表示键码值
+            if(evt.type == Event.KEY_UP && evt.keyCode == Event.VK_RETURN) {
+                stdout.println("你回车了");
+            }
+        });
+ 
+        //鼠标移动事件
+        $(#mouse).on("mousemove", function(evt) {
+            var str = "";
+            str += "相对于div本身的 x:" + evt.x + " y:" + evt.y + "<br>";
+            str += "相对于根元素html本身的 x:" + evt.xRoot + " y:" + evt.yRoot + "<br>";
+            str += "相对于window窗口本身的 x:" + evt.xView + " y:" + evt.yView + "<br>";
+            this.html = str;
+        });
+    }
+ 
+</script>
+</body>
+</html>
