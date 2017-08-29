@@ -52,13 +52,7 @@
        return _api;
     }
 
-	HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength) { 
-		return SAPI(NULL)->SciterOpenArchive (archiveData,archiveDataLength); 
-	}
 
-	BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength){
-		return SAPI(NULL)->SciterGetArchiveItem (harc,path,pdata,pdataLength); 
-	}
 
 
 #elif defined(OSX)
