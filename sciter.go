@@ -779,7 +779,7 @@ func (e *Element) NthAttr(n int) (value string, err error) {
 func (e *Element) Attr(name string) (string, error) {
 	var str string
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(str))[0])))
+	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
 	crcv := (*C.LPCWSTR_RECEIVER)(unsafe.Pointer(C.LPCWSTR_RECEIVER_cgo))
 	cparam := C.LPVOID(unsafe.Pointer(&str))
 	// cgo call
@@ -856,7 +856,7 @@ func (e *Element) Type() (string, error) {
 func (e *Element) Style(name string) (string, error) {
 	var str string
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(str))[0])))
+	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
 	crcv := (*C.LPCWSTR_RECEIVER)(unsafe.Pointer(C.LPCWSTR_RECEIVER_cgo))
 	cparam := C.LPVOID(unsafe.Pointer(&str))
 	// cgo call
