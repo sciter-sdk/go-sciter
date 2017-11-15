@@ -22,7 +22,7 @@ import (
 //    SW_ENABLE_DEBUG = (1 << 9), // make this window inspector ready
 //    SW_OWNS_VM      = (1 << 10), // it has its own script VM
 // };
-type WindowCreationFlag uint
+type WindowCreationFlag uint32
 
 const (
 	SW_CHILD        WindowCreationFlag = (1 << iota) // child window only, if this flag is set all other flags ignored
@@ -93,7 +93,7 @@ const (
 	// see: http://www.w3.org/TR/xml-events/Overview.html#s_intro
 )
 
-type MouseButton uint
+type MouseButton uint32
 
 // enum MOUSE_BUTTONS
 const (
@@ -102,7 +102,7 @@ const (
 	MIDDLE_MOUSE_BUTTON MouseButton = 4
 )
 
-type KeyboardState uint
+type KeyboardState uint32
 
 // enum KEYBOARD_STATES
 const (
@@ -118,7 +118,7 @@ const (
 	BEHAVIOR_ATTACH = 1
 )
 
-type DraggingType uint
+type DraggingType uint32
 
 // enum DRAGGING_TYPE
 const (
@@ -127,7 +127,7 @@ const (
 	DRAGGING_COPY
 )
 
-type MouseEvent uint
+type MouseEvent uint32
 
 // parameters of evtg == HANDLE_MOUSE
 // enum MOUSE_EVENTS
@@ -153,7 +153,7 @@ const (
 	// E.g. event DRAGGING | MOUSE_MOVE is sent to underlying DOM elements while dragging.
 )
 
-type CursorType uint
+type CursorType uint32
 
 // enum CURSOR_TYPE
 const (
@@ -175,7 +175,7 @@ const (
 	CURSOR_DRAG_COPY                     //15
 )
 
-type KeyEvent uint
+type KeyEvent uint32
 
 // enum KEY_EVENTS
 const (
@@ -184,7 +184,7 @@ const (
 	KEY_CHAR
 )
 
-type FocusEvent uint
+type FocusEvent uint32
 
 // enum FOCUS_EVENTS
 const (
@@ -192,7 +192,7 @@ const (
 	FOCUS_GOT
 )
 
-type ScrollEvent uint
+type ScrollEvent uint32
 
 // enum SCROLL_EVENTS
 const (
@@ -208,7 +208,7 @@ const (
 	SCROLL_CORNER_RELEASED
 )
 
-type GestureCmd uint
+type GestureCmd uint32
 
 // enum GESTURE_CMD
 const (
@@ -220,7 +220,7 @@ const (
 	GESTURE_TAP2                      // The two-finger tap gesture.
 )
 
-type GestureState uint
+type GestureState uint32
 
 // enum GESTURE_STATE
 const (
@@ -229,7 +229,7 @@ const (
 	GESTURE_STATE_END     GestureState = 4 // end last event of the gesture sequence
 )
 
-type GestureTypeFlag uint
+type GestureTypeFlag uint32
 
 // enum GESTURE_TYPE_FLAGS // requested
 const (
@@ -245,7 +245,7 @@ const (
 	GESTURE_FLAGS_ALL             GestureTypeFlag = 0xFFFF //
 )
 
-type DrawEvent uint
+type DrawEvent uint32
 
 // enum DRAW_EVENTS
 const (
@@ -259,7 +259,7 @@ const (
 	CONTENT_REMOVED = 0x02
 )
 
-type BehaviorEvent uint
+type BehaviorEvent uint32
 
 // enum BEHAVIOR_EVENTS
 const (
@@ -398,7 +398,7 @@ const (
 	BY_UNDO_REDO                          // undo/redo
 )
 
-type BehaviorMethodIdentifier uint
+type BehaviorMethodIdentifier uint32
 
 // enum BEHAVIOR_METHOD_IDENTIFIERS
 const (
@@ -493,7 +493,7 @@ const (
 	UT_OBJECT_ERROR    = 5 // type T_OBJECT of type Error
 )
 
-type ValueStringConvertType uint
+type ValueStringConvertType uint32
 
 // enum VALUE_STRING_CVT_TYPE
 const (
@@ -503,7 +503,7 @@ const (
 	CVT_XJSON_LITERAL                               ///< x-json parsing/emission, date is emitted as ISO8601 date literal, currency is emitted in the form DDDD$CCC
 )
 
-type SET_ELEMENT_HTML int
+type SET_ELEMENT_HTML int32
 
 // enum SET_ELEMENT_HTML
 const (
@@ -818,7 +818,7 @@ const (
 //   HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
 // } SCITER_CALLBACK_NOTIFICATION;
 type SciterCallbackNotification struct {
-	Code uint
+	Code uint32
 	Hwnd C.HWINDOW
 }
 
@@ -906,7 +906,7 @@ func (s *ScnLoadData) SetData(data []byte) {
 /** Resource data type.
  *  Used by SciterDataReadyAsync() function.
  **/
-type SciterResourceType uint
+type SciterResourceType uint32
 
 // typedef enum SciterResourceType
 const (
@@ -940,9 +940,9 @@ type ScnDataLoaded struct {
 	SciterCallbackNotification
 	uri      *uint16
 	data     *byte
-	DataSize uint
+	DataSize uint32
 	DataType SciterResourceType
-	Status   uint
+	Status   uint32
 }
 
 func (s *ScnDataLoaded) Uri() string {
@@ -984,8 +984,8 @@ func (s *ScnAttachBehavior) Element() C.HELEMENT {
 }
 
 // typedef int SCDOM_RESULT;
-type SCDOM_RESULT int
-type VALUE_RESULT int //C.VALUE_RESULT
+type SCDOM_RESULT int32
+type VALUE_RESULT int32 //C.VALUE_RESULT
 
 // enum VALUE_RESULT
 const (
@@ -1049,7 +1049,7 @@ const (
 	SCROLLABLE_AREA = 0x60 // scroll_area - scrollable area in content box
 )
 
-type SCITER_SCROLL_FLAGS uint
+type SCITER_SCROLL_FLAGS uint32
 
 // enum SCITER_SCROLL_FLAGS
 const (
@@ -1186,7 +1186,7 @@ const (
 
 // };
 
-type Sciter_RT_OPTIONS uint
+type Sciter_RT_OPTIONS uint32
 
 const (
 	SCITER_SMOOTH_SCROLL      Sciter_RT_OPTIONS = 1 // value:TRUE - enable, value:FALSE - disable, enabled by default
@@ -1215,7 +1215,7 @@ const (
 // *     4 - popup element on left side of anchor
 // *     6 - popup element on right side of anchor
 // *     ( see numpad on keyboard to get an idea of the numbers)
-type PopupPlacement uint
+type PopupPlacement uint32
 
 const (
 	BelowAnchor   PopupPlacement = 2
@@ -1224,7 +1224,7 @@ const (
 	RightOfAnchor PopupPlacement = 6
 )
 
-type ElementState uint
+type ElementState uint32
 
 // enum ELEMENT_STATE_BITS
 const (
@@ -1265,7 +1265,7 @@ const (
 	STATE_IS_RTL ElementState = 0x20000000 // the element or one of its containers has dir=rtl declared
 )
 
-type RequestType uint
+type RequestType uint32
 
 // enum REQUEST_TYPE
 const (
