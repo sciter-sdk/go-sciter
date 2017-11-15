@@ -1283,7 +1283,7 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 
 	switch evtg {
 	case SUBSCRIPTIONS_REQUEST:
-		p := (*uint)(params)
+		p := (*uint32)(params)
 		*p = HANDLE_ALL
 		handled = true
 	case HANDLE_INITIALIZATION:
