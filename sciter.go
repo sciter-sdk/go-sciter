@@ -394,7 +394,7 @@ func (s *Sciter) SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 func SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 	coption := C.UINT(option)
 	cvalue := C.UINT_PTR(value)
-	hwnd := C.HWINDOW(0)
+	hwnd := C.HWINDOW(nil)
 	r := C.SciterSetOption(hwnd, coption, cvalue)
 	if r == 0 {
 		return false
