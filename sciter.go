@@ -390,6 +390,18 @@ func (s *Sciter) SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 	return true
 }
 
+// BOOL     SciterSetOption (NULL, UINT option, UINT_PTR value )
+func SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
+	coption := C.UINT(option)
+	cvalue := C.UINT_PTR(value)
+	hwnd := C.HWINDOW(0)
+	r := C.SciterSetOption(hwnd, coption, cvalue)
+	if r == 0 {
+		return false
+	}
+	return true
+}
+
 // VOID     SciterGetPPI (HWINDOW hWndSciter, UINT* px, UINT* py) ;// { SAPI()->SciterGetPPI (hWndSciter,px,py); }
 // BOOL     SciterGetViewExpando ( HWINDOW hwnd, VALUE* pval ) ;//{ return SAPI()->SciterGetViewExpando ( hwnd, pval ); }
 // #ifdef WINDOWS
