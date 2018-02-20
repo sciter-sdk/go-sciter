@@ -5,7 +5,7 @@
 package sciter
 
 /*
-#cgo CFLAGS: -g -w -std=c11 -Iinclude -DPLAIN_API_ONLY
+#cgo CFLAGS: -g -std=c11 -Iinclude -DPLAIN_API_ONLY
 #cgo linux LDFLAGS: -ldl
 #cgo linux pkg-config: gtk+-3.0
 #include "sciter-x.h"
@@ -1623,8 +1623,8 @@ func (e *Element) IsEnabled() bool {
 }
 
 //export goELEMENT_COMPARATOR
-func goELEMENT_COMPARATOR(he1 unsafe.Pointer, he2 unsafe.Pointer, arg uintptr) int {
-	cmp := *(*func(*Element, *Element) int)(unsafe.Pointer(arg))
+func goELEMENT_COMPARATOR(he1 unsafe.Pointer, he2 unsafe.Pointer, arg unsafe.Pointer) int {
+	cmp := *(*func(*Element, *Element) int)(arg)
 	return cmp(WrapElement(C.HELEMENT(he1)), WrapElement(C.HELEMENT(he2)))
 }
 
