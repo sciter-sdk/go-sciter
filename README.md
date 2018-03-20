@@ -1,7 +1,14 @@
+# Go bindings for Sciter
+
+Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other language bindings (Delphi / D / Go / .NET / Python / Rust).
+
+----
+
+
 # Attention
 
-The ownership of project is transferred to this new organization. 
-Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, 
+The ownership of project is transferred to this new organization.
+Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`,
 but the package name is still `sciter`.
 
 # Introduction
@@ -37,7 +44,7 @@ Things that are not supported:
     The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix like `dll` `so` or `dylib`
 
     * Windows: simply copying `bin\64\sciter.dll` to `c:\windows\system32` is just enough
-    * Linux: 
+    * Linux:
       - `cd sciter-sdk/bin.gtk/`
       - `echo $PWD >> libsciter.conf`
       - `sudo cp libsciter.conf /etc/ld.so.conf.d/`
