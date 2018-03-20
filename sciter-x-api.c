@@ -7,9 +7,9 @@
     EXTERN_C ISciterAPI* SCAPI SciterAPI();
 
 #if defined(__cplusplus) && !defined(PLAIN_API_ONLY)
-    inline ISciterAPI* SAPI( ISciterAPI* ext = nullptr ) {
+    ISciterAPI* SAPI( ISciterAPI* ext = nullptr ) {
 #else
-    inline ISciterAPI* SAPI(ISciterAPI* ext) {
+    ISciterAPI* SAPI(ISciterAPI* ext) {
 #endif
        static ISciterAPI* _api = 0;
        if( ext ) _api = ext;
