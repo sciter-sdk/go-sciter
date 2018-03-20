@@ -11,7 +11,7 @@
 #else
     inline ISciterAPI* SAPI(ISciterAPI* ext) {
 #endif
-       static ISciterAPI* _api = nullptr;
+       static ISciterAPI* _api = 0;
        if( ext ) _api = ext;
        if( !_api )
        {
