@@ -6,17 +6,24 @@
 
     EXTERN_C ISciterAPI* SCAPI SciterAPI();
 
-    ISciterAPI* SAPI( ISciterAPI* ext ) {
-       static ISciterAPI* _api = NULL;
+#if defined(__cplusplus) && !defined(PLAIN_API_ONLY)
+    inline ISciterAPI* SAPI( ISciterAPI* ext = nullptr ) {
+#else
+    inline ISciterAPI* SAPI(ISciterAPI* ext) {
+#endif
+       static ISciterAPI* _api = nullptr;
        if( ext ) _api = ext;
        if( !_api )
        {
           _api = SciterAPI();
-          tiscript::ni( _api->TIScriptAPI() );
+#if defined(__cplusplus) && !defined(PLAIN_API_ONLY)
+          tiscript::ni(_api->TIScriptAPI());
+#endif
        }
+       assert(_api);
        return _api;
     }
-
+    
 #elif defined(WINDOWS)
 
     ISciterAPI* SAPI( ISciterAPI* ext ) {
@@ -70,8 +77,9 @@
             realpath(pathbuf, folderpath);
             *strrchr(folderpath, '/') = '\0';
 
-            void* lib_sciter_handle = dlopen(SCITER_DLL_NAME, RTLD_LOCAL|RTLD_LAZY);
-            if( !lib_sciter_handle ) {
+            void* lib_sciter_handle = 0;
+            {
+                // 1. try to load from the same folder as this executable
                 const char* lookup_paths[] =
                 {
                     "/" SCITER_DLL_NAME,
@@ -85,6 +93,9 @@
                     lib_sciter_handle = dlopen(tpath, RTLD_LOCAL|RTLD_LAZY);
                 }
             }
+            if (!lib_sciter_handle) // 2. no luck, try to load from system paths
+              lib_sciter_handle = dlopen(SCITER_DLL_NAME, RTLD_LOCAL | RTLD_LAZY);
+
             if (!lib_sciter_handle) {
                 fprintf(stderr, "[%s] Unable to load library: %s\n", __FILE__, dlerror());
                 exit(EXIT_FAILURE);
