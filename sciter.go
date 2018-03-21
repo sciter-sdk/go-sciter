@@ -76,6 +76,10 @@ func (s *Sciter) GetHwnd() C.HWINDOW {
 	return s.hwnd
 }
 
+func SetDLL(dir string){
+	C.DLL_DIR = C.CString(dir)
+}
+
 //This function is used in response to SCN_LOAD_DATA request.
 //
 //  \param[in] hwnd \b HWINDOW, Sciter window handle.

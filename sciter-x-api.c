@@ -1,6 +1,7 @@
 #include <sciter-x.h>
 
 // getting ISciterAPI reference:
+const char * DLL_DIR = "sciter.dll";
 
 #ifdef STATIC_LIB
 
@@ -31,7 +32,7 @@
        if( ext ) _api = ext;
        if( !_api )
        {
-          HMODULE hm = LoadLibrary( TEXT("sciter.dll") );
+          HMODULE hm = LoadLibrary( TEXT( DLL_DIR ) );
           //#if defined(WIN64) || defined(_WIN64)
           //  TEXT("sciter64.dll")
           //#else
