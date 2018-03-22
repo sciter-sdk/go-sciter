@@ -8,7 +8,9 @@ package sciter
 #cgo CFLAGS: -g -std=c11 -Iinclude -DPLAIN_API_ONLY
 #cgo linux LDFLAGS: -ldl
 #cgo linux pkg-config: gtk+-3.0
+
 #include "sciter-x.h"
+
 extern BOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param);
 extern VOID SC_CALLBACK LPCSTR_RECEIVER_cgo( LPCSTR str, UINT str_length, LPVOID param );
 extern VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo( LPCWSTR str, UINT str_length, LPVOID param );
@@ -22,6 +24,8 @@ extern VOID NATIVE_FUNCTOR_RELEASE_cgo( VOID* tag );
 extern INT SC_CALLBACK ELEMENT_COMPARATOR_cgo( HELEMENT he1, HELEMENT he2, LPVOID param );
 // ValueEnumElements
 extern BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval );
+
+extern const char * SCITER_DLL_PATH;
 */
 import "C"
 import (
@@ -77,7 +81,7 @@ func (s *Sciter) GetHwnd() C.HWINDOW {
 }
 
 func SetDLL(dir string){
-	C.DLL_DIR = C.CString(dir)
+	C.SCITER_DLL_PATH = C.CString(dir)
 }
 
 //This function is used in response to SCN_LOAD_DATA request.

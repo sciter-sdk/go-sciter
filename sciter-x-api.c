@@ -1,7 +1,7 @@
 #include <sciter-x.h>
 
 // getting ISciterAPI reference:
-const char * DLL_DIR = "sciter.dll";
+const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
 
 #ifdef STATIC_LIB
 
@@ -32,13 +32,7 @@ const char * DLL_DIR = "sciter.dll";
        if( ext ) _api = ext;
        if( !_api )
        {
-          HMODULE hm = LoadLibrary( TEXT( DLL_DIR ) );
-          //#if defined(WIN64) || defined(_WIN64)
-          //  TEXT("sciter64.dll")
-          //#else
-          //  TEXT("sciter32.dll")
-          //#endif
-          //);
+          HMODULE hm = LoadLibraryA( SCITER_DLL_PATH );
           if(hm) {
             SciterAPI_ptr sciterAPI = (SciterAPI_ptr) GetProcAddress(hm, "SciterAPI");
             if( sciterAPI ) {
@@ -78,7 +72,9 @@ const char * DLL_DIR = "sciter.dll";
             realpath(pathbuf, folderpath);
             *strrchr(folderpath, '/') = '\0';
 
-            void* lib_sciter_handle = 0;
+            // 0. try to load from user-provided library full path.
+            void* lib_sciter_handle = dlopen(SCITER_DLL_PATH, RTLD_LOCAL|RTLD_LAZY);
+            if (!lib_sciter_handle)
             {
                 // 1. try to load from the same folder as this executable
                 const char* lookup_paths[] =
@@ -137,8 +133,10 @@ const char * DLL_DIR = "sciter.dll";
                //strcat  (pathbuf, "/");
             }
 
-            void* lib_sciter_handle = dlopen(SCITER_DLL_NAME, RTLD_LOCAL|RTLD_LAZY);
+            // 0. try to load from user-provided library full path.
+            void* lib_sciter_handle = dlopen(SCITER_DLL_PATH, RTLD_LOCAL|RTLD_LAZY);
             if( !lib_sciter_handle ) {
+                // 1. try to load from the same folder as this executable
                 fprintf(stderr, "[%s] Unable to load library: %s\n", __FILE__, dlerror());
                 const char* lookup_paths[] =
                 {

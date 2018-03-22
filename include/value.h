@@ -1,8 +1,6 @@
 #ifndef __value_h__
 #define __value_h__
 
-const char * DLL_DIR;
-
 #include "sciter-x-types.h"
 
 enum VALUE_RESULT

@@ -119,6 +119,8 @@ enum GFX_LAYER
 
   typedef wchar_t wchar;
 
+  #define SCITER_DLL_NAME "sciter.dll"
+
   #ifdef _WIN64
     #define TARGET_64
   #else
