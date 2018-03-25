@@ -45,7 +45,7 @@ Things that are not supported:
 
     * Windows: simply copying `bin\64\sciter.dll` to `c:\windows\system32` is just enough
     * Linux:
-      - `cd sciter-sdk/bin.gtk/`
+      - `cd sciter-sdk/bin.gtk/{arch}` replace **{arch}** with either **arm** or **x64** depending on your architecture
       - `echo $PWD >> libsciter.conf`
       - `sudo cp libsciter.conf /etc/ld.so.conf.d/`
       - `sudo ldconfig`
