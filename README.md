@@ -45,18 +45,19 @@ Things that are not supported:
 
     * Windows: simply copying `bin\64\sciter.dll` to `c:\windows\system32` is just enough
     * Linux:
-      - `cd sciter-sdk/bin.gtk/`
+      - `cd sciter-sdk/bin.gtk/x64`
+      - `export LIBRARY_PATH=$PWD`
       - `echo $PWD >> libsciter.conf`
       - `sudo cp libsciter.conf /etc/ld.so.conf.d/`
       - `sudo ldconfig`
-      - `ldconfig -p | grep sciter` should print libsciter-gtk-64.so location
+      - `ldconfig -p | grep sciter` should print libsciter-gtk.so location
     * OSX:
       - `cd sciter-sdk/bin.osx/`
       - `export DYLD_LIBRARY_PATH=$PWD`
 
  3. Set up GCC envrionmnet for CGO
 
-    [mingw64-gcc][] (5.2.0 is tested) is recommended for Windows users.
+    [mingw64-gcc][] (5.2.0 and 7.2.0 are tested) is recommended for Windows users.
 
     Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
 
