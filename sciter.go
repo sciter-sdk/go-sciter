@@ -44,7 +44,7 @@ type Sciter struct {
 }
 
 var (
-	BAD_HWINDOW = C.HWINDOW(unsafe.Pointer(uintptr(0)))
+	BAD_HWINDOW C.HWINDOW = nil
 )
 
 func Wrap(hwnd C.HWINDOW) *Sciter {
@@ -402,7 +402,7 @@ func (s *Sciter) SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 func SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 	coption := C.UINT(option)
 	cvalue := C.UINT_PTR(value)
-	hwnd := C.HWINDOW(nil)
+	hwnd := BAD_HWINDOW
 	r := C.SciterSetOption(hwnd, coption, cvalue)
 	if r == 0 {
 		return false
