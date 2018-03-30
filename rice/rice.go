@@ -14,6 +14,7 @@ var (
 			rice.LocateWorkingDirectory,
 			rice.LocateFS,
 			rice.LocateAppended,
+			rice.LocateEmbedded,
 		},
 	}
 	boxmap = make(map[string]*rice.Box)
