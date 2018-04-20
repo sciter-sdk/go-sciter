@@ -104,6 +104,14 @@ typedef enum SCITER_TEXT_DIRECTION
   TEXT_DIRECTION_TTB,
 }SCITER_TEXT_DIRECTION;
 
+typedef enum SCITER_IMAGE_ENCODING
+{
+  SCITER_IMAGE_ENCODING_RAW, // [a,b,g,r,a,b,g,r,...] vector
+  SCITER_IMAGE_ENCODING_PNG,
+  SCITER_IMAGE_ENCODING_JPG,
+  SCITER_IMAGE_ENCODING_WEBP,
+} SCITER_IMAGE_ENCODING;
+
 typedef struct SCITER_TEXT_FORMAT
 {
     LPWSTR                fontFamily;
@@ -159,9 +167,8 @@ struct SciterGraphicsAPI
         SCFN(imageSave) // save png/jpeg/etc. image to stream of bytes
           ( HIMG himg,
           image_write_function* pfn, void* prm, /* function and its param passed "as is" */
-          UINT bpp /*24,32 if alpha needed*/,
-          UINT quality /* png: 0, jpeg:, 10 - 100 */ );
-
+          UINT encoding, // SCITER_IMAGE_ENCODING
+          UINT quality /* if webp or jpeg:, 10 - 100 */ );
 
   // SECTION: graphics primitives and drawing operations
 

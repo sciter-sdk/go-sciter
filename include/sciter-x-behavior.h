@@ -356,39 +356,39 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       //                               //     reason = index of the row (fixed_rows..n)
 
       ELEMENT_COLLAPSED = 0x90,      // element was collapsed, so far only behavior:tabs is sending these two to the panels
-      ELEMENT_EXPANDED,              // element was expanded,
+      ELEMENT_EXPANDED = 0x91,       // element was expanded,
 
-      ACTIVATE_CHILD,                // activate (select) child,
+      ACTIVATE_CHILD = 0x92,         // activate (select) child,
                                      // used for example by accesskeys behaviors to send activation request, e.g. tab on behavior:tabs.
 
       //DO_SWITCH_TAB = ACTIVATE_CHILD,// command to switch tab programmatically, handled by behavior:tabs
       //                               // use it as SciterPostEvent(tabsElementOrItsChild, DO_SWITCH_TAB, tabElementToShow, 0);
 
-      INIT_DATA_VIEW,                // request to virtual grid to initialize its view
+      //INIT_DATA_VIEW,                // request to virtual grid to initialize its view
 
-      ROWS_DATA_REQUEST,             // request from virtual grid to data source behavior to fill data in the table
-                                     // parameters passed throug DATA_ROWS_PARAMS structure.
+      //ROWS_DATA_REQUEST,             // request from virtual grid to data source behavior to fill data in the table
+      //                               // parameters passed throug DATA_ROWS_PARAMS structure.
 
-      UI_STATE_CHANGED,              // ui state changed, observers shall update their visual states.
+      UI_STATE_CHANGED = 0x95,       // ui state changed, observers shall update their visual states.
                                      // is sent for example by behavior:richtext when caret position/selection has changed.
 
-      FORM_SUBMIT,                   // behavior:form detected submission event. BEHAVIOR_EVENT_PARAMS::data field contains data to be posted.
+      FORM_SUBMIT = 0x96,                   // behavior:form detected submission event. BEHAVIOR_EVENT_PARAMS::data field contains data to be posted.
                                      // BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about
                                      // to be submitted. You can modify the data or discard submission by returning true from the handler.
-      FORM_RESET,                    // behavior:form detected reset event (from button type=reset). BEHAVIOR_EVENT_PARAMS::data field contains data to be reset.
+      FORM_RESET  = 0x97,            // behavior:form detected reset event (from button type=reset). BEHAVIOR_EVENT_PARAMS::data field contains data to be reset.
                                      // BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about
                                      // to be rest. You can modify the data or discard reset by returning true from the handler.
 
-      DOCUMENT_COMPLETE,             // document in behavior:frame or root document is complete.
+      DOCUMENT_COMPLETE = 0x98,             // document in behavior:frame or root document is complete.
 
-      HISTORY_PUSH,                  // requests to behavior:history (commands)
-      HISTORY_DROP,
-      HISTORY_PRIOR,
-      HISTORY_NEXT,
-      HISTORY_STATE_CHANGED,         // behavior:history notification - history stack has changed
+      HISTORY_PUSH = 0x99,                  // requests to behavior:history (commands)
+      HISTORY_DROP = 0x9A,
+      HISTORY_PRIOR = 0x9B,
+      HISTORY_NEXT = 0x9C,
+      HISTORY_STATE_CHANGED = 0x9D,  // behavior:history notification - history stack has changed
 
-      CLOSE_POPUP,                   // close popup request,
-      REQUEST_TOOLTIP,               // request tooltip, evt.source <- is the tooltip element.
+      CLOSE_POPUP = 0x9E,            // close popup request,
+      REQUEST_TOOLTIP = 0x9F,        // request tooltip, evt.source <- is the tooltip element.
 
       ANIMATION         = 0xA0,      // animation started (reason=1) or ended(reason=0) on the element.
 
@@ -396,6 +396,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       DOCUMENT_CLOSE_REQUEST = 0xC1, // document is about to be closed, to cancel closing do: evt.data = sciter::value("cancel");
       DOCUMENT_CLOSE    = 0xC2,      // last notification before document removal from the DOM
       DOCUMENT_READY    = 0xC3,      // document has got DOM structure, styles and behaviors of DOM elements. Script loading run is complete at this moment.
+      DOCUMENT_PARSED   = 0xC4,      // document just finished parsing - has got DOM structure. This event is generated before DOCUMENT_READY
 
       VIDEO_INITIALIZED = 0xD1,      // <video> "ready" notification
       VIDEO_STARTED     = 0xD2,      // <video> playback started notification
@@ -501,7 +502,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
   typedef struct SCRIPTING_METHOD_PARAMS
   {
       LPCSTR        name;   ///< method name
-      SCITER_VALUE* argv;   ///< vector of arguments
+      const SCITER_VALUE* argv;   ///< vector of arguments
       UINT          argc;   ///< argument count
       SCITER_VALUE  result; ///< return value
   } SCRIPTING_METHOD_PARAMS;
@@ -685,7 +686,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       // }
       // will end up with on_script_call(he, "my-method" , 2, argv, retval );
       // where argv[0] will be 1 and argv[1] will be "one".
-      virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, SCITER_VALUE* argv, SCITER_VALUE& retval) { return false; }
+      virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE& retval) { return false; }
 
       // Calls from TIScript. Override this if you want your own methods accessible directly from tiscript engine.
       // Use tiscript::args to access parameters.
@@ -789,16 +790,16 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
     inline void attach_dom_event_handler(HWINDOW hwnd, event_handler* ph)
     {
       int r = SciterWindowAttachEventHandler( hwnd, &event_handler::element_proc, ph, HANDLE_ALL );
-      assert(r == SCDOM_OK); r;
+      assert(r == SCDOM_OK); (void)r;
     }
     inline void detach_dom_event_handler(HWINDOW hwnd, event_handler* ph)
     {
       int r = SciterWindowDetachEventHandler( hwnd, &event_handler::element_proc, ph );
-      assert(r == SCDOM_OK); r;
+      assert(r == SCDOM_OK); (void)r;
     }
 
 #define BEGIN_FUNCTION_MAP \
-    virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, sciter::value* argv, sciter::value& retval) \
+    virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, const sciter::value* argv, sciter::value& retval) \
     { \
       aux::chars _name = aux::chars_of(name);
 

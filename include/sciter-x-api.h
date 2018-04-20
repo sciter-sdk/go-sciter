@@ -43,7 +43,7 @@ typedef struct _ISciterAPI {
 
   UINT    version; // is zero for now
 
-  LPCWSTR SCFN( SciterClassName )();
+  LPCWSTR SCFN( SciterClassName )(void);
   UINT    SCFN( SciterVersion )(BOOL major);
   BOOL    SCFN( SciterDataReady )(HWINDOW hwnd,LPCWSTR uri,LPCBYTE data, UINT dataLength);
   BOOL    SCFN( SciterDataReadyAsync )(HWINDOW hwnd,LPCWSTR uri, LPCBYTE data, UINT dataLength, LPVOID requestId);
@@ -72,9 +72,9 @@ typedef struct _ISciterAPI {
   VOID    SCFN( SciterGetPPI )(HWINDOW hWndSciter, UINT* px, UINT* py);
   BOOL    SCFN( SciterGetViewExpando )( HWINDOW hwnd, VALUE* pval );
 #ifdef WINDOWS
-  BOOL    SCFN( SciterRenderD2D )(HWINDOW hWndSciter, ID2D1RenderTarget* prt);
-  BOOL    SCFN( SciterD2DFactory )(ID2D1Factory ** ppf);
-  BOOL    SCFN( SciterDWFactory )(IDWriteFactory ** ppf);
+  BOOL    SCFN( SciterRenderD2D )(HWINDOW hWndSciter, IUnknown* /*ID2D1RenderTarget**/ prt);
+  BOOL    SCFN( SciterD2DFactory )(void** /*ID2D1Factory ***/ ppf);
+  BOOL    SCFN( SciterDWFactory )(void** /*IDWriteFactory ***/ ppf);
 #endif
   BOOL    SCFN( SciterGraphicsCaps )(LPUINT pcaps);
   BOOL    SCFN( SciterSetHomeURL )(HWINDOW hWndSciter, LPCWSTR baseUrl);

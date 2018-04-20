@@ -43,7 +43,7 @@
  * The returned name can be used in CreateWindow(Ex)W function.
  * You can use #SciterClassNameT macro.
  **/
-LPCWSTR SCAPI SciterClassName();
+LPCWSTR SCAPI SciterClassName(void);
 
 /**Returns major and minor version of Sciter engine.
   * \return UINT, hiword (16-bit) contains major number and loword contains minor number;
@@ -509,7 +509,7 @@ BOOL SCAPI SciterCreateOnDirectXWindow(HWINDOW hwnd, IUnknown* pSwapChain); // I
 * \return \b BOOL, \c TRUE if layer was rendered successfully.
 *
 **/
-BOOL SCAPI SciterRenderOnDirectXWindow(HWINDOW hwnd, HELEMENT elementToRenderOrNull, BOOL frontLayer);
+BOOL SCAPI SciterRenderOnDirectXWindow(HWINDOW hwnd, HELEMENT elementToRenderOrNull /* = NULL*/, BOOL frontLayer /* = FALSE*/);
 
 /**Renders content of the document loaded to DXGI texture
 * Optionally allows to render parts of document (separate DOM elements) as layers
@@ -531,7 +531,7 @@ BOOL SCAPI SciterRenderOnDirectXTexture(HWINDOW hwnd, HELEMENT elementToRenderOr
  *
  **/
 
- BOOL SCAPI SciterRenderD2D(HWINDOW hWndSciter, ID2D1RenderTarget* prt);
+ BOOL SCAPI SciterRenderD2D(HWINDOW hWndSciter, IUnknown* /*ID2D1RenderTarget**/ prt);
 
 /** Obtain pointer to ID2D1Factory instance used by the engine:
  *
@@ -543,7 +543,7 @@ BOOL SCAPI SciterRenderOnDirectXTexture(HWINDOW hwnd, HELEMENT elementToRenderOr
  *
  **/
 
- BOOL SCAPI     SciterD2DFactory(ID2D1Factory ** ppf);
+ BOOL SCAPI     SciterD2DFactory(void** /*ID2D1Factory ***/ ppf);
 
 /** Obtain pointer to IDWriteFactory instance used by the engine:
  *
@@ -555,7 +555,7 @@ BOOL SCAPI SciterRenderOnDirectXTexture(HWINDOW hwnd, HELEMENT elementToRenderOr
  *
  **/
 
- BOOL SCAPI     SciterDWFactory(IDWriteFactory ** ppf);
+ BOOL SCAPI     SciterDWFactory(void** /*IDWriteFactory ***/ ppf);
 
 #endif
 

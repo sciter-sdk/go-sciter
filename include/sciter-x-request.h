@@ -173,6 +173,14 @@ struct SciterRequestAPI
   REQUEST_RESULT
         SCFN(RequestSetRspHeader)( HREQUEST rq, LPCWSTR name, LPCWSTR value );
 
+  // set received data type, string, mime type
+  REQUEST_RESULT
+        SCFN(RequestSetReceivedDataType)( HREQUEST rq, LPCSTR type );
+
+  // set received data encoding, string
+  REQUEST_RESULT
+        SCFN(RequestSetReceivedDataEncoding)( HREQUEST rq, LPCSTR encoding );
+
   // get received (so far) data
   REQUEST_RESULT
         SCFN(RequestGetData)( HREQUEST rq, LPCBYTE_RECEIVER* rcv, LPVOID rcv_param );

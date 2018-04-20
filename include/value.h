@@ -24,19 +24,26 @@ enum VALUE_TYPE
 {
     T_UNDEFINED = 0,
     T_NULL = 1,
-    T_BOOL,
-    T_INT,
-    T_FLOAT,
-    T_STRING,
-    T_DATE,     // INT64 - contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC), a.k.a. FILETIME on Windows
-    T_CURRENCY, // INT64 - 14.4 fixed number. E.g. dollars = int64 / 10000; 
-    T_LENGTH,   // length units, value is int or float, units are VALUE_UNIT_TYPE
-    T_ARRAY,
-    T_MAP,
-    T_FUNCTION,
-    T_BYTES,      // sequence of bytes - e.g. image data
-    T_OBJECT,     // scripting object proxy (TISCRIPT/SCITER)
-    T_DOM_OBJECT  // DOM object, use get_object_data to get HELEMENT
+    T_BOOL = 2,
+    T_INT  = 3,
+    T_FLOAT = 4,
+    T_STRING = 5,
+    T_DATE = 6,     // INT64 - contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC), a.k.a. FILETIME on Windows
+    T_CURRENCY = 7, // INT64 - 14.4 fixed number. E.g. dollars = int64 / 10000; 
+    T_LENGTH = 8,   // length units, value is int or float, units are VALUE_UNIT_TYPE
+    T_ARRAY = 9,
+    T_MAP = 10,
+    T_FUNCTION = 11,   // named tuple , like array but with name tag
+    T_BYTES = 12,      // sequence of bytes - e.g. image data
+    T_OBJECT = 13,     // scripting object proxy (TISCRIPT/SCITER)
+    T_DOM_OBJECT = 14,  // DOM object, use get_object_data to get HELEMENT 
+    //T_RESOURCE = 15,  // 15 - other thing derived from tool::resource
+    //T_RANGE = 16,     // 16 - N..M, integer range.
+    T_DURATION = 17,   // double, seconds
+    T_ANGLE = 18,      // double, radians
+    T_COLOR = 19,      // [unsigned] INT, ABGR
+
+
 };
 
 enum VALUE_UNIT_TYPE
@@ -55,7 +62,7 @@ enum VALUE_UNIT_TYPE
     UT_PC = 12, //picas (1 pica = 12 points). 
     UT_DIP = 13,
     reserved3 = 14, 
-    UT_COLOR = 15, // color in int
+    reserved4 = 15, 
     UT_URL   = 16,  // url in string
 };
 
@@ -72,7 +79,7 @@ enum VALUE_UNIT_TYPE_OBJECT
 {
     UT_OBJECT_ARRAY  = 0,   // type T_OBJECT of type Array
     UT_OBJECT_OBJECT = 1,   // type T_OBJECT of type Object
-    UT_OBJECT_CLASS  = 2,   // type T_OBJECT of type Type (class or namespace)
+    UT_OBJECT_CLASS  = 2,   // type T_OBJECT of type Class (class or namespace)
     UT_OBJECT_NATIVE = 3,   // type T_OBJECT of native Type with data slot (LPVOID)
     UT_OBJECT_FUNCTION = 4, // type T_OBJECT of type Function
     UT_OBJECT_ERROR = 5,    // type T_OBJECT of type Error
@@ -292,8 +299,8 @@ UINT SCAPI ValueInvoke( const VALUE* pval, VALUE* pthis, UINT argc, const VALUE*
  */
 UINT SCAPI ValueNativeFunctorSet( VALUE* pval, 
     NATIVE_FUNCTOR_INVOKE*  pinvoke,
-    NATIVE_FUNCTOR_RELEASE* prelease,
-    VOID* tag );
+    NATIVE_FUNCTOR_RELEASE* prelease /* = NULL*/,
+    VOID* tag /* = NULL*/ );
 
 BOOL SCAPI ValueIsNativeFunctor( const VALUE* pval);
 
