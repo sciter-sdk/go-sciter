@@ -5,7 +5,7 @@
 package sciter
 
 /*
-#cgo CFLAGS: -g -std=c11 -Iinclude -DPLAIN_API_ONLY
+#cgo CFLAGS: -g -std=c11 -Iinclude -DPLAIN_API_ONLY -D_BSD_SOURCE -D_DEFAULT_SOURCE
 #cgo linux LDFLAGS: -ldl
 #cgo linux pkg-config: gtk+-3.0
 
