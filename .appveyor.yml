@@ -5,6 +5,9 @@ branches:
     - master
     - travis
 
+image:
+  - Visual Studio 2015
+
 environment:
   matrix:
   - TARGET: Go 1.10.0
@@ -22,9 +25,7 @@ environment:
 install:
   - cmd: echo Testing sciter%ARCH% with %TARGET%.
   - cmd: echo Current directory is %APPVEYOR_BUILD_FOLDER%
-  - cmd: set PATH=C:\projects\deps;C:\go%VERGO%%ARCHGO%\bin;C:\mingw-w64\%MGWVER%\mingw64\bin;%PATH%
-  - cmd: echo %PATH%
-  - cmd: echo %GOPATH%
+  - cmd: set PATH=C:\projects\deps;C:\go%VERGO%%ARCHGO%\bin;C:\mingw-w64\%MGWVER%\mingw%ARCH%\bin;%PATH%
 
   - gcc --version
   - go version
@@ -33,14 +34,26 @@ install:
   - curl -so "C:\projects\deps\sciter.dll" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin/%ARCH%/sciter.dll"
 
 before_build:
-  - cmd: set GOPATH=%APPVEYOR_BUILD_FOLDER%
+  - cmd: set GOROOT=C:\go%VERGO%%ARCHGO%
+  - cmd: set GOPATH=C:\projects\gopath
+  - cmd: set PATH=%GOPATH%\bin;%PATH%
+  - cmd: mkdir %GOPATH%
+  - go env
+  - go get -u github.com/lxn/win
+  - go get -u github.com/GeertJohan/go.rice
+  - go get -u github.com/GeertJohan/go.rice/rice
+  - go get -u github.com/kardianos/osext
 
 
 build_script:
+  - cmd: echo Building library
   - cmd: cd
-  - cmd: dir
+  - go build -x
 
+  - go get github.com/sciter-sdk/go-sciter
 
-test_script:
-  - cmd: cd
-  - go test
+  - cmd: echo Building examples
+  - cmd: cd examples
+  - cmd: go build ./...
+
+test: off

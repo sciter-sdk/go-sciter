@@ -1,5 +1,9 @@
 # Go bindings for Sciter
 
+[![Build status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
+[![Build Status](https://img.shields.io/travis/sciter-sdk/go-sciter/master.svg)](https://travis-ci.org/sciter-sdk/go-sciter)
+[![License](https://img.shields.io/github/license/sciter-sdk/go-sciter.svg)](https://github.com/sciter-sdk/go-sciter)
+
 Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other language bindings (Delphi / D / Go / .NET / Python / Rust).
 
 ----
