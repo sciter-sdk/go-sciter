@@ -57,6 +57,8 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
 
 #elif defined(OSX)
 
+    #include <string.h>
+
     //typedef ISciterAPI* SCAPI (*SciterAPI_ptr)();
 
     ISciterAPI* SAPI( ISciterAPI* ext )

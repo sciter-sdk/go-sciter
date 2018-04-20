@@ -670,9 +670,9 @@ func goLPCWSTR_RECEIVER(bs *uint16, n uint, param unsafe.Pointer) int {
 // typedef VOID SC_CALLBACK LPCSTR_RECEIVER( LPCSTR str, UINT str_length, LPVOID param );
 
 //export goLPCSTR_RECEIVER
-func goLPCSTR_RECEIVER(bs *byte, n uint, param unsafe.Pointer) int {
+func goLPCSTR_RECEIVER(bs C.LPCSTR, n uint, param unsafe.Pointer) int {
 	s := (*string)(param)
-	*s = BytePtrToString(bs)
+	*s = C.GoString(bs)
 	return 0
 }
 

@@ -23,7 +23,7 @@ VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo(LPCWSTR str, UINT str_length, LPVOID param
 // typedef VOID SC_CALLBACK LPCSTR_RECEIVER(LPCSTR str, UINT str_length, LPVOID param);
 VOID SC_CALLBACK LPCSTR_RECEIVER_cgo(LPCSTR str, UINT str_length, LPVOID param)
 {
-    goLPCSTR_RECEIVER((CHAR*)str, str_length, param);
+    goLPCSTR_RECEIVER(str, str_length, param);
 }
 
 // typedef BOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms);
@@ -54,7 +54,7 @@ VOID NATIVE_FUNCTOR_RELEASE_cgo(VOID* tag)
 
 INT SC_CALLBACK ELEMENT_COMPARATOR_cgo(HELEMENT he1, HELEMENT he2, LPVOID param)
 {
-    goELEMENT_COMPARATOR(he1, he2, param);
+    return goELEMENT_COMPARATOR(he1, he2, param);
 }
 
 // typedef BOOL SC_CALLBACK KeyValueCallback(LPVOID param, const VALUE* pkey, const VALUE* pval);

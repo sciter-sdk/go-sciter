@@ -40,21 +40,6 @@ func Utf16ToStringLength(s *uint16, length int) string {
 	return string(utf16.Decode(us))
 }
 
-func BytePtrToString(s *byte) string {
-	if s == nil {
-		panic("null cstring")
-	}
-	bs := make([]byte, 0, 256)
-	for p := uintptr(unsafe.Pointer(s)); ; p += 1 {
-		b := *(*byte)(unsafe.Pointer(p))
-		if b == 0 {
-			return string(bs)
-		}
-		bs = append(bs, b)
-	}
-	return ""
-}
-
 func StringToBytePtr(s string) *byte {
 	bs := ([]byte)(s)
 	return &bs[0]
