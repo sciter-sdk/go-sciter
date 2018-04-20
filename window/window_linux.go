@@ -4,6 +4,7 @@ package window
 #cgo linux pkg-config: gtk+-3.0
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
 
 GtkWindow* gwindow(GtkWidget* hwnd) {
   return hwnd ? GTK_WINDOW(gtk_widget_get_toplevel(hwnd)) : NULL;
@@ -44,7 +45,9 @@ func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, e
 
 func (s *Window) SetTitle(title string) {
 	w := C.gwindow((*C.GtkWidget)(unsafe.Pointer(s.GetHwnd())))
-	C.gtk_window_set_title(w, (*C.gchar)(unsafe.Pointer(&([]byte(title))[0])))
+	t := C.CString(title)
+	C.gtk_window_set_title(w, t)
+	C.free(unsafe.Pointer(t))
 }
 
 func (s *Window) Show() {

@@ -7,6 +7,7 @@ package window
 #cgo LDFLAGS: -framework Cocoa
 #import <Cocoa/Cocoa.h>
 #import <AppKit/NSApplication.h>
+#include <stdlib.h>
 
 int Run(void) {
     [NSApplication sharedApplication];
@@ -52,7 +53,9 @@ func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, e
 	return w, nil
 }
 func (s *Window) SetTitle(title string) {
-	C.SetWindowTitle(unsafe.Pointer(s.GetHwnd()), C.CString(title))
+	t := C.CString(title)
+	C.SetWindowTitle(unsafe.Pointer(s.GetHwnd()), t)
+	C.free(unsafe.Pointer(t))
 }
 
 func (s *Window) Show() {

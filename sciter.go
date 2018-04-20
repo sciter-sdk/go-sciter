@@ -799,11 +799,12 @@ func (e *Element) NthAttr(n int) (value string, err error) {
 func (e *Element) Attr(name string) (string, error) {
 	var str string
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
+	cname := C.CString(name)
 	crcv := (*C.LPCWSTR_RECEIVER)(unsafe.Pointer(C.LPCWSTR_RECEIVER_cgo))
 	cparam := C.LPVOID(unsafe.Pointer(&str))
 	// cgo call
 	r := C.SciterGetAttributeByNameCB(e.handle, cname, crcv, cparam)
+	C.free(unsafe.Pointer(cname))
 	return str, wrapDomResult(r, "SciterGetAttributeByNameCB")
 }
 
@@ -816,10 +817,11 @@ func (e *Element) Attr(name string) (string, error) {
 //  \return \b #SCDOM_RESULT SCAPI
 func (e *Element) SetAttr(name, val string) error {
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
+	cname := C.CString(name)
 	cval := C.LPCWSTR(StringToWcharPtr(val))
 	// cgo call
 	r := C.SciterSetAttributeByName(e.handle, cname, cval)
+	C.free(unsafe.Pointer(cname))
 	return wrapDomResult(r, "SciterSetAttributeByName")
 }
 
@@ -876,11 +878,12 @@ func (e *Element) Type() (string, error) {
 func (e *Element) Style(name string) (string, error) {
 	var str string
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
+	cname := C.CString(name)
 	crcv := (*C.LPCWSTR_RECEIVER)(unsafe.Pointer(C.LPCWSTR_RECEIVER_cgo))
 	cparam := C.LPVOID(unsafe.Pointer(&str))
 	// cgo call
 	r := C.SciterGetStyleAttributeCB(e.handle, cname, crcv, cparam)
+	C.free(unsafe.Pointer(cname))
 	return str, wrapDomResult(r, "SciterGetStyleAttributeCB")
 }
 
@@ -888,10 +891,11 @@ func (e *Element) Style(name string) (string, error) {
 
 func (e *Element) SetStyle(name, val string) error {
 	// args
-	cname := C.LPCSTR(unsafe.Pointer(&((([]byte)(name))[0])))
+	cname := C.CString(name)
 	cval := C.LPCWSTR(StringToWcharPtr(val))
 	// cgo call
 	r := C.SciterSetStyleAttribute(e.handle, cname, cval)
+	C.free(unsafe.Pointer(cname))
 	return wrapDomResult(r, "SciterSetStyleAttribute")
 }
 
