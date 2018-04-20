@@ -2,7 +2,11 @@
 #define __tis_h__
 
 #if defined(__GNUC__)
-  #define TIS_CDECL __attribute__((__cdecl__))
+  #ifdef __LP64__
+    #define TIS_CDECL
+  #else
+    #define TIS_CDECL __attribute__((__cdecl__))
+  #endif
 #else
   #define TIS_CDECL __cdecl
 #endif
