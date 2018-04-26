@@ -42,6 +42,8 @@ Things that are not supported:
 
 # Getting Started
 
+###  At the moment only **Go 1.10** or higher is supported (issue #136).
+
  1. Download the [sciter-sdk][]
  2. Extract the sciter runtime library from [sciter-sdk][] to system PATH
 
@@ -64,8 +66,6 @@ Things that are not supported:
     [mingw64-gcc][] (5.2.0 and 7.2.0 are tested) is recommended for Windows users.
 
     Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
-
-    At the moment only **Go 1.10** or higher is supported (issue #136).
 
  4. `go get -x github.com/sciter-sdk/go-sciter`
 
