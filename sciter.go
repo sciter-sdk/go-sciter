@@ -26,6 +26,13 @@ extern INT SC_CALLBACK ELEMENT_COMPARATOR_cgo( HELEMENT he1, HELEMENT he2, LPVOI
 extern BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval );
 
 extern const char * SCITER_DLL_PATH;
+
+extern HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength);
+
+extern BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength);
+
+extern BOOL SCAPI SciterCloseArchive (HSARCHIVE harc);
+
 */
 import "C"
 import (
@@ -41,6 +48,8 @@ type Sciter struct {
 	callbacks map[*CallbackHandler]struct{}
 	// map scripting function name to NativeFunctor
 	*eventMapper
+	// sciter archive
+	har C.HSARCHIVE
 }
 
 var (
@@ -439,25 +448,34 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 	}
 	return true
 }
+
+// Open a data blob of the Sciter compressed archive.
 func (s *Sciter) OpenArchive(data []byte) {
-    s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
+	s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
 }
+
+// Get an archive item referenced by \c uri.
+//
+// Usually it is passed to \c Sciter.DataReady().
 func (s *Sciter) GetArchiveItem(uri string) []byte {
-    var pv uintptr = 0
-    var length uint = 0
-    pBytes := (*C.LPCBYTE)(unsafe.Pointer(&pv))
-    pnBytes := (*C.UINT)(unsafe.Pointer(&length))
-    r := C.SciterGetArchiveItem(s.har, StringToWcharPtr(uri), pBytes, pnBytes)
-    if r == 0 {
-        return nil
-    }
-    ret := []byte{}
-    for i := 0; i < int(length); i++ {
-        b := *(*byte)(unsafe.Pointer(pv + uintptr(i)))
-        ret = append(ret, b)
-    }
-    return ret
+	var data C.LPCBYTE
+	var length C.UINT
+	cdata := (*C.LPCBYTE)(&data)
+	clength := C.LPUINT(&length)
+	r := C.SciterGetArchiveItem(s.har, StringToWcharPtr(uri), cdata, clength)
+	if r == 0 {
+		return nil
+	}
+	ret := ByteCPtrToBytes(data, length)
+	return ret
 }
+
+// Close the archive.
+func (s *Sciter) CloseArchive() {
+	C.SciterCloseArchive(s.har)
+	s.har = C.HSARCHIVE(nil)
+}
+
 // #if defined(OSX)
 // HWINDOW  SciterCreateNSView ( LPRECT frame ) ;//{ return SAPI()->SciterCreateNSView ( frame ); }
 // #endif
@@ -664,14 +682,7 @@ func (e *Element) ParentElement() (*Element, error) {
 
 //export goLPCBYTE_RECEIVER
 func goLPCBYTE_RECEIVER(bs *byte, n uint, param unsafe.Pointer) int {
-	var r []byte
-	p := uintptr(unsafe.Pointer(bs))
-	println("goLPCBYTE_RECEIVER:", n)
-	for i := 0; i < int(n); i++ {
-		u := *(*byte)(unsafe.Pointer(p + uintptr(i)))
-		r = append(r, u)
-	}
-	println("in:", string(r))
+	r := BytePtrToBytes(bs, n)
 	*(*[]byte)(param) = r
 	return 0
 }
@@ -2021,21 +2032,16 @@ func (pdst *Value) SetFloat(data float64) error {
 func (pdst *Value) Bytes() []byte {
 	cpdst := (*C.VALUE)(unsafe.Pointer(pdst))
 	// args
-	var pv uintptr = 0
-	var length uint = 0
+	var pv C.LPCBYTE
+	var length C.UINT
 	pBytes := (*C.LPCBYTE)(unsafe.Pointer(&pv))
-	pnBytes := (*C.UINT)(unsafe.Pointer(&length))
+	pnBytes := C.LPUINT(&length)
 	// cgo call
 	r := C.ValueBinaryData(cpdst, pBytes, pnBytes)
 	if r != C.UINT(HV_OK) {
 		return nil
 	}
-	ret := []byte{}
-	sz := unsafe.Sizeof(pv)
-	for i := 0; i < int(length); i++ {
-		b := *(*byte)(unsafe.Pointer(pv + uintptr(i)*sz))
-		ret = append(ret, b)
-	}
+	ret := ByteCPtrToBytes(pv, length)
 	return ret
 }
 
