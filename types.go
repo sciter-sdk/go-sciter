@@ -887,14 +887,7 @@ func (s *ScnLoadData) Uri() string {
 }
 
 func (s *ScnLoadData) Data() []byte {
-	ret := []byte{}
-	var b byte
-	pdata := uintptr(unsafe.Pointer(s.outData))
-	step := unsafe.Sizeof(b)
-	for i := 0; i < int(s.outDataSize); i++ {
-		b = *(*byte)(unsafe.Pointer(pdata + uintptr(i)*step))
-		ret = append(ret, b)
-	}
+	ret := ByteCPtrToBytes(s.outData, s.outDataSize)
 	return ret
 }
 

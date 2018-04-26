@@ -54,15 +54,6 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
        return _api;
     }
 
-	HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength) { 
-		return SAPI(NULL)->SciterOpenArchive (archiveData,archiveDataLength); 
-	}
-
-	BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength){
-		return SAPI(NULL)->SciterGetArchiveItem (harc,path,pdata,pdataLength); 
-	}
-
-
 #elif defined(OSX)
 
     #include <string.h>
@@ -376,3 +367,15 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
   BOOL SCAPI Sciter_V2v(HVM vm, const VALUE* value, tiscript_value* out_script_value) { return SAPI(NULL)->Sciter_V2v(vm,value,out_script_value); }
 
   BOOL SCAPI SciterProcX(HWINDOW hwnd, SCITER_X_MSG* pMsg) { return SAPI(NULL)->SciterProcX(hwnd, pMsg); }
+
+	HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength) { 
+		return SAPI(NULL)->SciterOpenArchive (archiveData, archiveDataLength); 
+	}
+
+	BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength) {
+		return SAPI(NULL)->SciterGetArchiveItem (harc, path, pdata, pdataLength); 
+	}
+  
+  BOOL SCAPI SciterCloseArchive (HSARCHIVE harc) {
+    return SAPI(NULL)->SciterCloseArchive (harc);
+  }

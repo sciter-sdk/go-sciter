@@ -13,8 +13,7 @@ Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other l
 # Attention
 
 The ownership of project is transferred to this new organization.
-Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`,
-but the package name is still `sciter`.
+Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, but the package name is still `sciter`.
 
 # Introduction
 
@@ -65,6 +64,8 @@ Things that are not supported:
     [mingw64-gcc][] (5.2.0 and 7.2.0 are tested) is recommended for Windows users.
 
     Under Linux gcc(4.8 or above) and gtk+-3.0 are needed.
+
+    At the moment only **Go 1.10** or higher is supported (issue #136).
 
  4. `go get -x github.com/sciter-sdk/go-sciter`
 
