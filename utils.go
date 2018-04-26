@@ -69,8 +69,8 @@ func StringToUTF16PtrWithLen(s string) (*uint16, int) {
 	return &us[0], length
 }
 
-func ByteCPtrToBytes(bp: C.LPCBYTE, size C.UINT) []byte {
-	bs := C.GoBytes(unsafe.Pointer(data), C.INT(length))
+func ByteCPtrToBytes(bp C.LPCBYTE, size C.UINT) []byte {
+	bs := C.GoBytes(unsafe.Pointer(bp), C.INT(size))
 	return bs
 }
 
