@@ -55,6 +55,8 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
     }
 
 
+
+
 #elif defined(OSX)
 
     #include <string.h>
