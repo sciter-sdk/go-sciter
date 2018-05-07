@@ -89,7 +89,7 @@ func (s *Sciter) GetHwnd() C.HWINDOW {
 	return s.hwnd
 }
 
-func SetDLL(dir string){
+func SetDLL(dir string) {
 	C.SCITER_DLL_PATH = C.CString(dir)
 }
 
@@ -461,8 +461,7 @@ func (s *Sciter) GetArchiveItem(uri string) []byte {
 	var data C.LPCBYTE
 	var length C.UINT
 	cdata := (*C.LPCBYTE)(&data)
-	clength := C.LPUINT(&length)
-	r := C.SciterGetArchiveItem(s.har, StringToWcharPtr(uri), cdata, clength)
+	r := C.SciterGetArchiveItem(s.har, StringToWcharPtr(uri), cdata, &length)
 	if r == 0 {
 		return nil
 	}
@@ -778,10 +777,8 @@ func (e *Element) SetText(text string) error {
 //   \return \b #SCDOM_RESULT SCAPI
 func (e *Element) AttrCount() (int, error) {
 	var count C.UINT
-	// args
-	ccount := C.LPUINT(&count)
 	// cgo call
-	r := C.SciterGetAttributeCount(e.handle, ccount)
+	r := C.SciterGetAttributeCount(e.handle, &count)
 	return int(count), wrapDomResult(r, "SciterGetAttributeCount")
 }
 
@@ -2035,9 +2032,8 @@ func (pdst *Value) Bytes() []byte {
 	var pv C.LPCBYTE
 	var length C.UINT
 	pBytes := (*C.LPCBYTE)(unsafe.Pointer(&pv))
-	pnBytes := C.LPUINT(&length)
 	// cgo call
-	r := C.ValueBinaryData(cpdst, pBytes, pnBytes)
+	r := C.ValueBinaryData(cpdst, pBytes, &length)
 	if r != C.UINT(HV_OK) {
 		return nil
 	}
@@ -2333,5 +2329,3 @@ func (pdst *Value) IsNativeFunctor() bool {
 	}
 	return true
 }
-
-
