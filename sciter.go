@@ -38,6 +38,7 @@ import "C"
 import (
 	"fmt"
 	"log"
+	"strings"
 	"runtime"
 	"unsafe"
 )
@@ -449,7 +450,7 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 	return true
 }
 
-// Open a data blob of the Sciter compressed archive.
+// Open data blob of the provided compressed Sciter archive.
 func (s *Sciter) OpenArchive(data []byte) {
 	s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
 }
@@ -473,6 +474,44 @@ func (s *Sciter) GetArchiveItem(uri string) []byte {
 func (s *Sciter) CloseArchive() {
 	C.SciterCloseArchive(s.har)
 	s.har = C.HSARCHIVE(nil)
+}
+
+// Register `this://app/` URLs to be loaded from the given Sciter archive.
+//
+// Pack resources using `packfolder` tool:
+//
+//   `$ packfolder res_folder res_packed.go -v resource_name -go`
+//
+// Usage:
+//
+//```
+//   win.SetResourceArchive(resource_name)
+//   win.LoadFile("this://app//index.htm")
+//```
+func (s *Sciter) SetResourceArchive(data []byte) {
+
+	// register `this://app/` schema
+	callback := &CallbackHandler{
+		OnLoadData: func(params *ScnLoadData) int {
+			if strings.HasPrefix(params.Uri(), "this://app/") {
+				// load resource starting with our schema
+				url := params.Uri()[11:]
+				fileData := s.GetArchiveItem(url)
+				if fileData != nil {
+					// use loaded resource
+					s.DataReady(url, fileData)
+				} else {
+					// failed to load
+					log.Println("error: failed to load " + params.Uri())
+					//  but fallback to Sciter anyway
+				}
+			}
+			return LOAD_OK
+		},
+	}
+
+  s.OpenArchive(data)
+  s.SetCallback(callback)
 }
 
 // #if defined(OSX)

@@ -35,7 +35,7 @@ func OnLoadData(s *sciter.Sciter) func(ld *sciter.ScnLoadData) int {
 				path = strings.Join(ps[1:], "/")
 			}
 		} else {
-			// do not handle file:// or rice://
+			// // do not handle schemes other than file:// or rice://
 			return sciter.LOAD_OK
 		}
 		// log.Println("rice loading:", path, "in box:", boxname)

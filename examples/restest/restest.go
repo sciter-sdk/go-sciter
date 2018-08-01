@@ -38,7 +38,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	w.SetTitle("Example")
 	w.Show()
 	w.Run()
 }
