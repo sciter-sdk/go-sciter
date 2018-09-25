@@ -1144,6 +1144,10 @@ func (e *Element) SelectParent(css_selector string, depth int) (*Element, error)
 
 // SCDOM_RESULT  SciterSetElementHtml(HELEMENT he, const BYTE* html, UINT htmlLength, UINT where)
 func (e *Element) SetHtml(html string, where SET_ELEMENT_HTML) error {
+	if len(html) == 0 {
+		return e.Clear()
+	}
+
 	// args
 	chtml := (*C.BYTE)(StringToBytePtr(html))
 	clen := C.UINT(len(html))
