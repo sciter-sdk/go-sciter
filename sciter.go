@@ -461,7 +461,7 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 
 // Open data blob of the provided compressed Sciter archive.
 func (s *Sciter) OpenArchive(data []byte) {
-	s.har = C.SciterOpenArchive((C.LPCBYTE)(&data[0]), C.UINT(len(data)))
+	s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
 }
 
 // Get an archive item referenced by \c uri.
@@ -1164,7 +1164,7 @@ func (e *Element) SetHtml(html string, where SET_ELEMENT_HTML) error {
 	}
 
 	// args
-	chtml := (C.LPCBYTE)(StringToBytePtr(html))
+	chtml := (*C.BYTE)(StringToBytePtr(html))
 	clen := C.UINT(len(html))
 	cwhere := C.UINT(where)
 	// cgo call
