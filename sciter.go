@@ -353,7 +353,10 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
 	cargc := C.UINT(argc)
-	cargv := (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	var cargv *C.SCITER_VALUE
+	if len(argv) > 0 {
+		cargv = (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	}
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
 	r := C.SciterCall(s.hwnd, cfn, cargc, cargv, cretval)
@@ -1767,7 +1770,10 @@ func (e *Element) CallFunction(functionName string, args ...*Value) (retval *Val
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
 	cargc := C.UINT(argc)
-	cargv := (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	var cargv *C.SCITER_VALUE
+	if len(argv) > 0 {
+		cargv = (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	}
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
 	r := C.SciterCallScriptingFunction(e.handle, cfn, cargv, cargc, cretval)
@@ -1794,7 +1800,11 @@ func (e *Element) CallMethod(methodName string, args ...*Value) (retval *Value, 
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(methodName)))
 	cargc := C.UINT(argc)
-	cargv := (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	var cargv *C.SCITER_VALUE
+	if len(argv) > 0 {
+		cargv = (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	}
+
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
 	r := C.SciterCallScriptingMethod(e.handle, cfn, cargv, cargc, cretval)
@@ -2299,7 +2309,10 @@ func (v *Value) Invoke(self *Value, nameOrUrl string, args ...*Value) (retval *V
 	cv := (*C.SCITER_VALUE)(unsafe.Pointer(v))
 	cself := (*C.SCITER_VALUE)(unsafe.Pointer(self))
 	cargc := C.UINT(argc)
-	cargv := (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	var cargv *C.SCITER_VALUE
+	if len(argv) > 0 {
+		cargv = (*C.SCITER_VALUE)(unsafe.Pointer(&argv[0]))
+	}
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	cnameOrUrl := C.LPCWSTR(StringToWcharPtr(nameOrUrl))
 	// cgo call

@@ -30,6 +30,9 @@
           function gFunc(a,b){
             return String.printf("script defined function with arg, a:%v, b:%v", a, b)
           }
+          function gFuncEmpty() {
+            return String.printf("script defined function without parameter")
+          }
           var root = view.root
           root.mfn = function(a, b){return String.printf("script defined method function with arg, a:%v, b:%v", a, b)}
           // handlers
@@ -62,7 +65,7 @@
     </form>
   </div>
   <div id="output">
-    
+
   </div>
 </body>
 </html>

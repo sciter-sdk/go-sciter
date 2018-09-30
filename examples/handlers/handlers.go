@@ -100,6 +100,13 @@ func testCall(w *window.Window) {
 	} else {
 		log.Println("function call successfully:", v.String())
 	}
+
+	v, err = root.CallFunction("gFuncEmpty")
+	if err != nil {
+		log.Println("function call gFuncEmpty() failed:", err)
+	} else {
+		log.Println("function call gFuncEmpty() successfully:", v.String())
+	}
 }
 
 func main() {
