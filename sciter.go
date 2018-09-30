@@ -128,14 +128,13 @@ var (
 //  \param[in] hwnd \b HWINDOW, Sciter window handle.
 //  \param[in] uri \b LPCWSTR, URI of the data requested by Sciter.
 //  \param[in] data \b LPBYTE, pointer to data buffer.
-//  \param[in] dataLength \b UINT, length of the data in bytes.
 //  \param[in] requestId \b LPVOID, SCN_LOAD_DATA requestId.
 //  \return \b BOOL, TRUE if Sciter accepts the data or \c FALSE if error occured
-func (s *Sciter) DataReadyAsync(uri string, data []byte, dataLength uint, requestId unsafe.Pointer) bool {
+func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointer) bool {
 	// args
 	curi := StringToWcharPtr(uri)
 	cdata := C.LPCBYTE(unsafe.Pointer(&data[0]))
-	cdataLength := C.UINT(dataLength)
+	cdataLength := C.UINT(len(data))
 	crequestId := C.LPVOID(requestId)
 	// cgo call
 	ret := C.SciterDataReadyAsync(s.hwnd, curi, cdata, cdataLength, crequestId)
