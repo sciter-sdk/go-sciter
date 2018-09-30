@@ -107,7 +107,11 @@ func SetDLL(dir string) {
 //  SCN_LOAD_DATA request and in the same thread. For asynchronous resource loading
 //  use SciterDataReadyAsync
 func (s *Sciter) DataReady(uri string, data []byte) bool {
-	ret := C.SciterDataReady(s.hwnd, StringToWcharPtr(uri), (*C.BYTE)(&data[0]), C.UINT(len(data)))
+	var pData C.LPCBYTE
+	if len(data) > 0 {
+		pData = (C.LPCBYTE)(unsafe.Pointer(&data[0]))
+	}
+	ret := C.SciterDataReady(s.hwnd, StringToWcharPtr(uri), pData, C.UINT(len(data)))
 	if ret == 0 {
 		return false
 	}
@@ -132,12 +136,15 @@ var (
 //  \return \b BOOL, TRUE if Sciter accepts the data or \c FALSE if error occured
 func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointer) bool {
 	// args
+	var pData C.LPCBYTE
+	if len(data) > 0 {
+		pData = (C.LPCBYTE)(unsafe.Pointer(&data[0]))
+	}
 	curi := StringToWcharPtr(uri)
-	cdata := C.LPCBYTE(unsafe.Pointer(&data[0]))
 	cdataLength := C.UINT(len(data))
 	crequestId := C.LPVOID(requestId)
 	// cgo call
-	ret := C.SciterDataReadyAsync(s.hwnd, curi, cdata, cdataLength, crequestId)
+	ret := C.SciterDataReadyAsync(s.hwnd, curi, pData, cdataLength, crequestId)
 	if ret == 0 {
 		return false
 	}
@@ -166,7 +173,7 @@ func (s *Sciter) LoadFile(filename string) error {
 //  \return \b BOOL, \c TRUE if the text was parsed and loaded successfully, FALSE otherwise.
 func (s *Sciter) LoadHtml(html, baseUrl string) error {
 	// args
-	chtml := (*C.BYTE)(unsafe.Pointer(StringToBytePtr(html)))
+	chtml := (C.LPCBYTE)(unsafe.Pointer(StringToBytePtr(html)))
 	csize := C.UINT(len(html))
 	cbaseUrl := StringToWcharPtr(baseUrl)
 	// cgo call
@@ -454,7 +461,7 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 
 // Open data blob of the provided compressed Sciter archive.
 func (s *Sciter) OpenArchive(data []byte) {
-	s.har = C.SciterOpenArchive((*C.BYTE)(&data[0]), C.UINT(len(data)))
+	s.har = C.SciterOpenArchive((C.LPCBYTE)(&data[0]), C.UINT(len(data)))
 }
 
 // Get an archive item referenced by \c uri.
@@ -1151,7 +1158,7 @@ func (e *Element) SetHtml(html string, where SET_ELEMENT_HTML) error {
 	}
 
 	// args
-	chtml := (*C.BYTE)(StringToBytePtr(html))
+	chtml := (C.LPCBYTE)(StringToBytePtr(html))
 	clen := C.UINT(len(html))
 	cwhere := C.UINT(where)
 	// cgo call
@@ -1660,7 +1667,10 @@ func (e *Element) HttpRequest(url string, dataType SciterResourceType, requestTy
 		rParams[i].name = C.LPCWSTR(StringToWcharPtr(params[i].Name))
 		rParams[i].value = C.LPCWSTR(StringToWcharPtr(params[i].Value))
 	}
-	crParams := (*C.REQUEST_PARAM)(unsafe.Pointer(&rParams[0]))
+	var crParams *C.REQUEST_PARAM
+	if nParams > 0 {
+		crParams = (*C.REQUEST_PARAM)(unsafe.Pointer(&rParams[0]))
+	}
 	// cgo call
 	r := C.SciterHttpRequest(e.handle, curl, cdataType, crequestType, crParams, cnParams)
 	return wrapDomResult(r, "SciterHttpRequest")
@@ -2094,11 +2104,14 @@ func (pdst *Value) Bytes() []byte {
 }
 
 // UINT  ValueBinaryDataSet ( VALUE* pval, LPCBYTE pBytes, UINT nBytes, UINT type, UINT units )
-func (pdst *Value) SetBytes(dat []byte) error {
+func (pdst *Value) SetBytes(data []byte) error {
 	cpdst := (*C.VALUE)(unsafe.Pointer(pdst))
 	// args
-	pBytes := (C.LPCBYTE)(unsafe.Pointer(&dat[0]))
-	nBytes := (C.UINT)(len(dat))
+	var pBytes C.LPCBYTE
+	if len(data) > 0 {
+		pBytes = (C.LPCBYTE)(unsafe.Pointer(&data[0]))
+	}
+	nBytes := (C.UINT)(len(data))
 	// cgo call
 	r := C.ValueBinaryDataSet(cpdst, pBytes, nBytes, T_BYTES, 0)
 	return wrapValueResult(VALUE_RESULT(r), "ValueBinaryDataSet")
