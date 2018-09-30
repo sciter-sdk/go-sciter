@@ -1101,24 +1101,30 @@ func (e *Element) Select(css_selectors string) ([]*Element, error) {
 	return results, err
 }
 
+// Returns the only child element that matches the selector.
 func (e *Element) SelectFirst(css_selectors string) (*Element, error) {
 	els, err := e.Select(css_selectors)
-	if err != nil || len(els) == 0 {
+	if err != nil {
 		return nil, fmt.Errorf("%s:%s", "SelectFirst", "no proper element found")
+	}
+	if len(els) == 0 {
+		return nil, nil
 	}
 	return els[0], nil
 }
 
-// Returns the only child element that matches the selector.  If no elements match
-// or more than one element matches, the function panics
+// Returns the only child element that matches the selector.
+// If no elements match or more than one element matches, the function returns error.
 func (e *Element) SelectUnique(selector string) (*Element, error) {
-	results, err := e.Select(selector)
-	if err != nil || len(results) != 1 {
+	els, err := e.Select(selector)
+	if err != nil || len(els) != 1 {
 		return nil, fmt.Errorf("%s:%s", "SelectUnique", "no unique element found")
 	}
-	return results[0], nil
+	return els[0], nil
 }
 
+// Returns the only child element that matches the selector.
+// If no elements match or more than one element matches, the function panics.
 func (e *Element) MustSelectUnique(selector string) *Element {
 	r, err := e.SelectUnique(selector)
 	if err != nil {
