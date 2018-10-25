@@ -49,7 +49,7 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter-gtk.so" $SDK_PATH/bin.gtk/x64/libsciter-gtk.so; fi
   - if [ "$TRAVIS_OS_NAME" = "osx"   ]; then curl -so "$TRAVIS_BUILD_DIR/sciter-osx-64.dylib" $SDK_PATH/bin.osx/sciter-osx-64.dylib; fi
 
-  - go get github.com/golang/lint/golint
+  - go get golang.org/x/lint/golint
   - go get honnef.co/go/tools/cmd/megacheck
   - go get github.com/fzipp/gocyclo
 
