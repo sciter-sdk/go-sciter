@@ -38,8 +38,8 @@ import "C"
 import (
 	"fmt"
 	"log"
-	"strings"
 	"runtime"
+	"strings"
 	"unsafe"
 )
 
@@ -519,8 +519,8 @@ func (s *Sciter) SetResourceArchive(data []byte) {
 		},
 	}
 
-  s.OpenArchive(data)
-  s.SetCallback(callback)
+	s.OpenArchive(data)
+	s.SetCallback(callback)
 }
 
 // #if defined(OSX)
@@ -1477,6 +1477,11 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 		if handler.OnScroll != nil {
 			p := (*ScrollParams)(params)
 			handled = handler.OnScroll(el, p)
+		}
+	case HANDLE_EXCHANGE:
+		if handler.OnExchange != nil {
+			p := (*ExchangeParams)(params)
+			handled = handler.OnExchange(el, p)
 		}
 	case HANDLE_GESTURE:
 		if handler.OnGesture != nil {

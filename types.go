@@ -71,8 +71,8 @@ const (
 	HANDLE_DRAW           = 0x0040 /** drawing request (event) */
 	HANDLE_DATA_ARRIVED   = 0x080  /** requested data () has been delivered */
 	HANDLE_BEHAVIOR_EVENT = 0x0100 /** logical synthetic events:
-		BUTTON_CLICK HYPERLINK_CLICK etc.
-		a.k.a. notifications from intrinsic behaviors */
+	BUTTON_CLICK HYPERLINK_CLICK etc.
+	a.k.a. notifications from intrinsic behaviors */
 	HANDLE_METHOD_CALL           = 0x0200 /** behavior specific methods */
 	HANDLE_SCRIPTING_METHOD_CALL = 0x0400 /** behavior specific methods */
 	HANDLE_TISCRIPT_METHOD_CALL  = 0x0800 /** behavior specific methods using direct tiscript::value's */
@@ -706,14 +706,24 @@ type ScrollParams struct {
 	Vertical int32 // bool
 }
 
+// struct EXCHANGE_PARAMS
+// {
+//   UINT         cmd;          // EXCHANGE_EVENTS
+//   HELEMENT     target;       // target element
+//   HELEMENT     source;       // source element (can be null if D&D from external window)
+//   POINT        pos;          // position of cursor, element relative
+//   POINT        pos_view;     // position of cursor, view relative
+//   UINT         mode;         // DD_MODE
+//   SCITER_VALUE data;         // packaged drag data
+// };
 type ExchangeParams struct {
-	Cmd       uint32
-	Target    C.HELEMENT
-	Pos       Point
-	PosView   Point
-	DataTypes uint32
-	DragCmd   uint32
-	FetchData uintptr // func pointer: typedef BOOL CALLBACK FETCH_EXCHANGE_DATA(EXCHANGE_PARAMS* params, UINT data_type, LPCBYTE* ppDataStart, UINT* pDataLength );
+	Cmd     uint32
+	Target  C.HELEMENT
+	Source  C.HELEMENT
+	Pos     Point
+	PosView Point
+	Mode    uint32
+	Data    C.SCITER_VALUE
 }
 
 // struct GESTURE_PARAMS
@@ -780,7 +790,7 @@ const (
 	 * asynchronously.
 	 **/
 	/* obsolete #define SC_DOCUMENT_COMPLETE 0x03
-		 use DOCUMENT_COMPLETE DOM event.
+	use DOCUMENT_COMPLETE DOM event.
 	*/
 
 	/**This notification is sent on parsing the document and while processing
@@ -1113,6 +1123,7 @@ type EventHandler struct {
 	OnDataArrived func(he *Element, params *DataArrivedParams) bool
 	OnSize        func(he *Element)
 	OnScroll      func(he *Element, params *ScrollParams) bool
+	OnExchange    func(he *Element, params *ExchangeParams) bool
 	OnGesture     func(he *Element, params *GestureParams) bool
 }
 
@@ -1167,14 +1178,14 @@ const (
 // enum GFX_LAYER
 // {
 const (
-	GFX_LAYER_GDI  = 1
-	GFX_LAYER_CG   = 1
-	GFX_LAYER_CAIRO= 1
-	GFX_LAYER_WARP = 2
-	GFX_LAYER_D2D  = 3
-	GFX_LAYER_SKIA = 4
+	GFX_LAYER_GDI         = 1
+	GFX_LAYER_CG          = 1
+	GFX_LAYER_CAIRO       = 1
+	GFX_LAYER_WARP        = 2
+	GFX_LAYER_D2D         = 3
+	GFX_LAYER_SKIA        = 4
 	GFX_LAYER_SKIA_OPENGL = 5
-	GFX_LAYER_AUTO = 0xFFFF
+	GFX_LAYER_AUTO        = 0xFFFF
 )
 
 // };
