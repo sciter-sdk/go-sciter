@@ -706,6 +706,46 @@ type ScrollParams struct {
 	Vertical int32 // bool
 }
 
+// enum EXCHANGE_CMD {
+// 	X_DRAG_ENTER = 0,       // drag enters the element
+// 	X_DRAG_LEAVE = 1,       // drag leaves the element
+// 	X_DRAG = 2,             // drag over the element
+// 	X_DROP = 3,             // data dropped on the element
+// 	X_PASTE = 4,            // N/A
+// 	X_DRAG_REQUEST = 5,     // N/A
+// 	X_DRAG_CANCEL = 6,      // drag cancelled (e.g. by pressing VK_ESCAPE)
+// 	X_WILL_ACCEPT_DROP = 7, // drop target element shall consume this event in order to receive X_DROP
+// };
+type ExchangeCmd uint32
+
+const (
+	X_DRAG_ENTER ExchangeCmd = iota
+	X_DRAG_LEAVE
+	X_DRAG
+	X_DROP
+	X_PASTE
+	X_DRAG_REQUEST
+	X_DRAG_CANCEL
+	X_WILL_ACCEPT_DROP
+)
+
+// enum DD_MODES {
+// 	DD_MODE_NONE = 0, // DROPEFFECT_NONE	( 0 )
+// 	DD_MODE_COPY = 1, // DROPEFFECT_COPY	( 1 )
+// 	DD_MODE_MOVE = 2, // DROPEFFECT_MOVE	( 2 )
+// 	DD_MODE_COPY_OR_MOVE = 3, // DROPEFFECT_COPY	( 1 ) | DROPEFFECT_MOVE	( 2 )
+// 	DD_MODE_LINK = 4, // DROPEFFECT_LINK	( 4 )
+// };
+type DDMode uint32
+
+const (
+	DD_MODE_NONE DDMode = 0
+	DD_MODE_COPY
+	DD_MODE_MOVE
+	DD_MODE_COPY_OR_MOVE
+	DD_MODE_LINK
+)
+
 // struct EXCHANGE_PARAMS
 // {
 //   UINT         cmd;          // EXCHANGE_EVENTS
@@ -717,13 +757,13 @@ type ScrollParams struct {
 //   SCITER_VALUE data;         // packaged drag data
 // };
 type ExchangeParams struct {
-	Cmd     uint32
+	Cmd     ExchangeCmd
 	Target  C.HELEMENT
 	Source  C.HELEMENT
 	Pos     Point
 	PosView Point
-	Mode    uint32
-	Data    C.SCITER_VALUE
+	Mode    DDMode
+	Data    Value
 }
 
 // struct GESTURE_PARAMS
