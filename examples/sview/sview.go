@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"path/filepath"
-	"unsafe"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -33,7 +32,6 @@ func setupViewer(w *window.Window) {
 			return false
 		},
 		OnExchange: func(el *sciter.Element, p *sciter.ExchangeParams) bool {
-			log.Println("ExchangeParams.cmd:", p.Cmd, unsafe.Sizeof(p.Cmd))
 			if p.Cmd == sciter.X_WILL_ACCEPT_DROP|sciter.SINKING {
 				if p.Data.IsString() {
 					return true
