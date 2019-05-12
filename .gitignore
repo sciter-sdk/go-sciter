@@ -29,3 +29,6 @@
 
 # sciter sdk
 sciter-sdk*/
+
+# editor config
+.vscode/
