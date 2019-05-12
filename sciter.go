@@ -357,7 +357,9 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 		argv[i] = *args[i]
 	}
 	// args
-	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
+	funcName := C.CString(functionName)
+	defer C.free(unsafe.Pointer(funcName))
+	cfn := C.LPCSTR(unsafe.Pointer(funcName))
 	cargc := C.UINT(argc)
 	var cargv *C.SCITER_VALUE
 	if len(argv) > 0 {
