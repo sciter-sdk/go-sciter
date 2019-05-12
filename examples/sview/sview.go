@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"path/filepath"
+	"unsafe"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -14,6 +15,7 @@ var (
 )
 
 func setupViewer(w *window.Window) {
+	log.Println("setup for new view ...")
 	w.SetTitle("Sciter HTM viewer")
 	root, err := w.GetRootElement()
 	if err != nil {
@@ -22,7 +24,7 @@ func setupViewer(w *window.Window) {
 	}
 	root.AttachEventHandler(&sciter.EventHandler{
 		OnKey: func(el *sciter.Element, p *sciter.KeyParams) bool {
-			if p.KeyCode == 0x74 {
+			if p.Cmd == sciter.KEY_DOWN|sciter.SINKING && p.KeyCode == 0x74 {
 				log.Println("reloading", pageURI)
 				w.LoadFile(pageURI)
 				setupViewer(w)
@@ -31,15 +33,13 @@ func setupViewer(w *window.Window) {
 			return false
 		},
 		OnExchange: func(el *sciter.Element, p *sciter.ExchangeParams) bool {
-			log.Println("ExchangeParams.cmd:", p.Cmd)
-			if p.Cmd == sciter.X_WILL_ACCEPT_DROP {
+			log.Println("ExchangeParams.cmd:", p.Cmd, unsafe.Sizeof(p.Cmd))
+			if p.Cmd == sciter.X_WILL_ACCEPT_DROP|sciter.SINKING {
 				if p.Data.IsString() {
 					return true
 				}
 			}
-			// if p.Cmd == sciter.X_DROP {
-			// it's 0b10000000000000011 instead of 0b11 ???
-			if p.Cmd == 65539 {
+			if p.Cmd == sciter.X_DROP|sciter.SINKING {
 				pageURI = p.Data.String()
 				log.Println("Loading new content:", pageURI)
 				w.LoadFile(pageURI)
@@ -104,6 +104,7 @@ func main() {
 	// set handlers
 	setupViewer(w)
 	setCallbackHandlers(w)
+	// show
 	w.Show()
 	w.Run()
 }
