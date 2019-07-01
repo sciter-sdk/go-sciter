@@ -354,7 +354,7 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i] = *args[i]
+		argv[i].Assign(args[i]);
 	}
 	// args
 	funcName := C.CString(functionName)
