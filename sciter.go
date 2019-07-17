@@ -354,7 +354,8 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i].Assign(args[i])
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	funcName := C.CString(functionName)
@@ -1787,7 +1788,8 @@ func (e *Element) CallFunction(functionName string, args ...*Value) (retval *Val
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i].Assign(args[i])
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
@@ -1817,7 +1819,8 @@ func (e *Element) CallMethod(methodName string, args ...*Value) (retval *Value, 
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i].Assign(args[i])
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(methodName)))
@@ -2328,7 +2331,8 @@ func (v *Value) Invoke(self *Value, nameOrUrl string, args ...*Value) (retval *V
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i].Assign(args[i])
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cv := (*C.SCITER_VALUE)(unsafe.Pointer(v))
