@@ -73,6 +73,8 @@ Things that are not supported:
 
 # Sciter Desktop UI Examples
 
+![](http://sciter.com/screenshots/slide-wt5.png)
+
 ![](http://sciter.com/screenshots/slide-norton360.png)
 
 ![](http://sciter.com/screenshots/slide-norton-nis.png)
