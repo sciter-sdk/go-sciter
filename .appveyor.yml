@@ -31,7 +31,7 @@ install:
   - go version
 
   - mkdir C:\projects\deps
-  - curl -so "C:\projects\deps\sciter.dll" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin/%ARCH%/sciter.dll"
+  - curl -so "C:\projects\deps\sciter.dll" "https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.win/x%ARCH%/sciter.dll"
 
 before_build:
   - cmd: set GOROOT=C:\go%VERGO%%ARCHGO%
