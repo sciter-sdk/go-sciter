@@ -17,10 +17,9 @@ os:
 
 go:
   - "1.10"
-  - "1.10.x"
   - "1.11"
   - "1.12"
-  - "1.12.x"
+  - "1.13"
 
 
 branches:
@@ -52,7 +51,7 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter-gtk.so" $SDK_PATH/bin.lnx/x64/libsciter-gtk.so; fi
   - if [ "$TRAVIS_OS_NAME" = "osx"   ]; then curl -so "$TRAVIS_BUILD_DIR/sciter-osx-64.dylib" $SDK_PATH/bin.osx/sciter-osx-64.dylib; fi
 
-  - go get golang.org/x/lint/golint
+# - go get golang.org/x/lint/golint
 
   - go get -u github.com/GeertJohan/go.rice
   - go get -u github.com/GeertJohan/go.rice/rice
