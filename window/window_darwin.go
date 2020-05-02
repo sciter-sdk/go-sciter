@@ -18,6 +18,23 @@ int Run(void) {
     return 0;
 }
 
+void MinimalMenu(void) {
+
+    id menubar = [[NSMenu new] autorelease];
+    id appMenuItem = [[NSMenuItem new] autorelease];
+    [menubar addItem:appMenuItem];
+    [NSApp setMainMenu:menubar];
+    id appMenu = [[NSMenu new] autorelease];
+	id appName = [[NSProcessInfo processInfo] processName];
+    id quitTitle = [@"Quit " stringByAppendingString:appName];
+    id quitMenuItem = [[[NSMenuItem alloc] initWithTitle:quitTitle
+        action:@selector(terminate:) keyEquivalent:@"q"]
+			  autorelease];
+
+	[appMenu addItem:quitMenuItem];
+	[appMenuItem setSubmenu:appMenu];
+}
+
 void SetWindowTitle(void * w, char * title) {
 	[[(NSView*)w window] setTitle:[NSString stringWithUTF8String:title]];
 }
@@ -64,5 +81,6 @@ func (s *Window) Show() {
 
 func (s *Window) Run() {
 	s.run()
+	C.MinimalMenu()
 	C.Run()
 }
