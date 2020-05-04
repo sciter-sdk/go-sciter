@@ -10,16 +10,16 @@ image:
 
 environment:
   matrix:
-  - TARGET: Go 1.10.0
+  - TARGET: Go 1.12.0
     ARCH: 64
     ARCHGO:
-    VERGO: 110
+    VERGO: 112
     MGWVER: x86_64-7.2.0-posix-seh-rt_v5-rev1
 
-  - TARGET: Go 1.10.0
+  - TARGET: Go 1.12.0
     ARCH: 32
     ARCHGO: -x86
-    VERGO: 110
+    VERGO: 112
     MGWVER: i686-6.3.0-posix-dwarf-rt_v5-rev1
 
   - TARGET: Go 1.13.0
