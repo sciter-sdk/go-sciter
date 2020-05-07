@@ -33,7 +33,7 @@ import (
 
 func main() {
 	win, _ := window.New(sciter.DefaultWindowCreateFlag, sciter.DefaultRect)
-	win.AddMenu( [menus as parameter ])
+	win.AddQuitMenu()
 	win.Show()
 	win.Run()
 }

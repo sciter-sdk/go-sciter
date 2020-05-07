@@ -18,7 +18,7 @@ int Run(void) {
     return 0;
 }
 
-void MinimalMenu(void) {
+void ExitMenu(void) {
 
     id menubar = [[NSMenu new] autorelease];
     id appMenuItem = [[NSMenuItem new] autorelease];
@@ -79,8 +79,8 @@ func (s *Window) Show() {
 	C.ShowWindow(unsafe.Pointer(s.GetHwnd()))
 }
 
-func (s *Window) AddMenu() {
-	C.MinimalMenu()
+func (s *Window) AddQuitMenu() {
+	C.ExitMenu()
 }
 
 func (s *Window) Run() {
