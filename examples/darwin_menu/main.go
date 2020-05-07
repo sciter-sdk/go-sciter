@@ -1,6 +1,5 @@
 package main
 
-import "C"
 import (
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
