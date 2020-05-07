@@ -16,11 +16,9 @@ os:
 # The latest 1.9 version was 9646a0a383.
 
 go:
-  - "1.10"
-  - "1.11"
   - "1.12"
   - "1.13"
-
+  - "1.14"
 
 branches:
   only:
