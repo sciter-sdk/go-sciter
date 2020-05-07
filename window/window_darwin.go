@@ -18,6 +18,23 @@ int Run(void) {
     return 0;
 }
 
+void ExitMenu(void) {
+
+    id menubar = [[NSMenu new] autorelease];
+    id appMenuItem = [[NSMenuItem new] autorelease];
+    [menubar addItem:appMenuItem];
+    [NSApp setMainMenu:menubar];
+    id appMenu = [[NSMenu new] autorelease];
+	id appName = [[NSProcessInfo processInfo] processName];
+    id quitTitle = [@"Quit " stringByAppendingString:appName];
+    id quitMenuItem = [[[NSMenuItem alloc] initWithTitle:quitTitle
+        action:@selector(terminate:) keyEquivalent:@"q"]
+			  autorelease];
+
+	[appMenu addItem:quitMenuItem];
+	[appMenuItem setSubmenu:appMenu];
+}
+
 void SetWindowTitle(void * w, char * title) {
 	[[(NSView*)w window] setTitle:[NSString stringWithUTF8String:title]];
 }
@@ -60,6 +77,10 @@ func (s *Window) SetTitle(title string) {
 
 func (s *Window) Show() {
 	C.ShowWindow(unsafe.Pointer(s.GetHwnd()))
+}
+
+func (s *Window) AddQuitMenu() {
+	C.ExitMenu()
 }
 
 func (s *Window) Run() {
