@@ -75,12 +75,16 @@ func (s *Window) SetTitle(title string) {
 	C.free(unsafe.Pointer(t))
 }
 
+func (s *Window) AddQuitMenu() {
+	C.MinimalMenu()
+}
+
 func (s *Window) Show() {
 	C.ShowWindow(unsafe.Pointer(s.GetHwnd()))
 }
 
 func (s *Window) Run() {
 	s.run()
-	C.MinimalMenu()
+
 	C.Run()
 }
