@@ -49,6 +49,10 @@ func (s *Window) SetTitle(title string) {
 	C.SetWindowTextW(hwnd, (*C.WCHAR)(unsafe.Pointer(sciter.StringToWcharPtr(title))))
 }
 
+func (s *Window) AddQuitMenu() {
+	// Define behaviour for windows
+}
+
 func (s *Window) Run() {
 	// for system drag-n-drop
 	// win.OleInitialize()

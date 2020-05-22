@@ -10,12 +10,28 @@ package window
 #include <stdlib.h>
 
 int Run(void) {
-    [NSApplication sharedApplication];
-    [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+		[NSApplication sharedApplication];
+		[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
 
-    [NSApp activateIgnoringOtherApps:YES];
-    [NSApp run];
-    return 0;
+		[NSApp activateIgnoringOtherApps:YES];
+		[NSApp run];
+		return 0;
+}
+
+void MinimalMenu(void) {
+	id menubar = [[NSMenu new] autorelease];
+	id appMenuItem = [[NSMenuItem new] autorelease];
+	[menubar addItem:appMenuItem];
+	[NSApp setMainMenu:menubar];
+	id appMenu = [[NSMenu new] autorelease];
+	id appName = [[NSProcessInfo processInfo] processName];
+	id quitTitle = [@"Quit " stringByAppendingString:appName];
+	id quitMenuItem = [[[NSMenuItem alloc] initWithTitle:quitTitle
+		action:@selector(terminate:) keyEquivalent:@"q"]
+		autorelease];
+
+	[appMenu addItem:quitMenuItem];
+	[appMenuItem setSubmenu:appMenu];
 }
 
 void SetWindowTitle(void * w, char * title) {
@@ -58,11 +74,17 @@ func (s *Window) SetTitle(title string) {
 	C.free(unsafe.Pointer(t))
 }
 
+// Add a simple menu with a Quit item in it.
+func (s *Window) AddQuitMenu() {
+	C.MinimalMenu()
+}
+
 func (s *Window) Show() {
 	C.ShowWindow(unsafe.Pointer(s.GetHwnd()))
 }
 
 func (s *Window) Run() {
 	s.run()
+
 	C.Run()
 }

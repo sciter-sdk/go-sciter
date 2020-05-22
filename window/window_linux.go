@@ -50,6 +50,10 @@ func (s *Window) SetTitle(title string) {
 	C.free(unsafe.Pointer(t))
 }
 
+func (s *Window) AddQuitMenu() {
+	// Define behaviour for linux
+}
+
 func (s *Window) Show() {
 	w := (*C.GtkWidget)(unsafe.Pointer(s.GetHwnd()))
 	C.gshow(w)
