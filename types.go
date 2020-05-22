@@ -71,8 +71,8 @@ const (
 	HANDLE_DRAW           = 0x0040 /** drawing request (event) */
 	HANDLE_DATA_ARRIVED   = 0x080  /** requested data () has been delivered */
 	HANDLE_BEHAVIOR_EVENT = 0x0100 /** logical synthetic events:
-		BUTTON_CLICK HYPERLINK_CLICK etc.
-		a.k.a. notifications from intrinsic behaviors */
+	BUTTON_CLICK HYPERLINK_CLICK etc.
+	a.k.a. notifications from intrinsic behaviors */
 	HANDLE_METHOD_CALL           = 0x0200 /** behavior specific methods */
 	HANDLE_SCRIPTING_METHOD_CALL = 0x0400 /** behavior specific methods */
 	HANDLE_TISCRIPT_METHOD_CALL  = 0x0800 /** behavior specific methods using direct tiscript::value's */
@@ -706,14 +706,64 @@ type ScrollParams struct {
 	Vertical int32 // bool
 }
 
+// enum EXCHANGE_CMD {
+// 	X_DRAG_ENTER = 0,       // drag enters the element
+// 	X_DRAG_LEAVE = 1,       // drag leaves the element
+// 	X_DRAG = 2,             // drag over the element
+// 	X_DROP = 3,             // data dropped on the element
+// 	X_PASTE = 4,            // N/A
+// 	X_DRAG_REQUEST = 5,     // N/A
+// 	X_DRAG_CANCEL = 6,      // drag cancelled (e.g. by pressing VK_ESCAPE)
+// 	X_WILL_ACCEPT_DROP = 7, // drop target element shall consume this event in order to receive X_DROP
+// };
+type ExchangeCmd uint32
+
+const (
+	X_DRAG_ENTER ExchangeCmd = iota
+	X_DRAG_LEAVE
+	X_DRAG
+	X_DROP
+	X_PASTE
+	X_DRAG_REQUEST
+	X_DRAG_CANCEL
+	X_WILL_ACCEPT_DROP
+)
+
+// enum DD_MODES {
+// 	DD_MODE_NONE = 0, // DROPEFFECT_NONE	( 0 )
+// 	DD_MODE_COPY = 1, // DROPEFFECT_COPY	( 1 )
+// 	DD_MODE_MOVE = 2, // DROPEFFECT_MOVE	( 2 )
+// 	DD_MODE_COPY_OR_MOVE = 3, // DROPEFFECT_COPY	( 1 ) | DROPEFFECT_MOVE	( 2 )
+// 	DD_MODE_LINK = 4, // DROPEFFECT_LINK	( 4 )
+// };
+type DDMode uint32
+
+const (
+	DD_MODE_NONE DDMode = 0
+	DD_MODE_COPY
+	DD_MODE_MOVE
+	DD_MODE_COPY_OR_MOVE
+	DD_MODE_LINK
+)
+
+// struct EXCHANGE_PARAMS
+// {
+//   UINT         cmd;          // EXCHANGE_EVENTS
+//   HELEMENT     target;       // target element
+//   HELEMENT     source;       // source element (can be null if D&D from external window)
+//   POINT        pos;          // position of cursor, element relative
+//   POINT        pos_view;     // position of cursor, view relative
+//   UINT         mode;         // DD_MODE
+//   SCITER_VALUE data;         // packaged drag data
+// };
 type ExchangeParams struct {
-	Cmd       uint32
-	Target    C.HELEMENT
-	Pos       Point
-	PosView   Point
-	DataTypes uint32
-	DragCmd   uint32
-	FetchData uintptr // func pointer: typedef BOOL CALLBACK FETCH_EXCHANGE_DATA(EXCHANGE_PARAMS* params, UINT data_type, LPCBYTE* ppDataStart, UINT* pDataLength );
+	Cmd     ExchangeCmd
+	Target  C.HELEMENT
+	Source  C.HELEMENT
+	Pos     Point
+	PosView Point
+	Mode    DDMode
+	Data    Value
 }
 
 // struct GESTURE_PARAMS
@@ -780,7 +830,7 @@ const (
 	 * asynchronously.
 	 **/
 	/* obsolete #define SC_DOCUMENT_COMPLETE 0x03
-		 use DOCUMENT_COMPLETE DOM event.
+	use DOCUMENT_COMPLETE DOM event.
 	*/
 
 	/**This notification is sent on parsing the document and while processing
@@ -1113,6 +1163,7 @@ type EventHandler struct {
 	OnDataArrived func(he *Element, params *DataArrivedParams) bool
 	OnSize        func(he *Element)
 	OnScroll      func(he *Element, params *ScrollParams) bool
+	OnExchange    func(he *Element, params *ExchangeParams) bool
 	OnGesture     func(he *Element, params *GestureParams) bool
 }
 
@@ -1167,14 +1218,14 @@ const (
 // enum GFX_LAYER
 // {
 const (
-	GFX_LAYER_GDI  = 1
-	GFX_LAYER_CG   = 1
-	GFX_LAYER_CAIRO= 1
-	GFX_LAYER_WARP = 2
-	GFX_LAYER_D2D  = 3
-	GFX_LAYER_SKIA = 4
+	GFX_LAYER_GDI         = 1
+	GFX_LAYER_CG          = 1
+	GFX_LAYER_CAIRO       = 1
+	GFX_LAYER_WARP        = 2
+	GFX_LAYER_D2D         = 3
+	GFX_LAYER_SKIA        = 4
 	GFX_LAYER_SKIA_OPENGL = 5
-	GFX_LAYER_AUTO = 0xFFFF
+	GFX_LAYER_AUTO        = 0xFFFF
 )
 
 // };

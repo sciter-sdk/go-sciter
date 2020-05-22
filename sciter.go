@@ -38,8 +38,8 @@ import "C"
 import (
 	"fmt"
 	"log"
-	"strings"
 	"runtime"
+	"strings"
 	"unsafe"
 )
 
@@ -354,10 +354,13 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i] = *args[i]
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
-	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
+	funcName := C.CString(functionName)
+	defer C.free(unsafe.Pointer(funcName))
+	cfn := C.LPCSTR(unsafe.Pointer(funcName))
 	cargc := C.UINT(argc)
 	var cargv *C.SCITER_VALUE
 	if len(argv) > 0 {
@@ -519,8 +522,8 @@ func (s *Sciter) SetResourceArchive(data []byte) {
 		},
 	}
 
-  s.OpenArchive(data)
-  s.SetCallback(callback)
+	s.OpenArchive(data)
+	s.SetCallback(callback)
 }
 
 // #if defined(OSX)
@@ -1478,6 +1481,11 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 			p := (*ScrollParams)(params)
 			handled = handler.OnScroll(el, p)
 		}
+	case HANDLE_EXCHANGE:
+		if handler.OnExchange != nil {
+			p := (*ExchangeParams)(params)
+			handled = handler.OnExchange(el, p)
+		}
 	case HANDLE_GESTURE:
 		if handler.OnGesture != nil {
 			p := (*GestureParams)(params)
@@ -1780,7 +1788,8 @@ func (e *Element) CallFunction(functionName string, args ...*Value) (retval *Val
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i] = *args[i]
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(functionName)))
@@ -1810,7 +1819,8 @@ func (e *Element) CallMethod(methodName string, args ...*Value) (retval *Value, 
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i] = *args[i]
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cfn := C.LPCSTR(unsafe.Pointer(StringToBytePtr(methodName)))
@@ -2321,7 +2331,8 @@ func (v *Value) Invoke(self *Value, nameOrUrl string, args ...*Value) (retval *V
 	argc := len(args)
 	argv := make([]Value, argc)
 	for i := 0; i < argc; i++ {
-		argv[i] = *args[i]
+		argv[i].Copy(args[i]) // Make copy that is not garbage collected
+		defer argv[i].finalize()
 	}
 	// args
 	cv := (*C.SCITER_VALUE)(unsafe.Pointer(v))

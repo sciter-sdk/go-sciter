@@ -47,11 +47,11 @@ Things that are not supported:
  1. Download the [sciter-sdk][]
  2. Extract the sciter runtime library from [sciter-sdk][] to system PATH
 
-    The runtime libraries lives in `bin` `bin.gtk` `bin.osx` with suffix like `dll` `so` or `dylib`
+    The runtime libraries lives in `bin` `bin.lnx` `bin.osx` with suffix like `dll` `so` or `dylib`
 
     * Windows: simply copying `bin\64\sciter.dll` to `c:\windows\system32` is just enough
     * Linux:
-      - `cd sciter-sdk/bin.gtk/x64`
+      - `cd sciter-sdk/bin.lnx/x64`
       - `export LIBRARY_PATH=$PWD`
       - `echo $PWD >> libsciter.conf`
       - `sudo cp libsciter.conf /etc/ld.so.conf.d/`
@@ -72,6 +72,8 @@ Things that are not supported:
  5. Run the example and enjoy :)
 
 # Sciter Desktop UI Examples
+
+![](http://sciter.com/screenshots/slide-wt5.png)
 
 ![](http://sciter.com/screenshots/slide-norton360.png)
 

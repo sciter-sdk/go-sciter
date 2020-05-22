@@ -16,9 +16,9 @@ os:
 # The latest 1.9 version was 9646a0a383.
 
 go:
-  - "1.10"
-  - "1.10.x"
-
+  - "1.12"
+  - "1.13"
+  - "1.14"
 
 branches:
   only:
@@ -46,12 +46,10 @@ before_cache:
 
 install:
   - export SDK_PATH=https://raw.githubusercontent.com/c-smile/sciter-sdk/master
-  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter-gtk.so" $SDK_PATH/bin.gtk/x64/libsciter-gtk.so; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter-gtk.so" $SDK_PATH/bin.lnx/x64/libsciter-gtk.so; fi
   - if [ "$TRAVIS_OS_NAME" = "osx"   ]; then curl -so "$TRAVIS_BUILD_DIR/sciter-osx-64.dylib" $SDK_PATH/bin.osx/sciter-osx-64.dylib; fi
 
-  - go get golang.org/x/lint/golint
-  - go get honnef.co/go/tools/cmd/megacheck
-  - go get github.com/fzipp/gocyclo
+# - go get golang.org/x/lint/golint
 
   - go get -u github.com/GeertJohan/go.rice
   - go get -u github.com/GeertJohan/go.rice/rice
