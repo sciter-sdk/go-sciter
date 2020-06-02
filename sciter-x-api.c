@@ -24,7 +24,7 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
        assert(_api);
        return _api;
     }
-    
+
 #elif defined(WINDOWS)
 
     ISciterAPI* SAPI( ISciterAPI* ext ) {
@@ -271,7 +271,7 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
   SCDOM_RESULT SCAPI SciterGetElementUID(HELEMENT he, UINT* puid) { return SAPI(NULL)->SciterGetElementUID(he,puid); }
   SCDOM_RESULT SCAPI SciterGetElementByUID(HWINDOW hwnd, UINT uid, HELEMENT* phe) { return SAPI(NULL)->SciterGetElementByUID(hwnd,uid,phe); }
   SCDOM_RESULT SCAPI SciterShowPopup(HELEMENT hePopup, HELEMENT heAnchor, UINT placement) { return SAPI(NULL)->SciterShowPopup(hePopup,heAnchor,placement); }
-  SCDOM_RESULT SCAPI SciterShowPopupAt(HELEMENT hePopup, POINT pos, BOOL animate) { return SAPI(NULL)->SciterShowPopupAt(hePopup,pos,animate); }
+  SCDOM_RESULT SCAPI SciterShowPopupAt(HELEMENT hePopup, POINT pos, UINT placement) { return SAPI(NULL)->SciterShowPopupAt(hePopup,pos,placement); }
   SCDOM_RESULT SCAPI SciterHidePopup(HELEMENT he) { return SAPI(NULL)->SciterHidePopup(he); }
   SCDOM_RESULT SCAPI SciterGetElementState( HELEMENT he, UINT* pstateBits) { return SAPI(NULL)->SciterGetElementState(he,pstateBits); }
   SCDOM_RESULT SCAPI SciterSetElementState( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, BOOL updateView) { return SAPI(NULL)->SciterSetElementState(he,stateBitsToSet,stateBitsToClear,updateView); }
@@ -285,8 +285,8 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
   SCDOM_RESULT SCAPI SciterAttachEventHandler( HELEMENT he, LPELEMENT_EVENT_PROC pep, LPVOID tag ) { return SAPI(NULL)->SciterAttachEventHandler( he,pep,tag ); }
   SCDOM_RESULT SCAPI SciterWindowAttachEventHandler( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag, UINT subscription ) { return SAPI(NULL)->SciterWindowAttachEventHandler(hwndLayout,pep,tag,subscription ); }
   SCDOM_RESULT SCAPI SciterWindowDetachEventHandler( HWINDOW hwndLayout, LPELEMENT_EVENT_PROC pep, LPVOID tag ) { return SAPI(NULL)->SciterWindowDetachEventHandler(hwndLayout,pep,tag ); }
-  SCDOM_RESULT SCAPI SciterSendEvent( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT reason, /*out*/ BOOL* handled) { return SAPI(NULL)->SciterSendEvent( he,appEventCode,heSource,reason,handled); }
-  SCDOM_RESULT SCAPI SciterPostEvent( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT reason) { return SAPI(NULL)->SciterPostEvent(he,appEventCode,heSource,reason); }
+  SCDOM_RESULT SCAPI SciterSendEvent( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason, /*out*/ BOOL* handled) { return SAPI(NULL)->SciterSendEvent( he,appEventCode,heSource,reason,handled); }
+  SCDOM_RESULT SCAPI SciterPostEvent( HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason) { return SAPI(NULL)->SciterPostEvent(he,appEventCode,heSource,reason); }
   SCDOM_RESULT SCAPI SciterFireEvent( const struct BEHAVIOR_EVENT_PARAMS* evt, BOOL post, BOOL *handled) { return SAPI(NULL)->SciterFireEvent( evt, post, handled ); }
   SCDOM_RESULT SCAPI SciterCallBehaviorMethod(HELEMENT he, struct METHOD_PARAMS* params) { return SAPI(NULL)->SciterCallBehaviorMethod(he,params); }
   SCDOM_RESULT SCAPI SciterRequestElementData( HELEMENT he, LPCWSTR url, UINT dataType, HELEMENT initiator ) { return SAPI(NULL)->SciterRequestElementData(he,url,dataType,initiator ); }
@@ -368,14 +368,14 @@ const char * SCITER_DLL_PATH = SCITER_DLL_NAME;
 
   BOOL SCAPI SciterProcX(HWINDOW hwnd, SCITER_X_MSG* pMsg) { return SAPI(NULL)->SciterProcX(hwnd, pMsg); }
 
-	HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength) { 
-		return SAPI(NULL)->SciterOpenArchive (archiveData, archiveDataLength); 
+	HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength) {
+		return SAPI(NULL)->SciterOpenArchive (archiveData, archiveDataLength);
 	}
 
 	BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength) {
-		return SAPI(NULL)->SciterGetArchiveItem (harc, path, pdata, pdataLength); 
+		return SAPI(NULL)->SciterGetArchiveItem (harc, path, pdata, pdataLength);
 	}
-  
+
   BOOL SCAPI SciterCloseArchive (HSARCHIVE harc) {
     return SAPI(NULL)->SciterCloseArchive (harc);
   }

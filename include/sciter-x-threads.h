@@ -237,7 +237,7 @@
      template<typename F, typename P>
      inline void thread( F f, P p )
      {
-          new std::thread(f,p); // will leak the instance?
+          std::thread(f,p).detach();
      }
 
   }

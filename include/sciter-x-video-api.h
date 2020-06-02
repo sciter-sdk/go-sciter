@@ -33,7 +33,7 @@ namespace sciter {
 
   #define VIDEO_SOURCE_INAME "source.video.sciter.com"
 
-  struct video_source : public aux::iasset
+  struct video_source : public sciter::om::iasset<video_source>
   {
     virtual bool play() = 0;
     virtual bool pause() = 0;
@@ -52,7 +52,7 @@ namespace sciter {
   #define VIDEO_DESTINATION_INAME "destination.video.sciter.com"
 
   // video_destination interface, represents video rendering site
-  struct video_destination : public aux::iasset
+  struct video_destination : public sciter::om::iasset<video_destination>
   {
      // true if this instance of video_renderer is attached to DOM element and is capable of playing.
      virtual bool is_alive() = 0;

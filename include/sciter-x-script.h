@@ -26,14 +26,14 @@ typedef tiscript_VM* HVM;
   #include "tiscript.hpp"
   namespace sciter
   {
-    inline SCITER_VALUE v2v(tiscript::VM* vm, tiscript::value val, bool isolate = true)
+    OBSOLETE inline SCITER_VALUE v2v(tiscript::VM* vm, tiscript::value val, bool isolate = true)
     {
       SCITER_VALUE v;
       BOOL r = Sciter_v2V(vm,val,(VALUE*)&v, BOOL(isolate));
       assert(r); r;
       return v;
     }
-    inline tiscript::value v2v(tiscript::VM* vm, const SCITER_VALUE& val)
+    OBSOLETE inline tiscript::value v2v(tiscript::VM* vm, const SCITER_VALUE& val)
     {
       tiscript::value v;
       BOOL r = Sciter_V2v(vm,(const VALUE*)&val,&v);

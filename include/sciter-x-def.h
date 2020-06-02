@@ -133,6 +133,22 @@ enum SC_LOAD_DATA_RETURN_CODES
 #define SC_GRAPHICS_CRITICAL_FAILURE 0x07
 
 
+/**This notification is sent when the engine needs keyboard to be present on screen
+   E.g. when <input|text> gets focus
+
+ * \param lParam #LPSCN_KEYBOARD_REQUEST
+ *
+ **/
+#define SC_KEYBOARD_REQUEST 0x08
+
+/**This notification is sent when the engine needs some area to be redrawn
+ 
+ * \param lParam #LPSCN_INVLIDATE_RECT
+ *
+ **/
+#define SC_INVALIDATE_RECT 0x09
+
+
 /**Notification callback structure.
  **/
 typedef struct SCITER_CALLBACK_NOTIFICATION
@@ -241,6 +257,26 @@ typedef struct SCN_GRAPHICS_CRITICAL_FAILURE
 
 typedef SCN_GRAPHICS_CRITICAL_FAILURE* LPSCN_GRAPHICS_CRITICAL_FAILURE;
 
+/**This structure is used by #SC_KEYBOARD_REQUEST notification.
+ *\copydoc SC_KEYBOARD_REQUEST **/
+typedef struct SCN_KEYBOARD_REQUEST {
+  UINT    code; /**< [in] = SC_KEYBOARD_REQUEST */
+  HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+  UINT    keyboardMode; /**< [in] 0 - hide keyboard, 1 ... type of keyboard, TBD */
+} SCN_KEYBOARD_REQUEST;
+
+typedef SCN_KEYBOARD_REQUEST *LPSCN_KEYBOARD_REQUEST;
+
+/**This structure is used by #SC_INVALIDATE_RECT notification.
+ *\copydoc SC_INVALIDATE_RECT **/
+typedef struct SCN_INVALIDATE_RECT {
+  UINT    code; /**< [in] = SC_INVALIDATE_RECT */
+  HWINDOW hwnd; /**< [in] HWINDOW of the window this callback was attached to.*/
+  RECT    invalidRect; /**< [in] cumulative invalid rect.*/
+} SCN_INVALIDATE_RECT;
+
+typedef SCN_INVALIDATE_RECT *LPSCN_INVALIDATE_RECT;
+
 
 #include "sciter-x-behavior.h"
 
@@ -287,10 +323,10 @@ typedef SCN_GRAPHICS_CRITICAL_FAILURE* LPSCN_GRAPHICS_CRITICAL_FAILURE;
 /**Load HTML file.
  *
  * \param[in] hWndSciter \b HWINDOW, Sciter window handle.
- * \param[in] filename \b LPCWSTR, File name of an HTML file.
+ * \param[in] url \b LPCWSTR, either absolute URL of HTML file to load. "file://...", "http://...", "res:...", "this://app/..." or absolute file path.
  * \return \b BOOL, \c TRUE if the text was parsed and loaded successfully, \c FALSE otherwise.
  **/
- BOOL SCAPI     SciterLoadFile(HWINDOW hWndSciter, LPCWSTR filename);
+ BOOL SCAPI     SciterLoadFile(HWINDOW hWndSciter, LPCWSTR url);
 
 /**Load HTML from in memory buffer with base.
  *
@@ -436,6 +472,14 @@ enum SCITER_RT_OPTIONS
                                   // the same (modulo fonts) look-n-feel on all platforms.
 
    SCITER_ALPHA_WINDOW  = 12,     //  hWnd, value - TRUE/FALSE - window uses per pixel alpha (e.g. WS_EX_LAYERED/UpdateLayeredWindow() window)
+   
+   SCITER_SET_INIT_SCRIPT = 13,   // hWnd - N/A , value LPCSTR - UTF-8 encoded script source to be loaded into each view before any other script execution.
+                                  //                             The engine copies this string inside the call.
+
+   SCITER_SET_MAIN_WINDOW = 14,   //  hWnd, value - TRUE/FALSE - window is main, will destroy all other dependent windows on close
+
+   SCITER_SET_MAX_HTTP_DATA_LENGTH = 15, // hWnd - N/A , value - max request length in megabytes (1024*1024 bytes)
+
 };
 
  BOOL SCAPI SciterSetOption(HWINDOW hWnd, UINT option, UINT_PTR value );
@@ -600,7 +644,7 @@ enum SCITER_CREATE_WINDOW_FLAGS {
    SW_RESIZEABLE = (1 << 2), // has resizeable frame
    SW_TOOL       = (1 << 3), // is tool window
    SW_CONTROLS   = (1 << 4), // has minimize / maximize buttons
-   SW_GLASSY     = (1 << 5), // glassy window ( DwmExtendFrameIntoClientArea on windows )
+   SW_GLASSY     = (1 << 5), // glassy window - supports "Acrylic" on Windows and "Vibrant" on MacOS. 
    SW_ALPHA      = (1 << 6), // transparent window ( e.g. WS_EX_LAYERED on Windows )
    SW_MAIN       = (1 << 7), // main window of the app, will terminate the app on close
    SW_POPUP      = (1 << 8), // the window is created as topmost window.

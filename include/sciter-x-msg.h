@@ -18,6 +18,8 @@
 
 #include "sciter-x-types.h"
 #include "sciter-x-def.h"
+#include "sciter-x-behavior.h"
+
 
 /** #SCITER_X_MSG_CODE message/function identifier */
 typedef enum SCITER_X_MSG_CODE {
@@ -25,6 +27,11 @@ typedef enum SCITER_X_MSG_CODE {
   SXM_DESTROY = 1,
   SXM_SIZE    = 2,
   SXM_PAINT   = 3,
+  SXM_RESOLUTION = 4,
+  SXM_HEARTBIT = 5,
+  SXM_MOUSE = 6,
+  SXM_KEY = 7,
+  SXM_FOCUS = 8,
 }SCITER_X_MSG_CODE;
 
 /** #SCITER_X_MSG common header of message structures passed to SciterProcX */
@@ -63,6 +70,52 @@ typedef struct SCITER_X_MSG_SIZE {
 #endif
 }SCITER_X_MSG_SIZE;
 
+typedef struct SCITER_X_MSG_RESOLUTION {
+  SCITER_X_MSG header;
+  UINT pixelsPerInch;
+#ifdef __cplusplus
+  SCITER_X_MSG_RESOLUTION(UINT ppi) : header(SXM_RESOLUTION), pixelsPerInch(ppi) {}
+#endif
+} SCITER_X_MSG_RESOLUTION;
+
+typedef struct SCITER_X_MSG_MOUSE {
+  SCITER_X_MSG    header;
+  enum MOUSE_EVENTS    event;
+  enum MOUSE_BUTTONS   button;
+  enum KEYBOARD_STATES modifiers;
+  POINT           pos;
+#ifdef __cplusplus
+  SCITER_X_MSG_MOUSE(MOUSE_EVENTS e, MOUSE_BUTTONS b, KEYBOARD_STATES mods, POINT p) : header(SXM_MOUSE), event(e), button(b), modifiers(mods), pos(p) {}
+#endif
+} SCITER_X_MSG_MOUSE;
+
+typedef struct SCITER_X_MSG_KEY {
+  SCITER_X_MSG    header;
+  enum KEY_EVENTS      event;
+  UINT            code;
+  enum KEYBOARD_STATES modifiers;
+#ifdef __cplusplus
+  SCITER_X_MSG_KEY(KEY_EVENTS e, UINT c, KEYBOARD_STATES mods) : header(SXM_KEY), event(e), code(c), modifiers(mods) {}
+#endif
+} SCITER_X_MSG_KEY;
+
+typedef struct SCITER_X_MSG_FOCUS {
+  SCITER_X_MSG    header;
+  BOOL            got; // true - got, false - lost
+#ifdef __cplusplus
+  SCITER_X_MSG_FOCUS(BOOL g) : header(SXM_FOCUS), got(g) {}
+#endif
+} SCITER_X_MSG_FOCUS;
+
+
+typedef struct SCITER_X_MSG_HEARTBIT {
+  SCITER_X_MSG header;
+  UINT time;
+#ifdef __cplusplus
+  SCITER_X_MSG_HEARTBIT(UINT t) : header(SXM_HEARTBIT), time(t) {}
+#endif
+} SCITER_X_MSG_HEARTBIT;
+
 
 /** #ELEMENT_BITMAP_RECEIVER - callback function that receives pointer to pixmap and location
 * \param[in] bgra \b LPCBYTE, pointer to BGRA bitmap, number of bytes = width * height * 4
@@ -79,7 +132,8 @@ typedef enum SCITER_PAINT_TARGET_TYPE {
   SPT_DEFAULT   = 0,  /**< default rendering target - window surface */
   SPT_RECEIVER  = 1,  /**< target::receiver fields are valid */
   SPT_DC        = 2,  /**< target::dc is valid */
-  // ...
+  SPT_OPENGL    = 3,  /**< target is not used - caller shall set current context on its side  */
+  SPT_OPENGLES  = 4,  /**< target is not used - caller shall set current context on its side  */
 }SCITER_PAINT_TARGET_TYPE;
 
 typedef struct SCITER_X_MSG_PAINT {
