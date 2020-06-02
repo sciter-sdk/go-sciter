@@ -105,13 +105,13 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
     UINT cmd; // INITIALIZATION_EVENTS
   };
 
-  enum SOM_EVENTS
+  typedef enum SOM_EVENTS
   {
     SOM_GET_PASSPORT = 0,
     SOM_GET_ASSET = 1
-  };
+  } SOM_EVENTS;
 
-  struct SOM_PARAMS
+  typedef struct SOM_PARAMS
   {
     UINT cmd; // SOM_EVENTS
     union {
@@ -121,7 +121,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
 #ifdef __cplusplus
     SOM_PARAMS() : data() {}
 #endif
-  };
+  } SOM_PARAMS;
 
   enum DRAGGING_TYPE
   {
@@ -266,19 +266,19 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
   enum SCROLL_SOURCE {
     SCROLL_SOURCE_UNKNOWN,
     SCROLL_SOURCE_KEYBOARD,  // SCROLL_PARAMS::reason <- keyCode
-    SCROLL_SOURCE_SCROLLBAR, // SCROLL_PARAMS::reason <- SCROLLBAR_PART 
+    SCROLL_SOURCE_SCROLLBAR, // SCROLL_PARAMS::reason <- SCROLLBAR_PART
     SCROLL_SOURCE_ANIMATOR,
     SCROLL_SOURCE_WHEEL,
   };
 
   enum SCROLLBAR_PART {
-    SCROLLBAR_BASE,       
-    SCROLLBAR_PLUS,       
-    SCROLLBAR_MINUS,      
-    SCROLLBAR_SLIDER,     
-    SCROLLBAR_PAGE_MINUS, 
-    SCROLLBAR_PAGE_PLUS,  
-    SCROLLBAR_CORNER,     
+    SCROLLBAR_BASE,
+    SCROLLBAR_PLUS,
+    SCROLLBAR_MINUS,
+    SCROLLBAR_SLIDER,
+    SCROLLBAR_PAGE_MINUS,
+    SCROLLBAR_PAGE_PLUS,
+    SCROLLBAR_CORNER,
   };
 
 
@@ -338,13 +338,13 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
 
   enum EXCHANGE_CMD {
     X_DRAG_ENTER = 0,       // drag enters the element
-    X_DRAG_LEAVE = 1,       // drag leaves the element  
+    X_DRAG_LEAVE = 1,       // drag leaves the element
     X_DRAG = 2,             // drag over the element
-    X_DROP = 3,             // data dropped on the element  
+    X_DROP = 3,             // data dropped on the element
     X_PASTE = 4,            // N/A
     X_DRAG_REQUEST = 5,     // N/A
     X_DRAG_CANCEL = 6,      // drag cancelled (e.g. by pressing VK_ESCAPE)
-    X_WILL_ACCEPT_DROP = 7, // drop target element shall consume this event in order to receive X_DROP 
+    X_WILL_ACCEPT_DROP = 7, // drop target element shall consume this event in order to receive X_DROP
   };
 
   enum DD_MODES {
@@ -354,7 +354,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
     DD_MODE_COPY_OR_MOVE = 3, // DROPEFFECT_COPY	( 1 ) | DROPEFFECT_MOVE	( 2 )
     DD_MODE_LINK = 4, // DROPEFFECT_LINK	( 4 )
   };
-  
+
   struct EXCHANGE_PARAMS
   {
     UINT         cmd;          // EXCHANGE_EVENTS
@@ -362,7 +362,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
     HELEMENT     source;       // source element (can be null if D&D from external window)
     POINT        pos;          // position of cursor, element relative
     POINT        pos_view;     // position of cursor, view relative
-    UINT         mode;         // DD_MODE 
+    UINT         mode;         // DD_MODE
     SCITER_VALUE data;         // packaged drag data
   };
 
@@ -562,7 +562,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
   enum BEHAVIOR_METHOD_IDENTIFIERS
   {
     DO_CLICK = 0,
-/*  remnants of HTMLayout API, not used 
+/*  remnants of HTMLayout API, not used
     GET_TEXT_VALUE = 1,
     SET_TEXT_VALUE,
       // p - TEXT_VALUE_PARAMS
@@ -742,7 +742,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
         {
           return false;
         }
-      
+
       virtual bool handle_draw   (HELEMENT he, DRAW_PARAMS& params )
         {
           return on_draw(he, params.cmd, params.gfx, params.area );
@@ -923,7 +923,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
     }
 
 // NOTE: no 'override' here as BEGIN/END_FUNCTION_MAP can be declared on classes that do not derive from event_handler,
-//       see CHAIN_FUNCTION_MAP 
+//       see CHAIN_FUNCTION_MAP
 #define BEGIN_FUNCTION_MAP \
     virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, const sciter::value* argv, sciter::value& retval) \
     { \
