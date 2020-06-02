@@ -79,6 +79,7 @@ const (
 
 	HANDLE_EXCHANGE = 0x1000 /** system drag-n-drop */
 	HANDLE_GESTURE  = 0x2000 /** touch input events */
+	HANDLE_SOM      = 0x8000 /** som_asset_t request */
 
 	HANDLE_ALL = 0xFFFF /* all of them */
 
@@ -802,6 +803,14 @@ type GestureParams struct {
 	DeltaV    float64
 }
 
+type SomEvents uint32
+const (
+	SOM_GET_PASSPORT = 0
+	SOM_GET_ASSET = 1
+)
+
+type SomParams C.SOM_PARAMS
+
 const (
 	LOAD_OK      = 0 // do default loading if data not set
 	LOAD_DISCARD = 1 // discard request completely
@@ -1221,6 +1230,7 @@ type EventHandler struct {
 	OnScroll      func(he *Element, params *ScrollParams) bool
 	OnExchange    func(he *Element, params *ExchangeParams) bool
 	OnGesture     func(he *Element, params *GestureParams) bool
+	OnSom         func(he *Element, params *SomParams) bool
 }
 
 // case SC_LOAD_DATA:          return static_cast<BASE*>(this)->on_load_data((LPSCN_LOAD_DATA) pnm);

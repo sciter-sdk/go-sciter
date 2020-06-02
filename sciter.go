@@ -1508,8 +1508,13 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 			p := (*GestureParams)(params)
 			handled = handler.OnGesture(el, p)
 		}
+	case HANDLE_SOM:
+		if handler.OnSom != nil {
+			p := (*SomParams)(params)
+			handled := handler.OnSom(el, p)
+		}
 	default:
-		log.Panic("Unhandled sciter event case: ", evtg)
+		log.Panicf("Unhandled sciter event case: 0x%04X.\nCheck `EVENT_GROUPS` in sciter-x-behavior.h in the latest Sciter SDK", evtg)
 	}
 	if handled {
 		return 1
