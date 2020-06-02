@@ -1234,16 +1234,18 @@ func (e *Element) ShowPopup(eAnchor *Element, placement PopupPlacement) error {
 // Shows block element (DIV) in popup window at given position.
 //  \param[in] hePopup \b HELEMENT, element to show as popup
 //  \param[in] pos \b POINT, popup element position, relative to origin of Sciter window.
-//  \param[in] animate \b BOOL, true if animation is needed.
-func (e *Element) ShowPopupAt(pos Point, animate bool) error {
+//  \param[in] placement \b UINT, values:
+//      2 - popup element below of anchor
+//      8 - popup element above of anchor
+//      4 - popup element on left side of anchor
+//      6 - popup element on right side of anchor
+//      ( see numpad on keyboard to get an idea of the numbers)
+func (e *Element) ShowPopupAt(pos Point, placement uint) error {
 	// args
 	var cpos C.POINT = *(*C.POINT)(unsafe.Pointer(&pos))
-	var canimate C.BOOL = C.FALSE
-	if animate {
-		canimate = C.TRUE
-	}
+	cplacement := C.UINT(placement)
 	// cgo call
-	r := C.SciterShowPopupAt(e.handle, cpos, canimate)
+	r := C.SciterShowPopupAt(e.handle, cpos, cplacement)
 	return wrapDomResult(r, "SciterShowPopupAt")
 }
 

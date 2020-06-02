@@ -26,6 +26,7 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
 
     struct debug_output
     {
+     
       debug_output(HWINDOW hwnd = 0)
       {
         setup_on(hwnd);
@@ -34,6 +35,13 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
       void setup_on(HWINDOW hwnd = 0)
       {
         ::SciterSetupDebugOutput(hwnd,this,_output_debug);
+        instance(this);
+      }
+
+      static debug_output* instance(debug_output* pi = nullptr) {
+        static debug_output* _instance = nullptr;
+        if (pi) _instance = pi;
+        return _instance;
       }
 
       static VOID SC_CALLBACK _output_debug(LPVOID param, UINT subsystem, UINT severity, LPCWSTR text, UINT text_length)
@@ -76,7 +84,11 @@ inline  VOID    SCAPI SciterSetupDebugOutput ( HWINDOW hwndOrNull, LPVOID param,
         char buffer [ 2049 ];
         va_list args;
         va_start ( args, fmt );
+#if _MSC_VER == 1400
+        int len = vsnprintf( buffer, sizeof(buffer), _TRUNCATE, fmt, args );
+#else
         int len = vsnprintf( buffer, sizeof(buffer), fmt, args );
+#endif
         va_end ( args );
         buffer [ len ] = 0;
         buffer [ 2048 ] = 0;

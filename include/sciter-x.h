@@ -17,12 +17,17 @@
 #ifndef __SCITER_X__
 #define __SCITER_X__
 
+#if __cplusplus > 199711L
+#define CPP11
+#endif
+
 #include "sciter-x-types.h"
 #include "sciter-x-def.h"
 #include "sciter-x-dom.h"
 #include "sciter-x-value.h"
 #include "sciter-x-api.h"
 #include "sciter-x-msg.h"
+#include "sciter-om.h"
 
 #if defined(__cplusplus) && !defined( PLAIN_API_ONLY )
 

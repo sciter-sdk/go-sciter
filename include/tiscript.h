@@ -1,6 +1,8 @@
 #ifndef __tis_h__
 #define __tis_h__
 
+#include "sciter-x-types.h"
+
 #if defined(__GNUC__)
   #ifdef __LP64__
     #define TIS_CDECL
@@ -86,6 +88,7 @@ typedef void TISAPI tiscript_callback(tiscript_VM *c,void* prm);
 typedef struct tiscript_method_def
 {
   void*             dispatch; // a.k.a. VTBL
+  UINT32            id;
   const char*       name;
   tiscript_method*  handler;  // or tiscript_tagged_method if tag is not 0
   void*             tag;
@@ -95,6 +98,7 @@ typedef struct tiscript_method_def
 typedef struct tiscript_prop_def
 {
   void*                dispatch; // a.k.a. VTBL
+  UINT32               id;
   const char*          name;
   tiscript_get_prop*   getter;
   tiscript_set_prop*   setter;
@@ -264,7 +268,8 @@ typedef struct tiscript_native_interface
    bool  (TISAPI *set_remote_std_streams)(tiscript_VM* pvm, tiscript_pvalue* input, tiscript_pvalue* output, tiscript_pvalue* error);
 
    // support of multi-return values from native fucntions, n here is a number 1..64
-   bool  (TISAPI *set_nth_retval)(tiscript_VM* pvm, int n, tiscript_value ns );
+   tiscript_value (TISAPI *make_val_list)(tiscript_VM* pvm, int valc, const tiscript_value* va);
+
    // returns number of props in object, elements in array, or bytes in byte array.
    int   (TISAPI *get_length)(tiscript_VM* pvm, tiscript_value obj );
    // for( var val in coll ) {...}

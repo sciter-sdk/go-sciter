@@ -88,7 +88,7 @@ typedef enum SCITER_LINE_CAP_TYPE
   SCITER_LINE_CAP_ROUND = 2,
 }SCITER_LINE_CAP_TYPE;
 
-typedef enum SCITER_TEXT_ALIGNMENT
+/*typedef enum SCITER_TEXT_ALIGNMENT
 {
   TEXT_ALIGN_DEFAULT,
   TEXT_ALIGN_START,
@@ -102,7 +102,7 @@ typedef enum SCITER_TEXT_DIRECTION
   TEXT_DIRECTION_LTR,
   TEXT_DIRECTION_RTL,
   TEXT_DIRECTION_TTB,
-}SCITER_TEXT_DIRECTION;
+} SCITER_TEXT_DIRECTION; */
 
 typedef enum SCITER_IMAGE_ENCODING
 {
@@ -112,7 +112,7 @@ typedef enum SCITER_IMAGE_ENCODING
   SCITER_IMAGE_ENCODING_WEBP,
 } SCITER_IMAGE_ENCODING;
 
-typedef struct SCITER_TEXT_FORMAT
+/* typedef struct SCITER_TEXT_FORMAT
 {
     LPWSTR                fontFamily;
     UINT                  fontWeight; // 100...900, 400 - normal, 700 - bold
@@ -123,7 +123,7 @@ typedef struct SCITER_TEXT_FORMAT
     SCITER_TEXT_ALIGNMENT textAlignment; // horizontal alignment
     SCITER_TEXT_ALIGNMENT lineAlignment; // a.k.a. vertical alignment for roman writing systems
     LPWSTR                localeName;
-}SCITER_TEXT_FORMAT;
+} SCITER_TEXT_FORMAT; */
 
 // imageSave callback:
 typedef BOOL SCAPI image_write_function(LPVOID prm, const BYTE* data, UINT data_length);
@@ -254,7 +254,7 @@ struct SciterGraphicsAPI
 // SECTION: affine tranformations:
 
   GRAPHIN_RESULT
-        SCFN(gRotate) ( HGFX hgfx, SC_ANGLE radians, SC_POS* cx /*= 0*/, SC_POS* cy /*= 0*/ );
+        SCFN(gRotate) ( HGFX hgfx, SC_ANGLE radians, const SC_POS* cx /*= 0*/, const SC_POS* cy /*= 0*/ );
 
   GRAPHIN_RESULT
         SCFN(gTranslate) ( HGFX hgfx, SC_POS cx, SC_POS cy );
@@ -309,32 +309,38 @@ struct SciterGraphicsAPI
 
   // setup parameters of linear gradient of lines.
   GRAPHIN_RESULT
-        SCFN(gLineGradientLinear)( HGFX hgfx, SC_POS x1, SC_POS y1, SC_POS x2, SC_POS y2, SC_COLOR_STOP* stops, UINT nstops );
+        SCFN(gLineGradientLinear)( HGFX hgfx, SC_POS x1, SC_POS y1, SC_POS x2, SC_POS y2, const SC_COLOR_STOP* stops, UINT nstops );
 
   // setup parameters of linear gradient of fills.
   GRAPHIN_RESULT
-        SCFN(gFillGradientLinear)( HGFX hgfx, SC_POS x1, SC_POS y1, SC_POS x2, SC_POS y2, SC_COLOR_STOP* stops, UINT nstops );
+        SCFN(gFillGradientLinear)( HGFX hgfx, SC_POS x1, SC_POS y1, SC_POS x2, SC_POS y2, const SC_COLOR_STOP* stops, UINT nstops );
 
   // setup parameters of line gradient radial fills.
   GRAPHIN_RESULT
-        SCFN(gLineGradientRadial)( HGFX hgfx, SC_POS x, SC_POS y, SC_DIM rx, SC_DIM ry, SC_COLOR_STOP* stops, UINT nstops );
+        SCFN(gLineGradientRadial)( HGFX hgfx, SC_POS x, SC_POS y, SC_DIM rx, SC_DIM ry, const SC_COLOR_STOP* stops, UINT nstops );
 
   // setup parameters of gradient radial fills.
   GRAPHIN_RESULT
-        SCFN(gFillGradientRadial)( HGFX hgfx, SC_POS x, SC_POS y, SC_DIM rx, SC_DIM ry, SC_COLOR_STOP* stops, UINT nstops );
+        SCFN(gFillGradientRadial)( HGFX hgfx, SC_POS x, SC_POS y, SC_DIM rx, SC_DIM ry, const SC_COLOR_STOP* stops, UINT nstops );
 
   GRAPHIN_RESULT
         SCFN(gFillMode) ( HGFX hgfx, BOOL even_odd /* false - fill_non_zero */ );
 
 // SECTION: text
 
-  // create text layout using element's styles
+  // create text layout for host element
   GRAPHIN_RESULT
-        SCFN(textCreateForElement)(HTEXT* ptext, LPCWSTR text, UINT textLength, HELEMENT he );
+        SCFN(textCreateForElement)(HTEXT* ptext, LPCWSTR text, UINT textLength, HELEMENT he, LPCWSTR classNameOrNull );
 
-  // create text layout using explicit format declaration
+  // create text layout using explicit style declaration
   GRAPHIN_RESULT
-        SCFN(textCreate)(HTEXT* ptext, LPCWSTR text, UINT textLength, const SCITER_TEXT_FORMAT* format );
+        SCFN(textCreateForElementAndStyle)(HTEXT* ptext, LPCWSTR text, UINT textLength, HELEMENT he, LPCWSTR style, UINT styleLength); 
+
+  GRAPHIN_RESULT
+        SCFN(textAddRef) (HTEXT path);
+
+  GRAPHIN_RESULT
+        SCFN(textRelease) (HTEXT path);
 
   GRAPHIN_RESULT
         SCFN(textGetMetrics)(HTEXT text, SC_DIM* minWidth, SC_DIM* maxWidth, SC_DIM* height, SC_DIM* ascent, SC_DIM* descent, UINT* nLines);
@@ -352,8 +358,9 @@ struct SciterGraphicsAPI
   // draws img onto the graphics surface with current transformation applied (scale, rotation).
   GRAPHIN_RESULT
         SCFN(gDrawImage) ( HGFX hgfx, HIMG himg, SC_POS x, SC_POS y,
-                           SC_DIM* w /*= 0*/, SC_DIM* h /*= 0*/, UINT* ix /*= 0*/, UINT* iy /*= 0*/, UINT* iw /*= 0*/, UINT* ih, /*= 0*/
-                           float* opacity /*= 0, if provided is in 0.0 .. 1.0*/ );
+                           const SC_DIM* w /*= 0*/, const SC_DIM* h /*= 0*/, 
+                           const UINT* ix /*= 0*/, const UINT* iy /*= 0*/, const UINT* iw /*= 0*/, const UINT* ih, /*= 0*/
+                           const float* opacity /*= 0, if provided is in 0.0 .. 1.0*/ );
 
   // SECTION: coordinate space
 
@@ -407,6 +414,8 @@ struct SciterGraphicsAPI
   GRAPHIN_RESULT
         SCFN(vUnWrapText) ( const VALUE* fromValue, HTEXT *phtext);
 
+  GRAPHIN_RESULT
+        SCFN(gFlush) (HGFX hgfx);
 
 
 };

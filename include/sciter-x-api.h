@@ -26,6 +26,9 @@
   #if defined(OSX)
     #include <libproc.h>
   #endif
+  #if defined(ANDROID)
+    #include <dlfcn.h>
+  #endif
 #endif
 
 #if defined(OSX)
@@ -39,15 +42,21 @@
 struct SciterGraphicsAPI;
 struct SCITER_X_MSG;
 
+#ifdef WINDOWLESS
+  #define SCITER_API_VERSION 0x10005
+#else 
+  #define SCITER_API_VERSION 5
+#endif // !WINDOWLESS
+
 typedef struct _ISciterAPI {
 
-  UINT    version; // is zero for now
+  UINT    version; // API_VERSION
 
   LPCWSTR SCFN( SciterClassName )(void);
   UINT    SCFN( SciterVersion )(BOOL major);
   BOOL    SCFN( SciterDataReady )(HWINDOW hwnd,LPCWSTR uri,LPCBYTE data, UINT dataLength);
   BOOL    SCFN( SciterDataReadyAsync )(HWINDOW hwnd,LPCWSTR uri, LPCBYTE data, UINT dataLength, LPVOID requestId);
-#ifdef WINDOWS
+#if defined(WINDOWS) && !defined(WINDOWLESS)
   LRESULT SCFN( SciterProc )(HWINDOW hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
   LRESULT SCFN( SciterProcND )(HWINDOW hwnd, UINT msg, WPARAM wParam, LPARAM lParam, BOOL* pbHandled);
 #endif
@@ -65,27 +74,28 @@ typedef struct _ISciterAPI {
   BOOL    SCFN( SciterCall )(HWINDOW hWnd, LPCSTR functionName, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE* retval);
   BOOL    SCFN( SciterEval )( HWINDOW hwnd, LPCWSTR script, UINT scriptLength, SCITER_VALUE* pretval);
   VOID    SCFN( SciterUpdateWindow)(HWINDOW hwnd);
-#ifdef WINDOWS
+#if defined(WINDOWS) && !defined(WINDOWLESS)
   BOOL    SCFN( SciterTranslateMessage )(MSG* lpMsg);
 #endif
   BOOL    SCFN( SciterSetOption )(HWINDOW hWnd, UINT option, UINT_PTR value );
   VOID    SCFN( SciterGetPPI )(HWINDOW hWndSciter, UINT* px, UINT* py);
   BOOL    SCFN( SciterGetViewExpando )( HWINDOW hwnd, VALUE* pval );
-#ifdef WINDOWS
+#if defined(WINDOWS) && !defined(WINDOWLESS)
   BOOL    SCFN( SciterRenderD2D )(HWINDOW hWndSciter, IUnknown* /*ID2D1RenderTarget**/ prt);
   BOOL    SCFN( SciterD2DFactory )(void** /*ID2D1Factory ***/ ppf);
   BOOL    SCFN( SciterDWFactory )(void** /*IDWriteFactory ***/ ppf);
 #endif
   BOOL    SCFN( SciterGraphicsCaps )(LPUINT pcaps);
   BOOL    SCFN( SciterSetHomeURL )(HWINDOW hWndSciter, LPCWSTR baseUrl);
-#if defined(OSX)
+#if defined(OSX) && !defined(WINDOWLESS)
   HWINDOW SCFN( SciterCreateNSView )( LPRECT frame ); // returns NSView*
 #endif
-#if defined(LINUX)
+#if defined(LINUX) && !defined(WINDOWLESS)
   HWINDOW SCFN( SciterCreateWidget )( LPRECT frame ); // returns GtkWidget
 #endif
-
+#if !defined(WINDOWLESS)
   HWINDOW SCFN( SciterCreateWindow )( UINT creationFlags,LPRECT frame, SciterWindowDelegate* delegate, LPVOID delegateParam, HWINDOW parent);
+#endif
   VOID    SCFN( SciterSetupDebugOutput )(
                 HWINDOW               hwndOrNull,// HWINDOW or null if this is global output handler
                 LPVOID                param,     // param to be passed "as is" to the pfOutput
@@ -132,7 +142,7 @@ typedef struct _ISciterAPI {
   SCDOM_RESULT SCFN( SciterGetElementUID)(HELEMENT he, UINT* puid);
   SCDOM_RESULT SCFN( SciterGetElementByUID)(HWINDOW hwnd, UINT uid, HELEMENT* phe);
   SCDOM_RESULT SCFN( SciterShowPopup)(HELEMENT hePopup, HELEMENT heAnchor, UINT placement);
-  SCDOM_RESULT SCFN( SciterShowPopupAt)(HELEMENT hePopup, POINT pos, BOOL animate);
+  SCDOM_RESULT SCFN( SciterShowPopupAt)(HELEMENT hePopup, POINT pos, UINT placement);
   SCDOM_RESULT SCFN( SciterHidePopup)(HELEMENT he);
   SCDOM_RESULT SCFN( SciterGetElementState)( HELEMENT he, UINT* pstateBits);
   SCDOM_RESULT SCFN( SciterSetElementState)( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, BOOL updateView);
@@ -251,13 +261,17 @@ typedef struct _ISciterAPI {
   LPSciterGraphicsAPI SCFN( GetSciterGraphicsAPI )();
   LPSciterRequestAPI SCFN( GetSciterRequestAPI )();
 
-#ifdef WINDOWS 
+#if defined(WINDOWS) && !defined(WINDOWLESS)
     BOOL SCFN( SciterCreateOnDirectXWindow ) (HWINDOW hwnd, IUnknown* pSwapChain); // IDXGISwapChain
     BOOL SCFN( SciterRenderOnDirectXWindow ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, BOOL frontLayer);
     BOOL SCFN( SciterRenderOnDirectXTexture ) (HWINDOW hwnd, HELEMENT elementToRenderOrNull, IUnknown* surface); // IDXGISurface
 #endif
 
   BOOL SCFN(SciterProcX)(HWINDOW hwnd, SCITER_X_MSG* pMsg ); // returns TRUE if handled
+
+  UINT64 SCFN(SciterAtomValue)(const char* name); // 
+  BOOL   SCFN(SciterAtomNameCB)(UINT64 atomv, LPCSTR_RECEIVER* rcv, LPVOID rcv_param);
+  BOOL   SCFN(SciterSetGlobalAsset)(som_asset_t* pass);
 
 } ISciterAPI;
 
