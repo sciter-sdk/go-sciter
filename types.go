@@ -451,6 +451,13 @@ const (
 	T_BYTES      // sequence of bytes - e.g. image data
 	T_OBJECT     // scripting object proxy (TISCRIPT/SCITER)
 	T_DOM_OBJECT // DOM object (CSSS!) use get_object_data to get HELEMENT
+	T_RESOURCE   // 15 - other thing derived from tool::resource
+	T_RANGE      // 16 - N..M, integer range.
+	T_DURATION   // double, seconds
+	T_ANGLE      // double, radians
+	T_COLOR      // [unsigned] INT, ABGR
+	T_ENUM
+	T_ASSET      // sciter::om::iasset* add_ref'ed pointer
 )
 
 // enum VALUE_UNIT_TYPE
@@ -491,6 +498,11 @@ const (
 	UT_OBJECT_NATIVE   = 3 // type T_OBJECT of native Type with data slot (LPVOID)
 	UT_OBJECT_FUNCTION = 4 // type T_OBJECT of type Function
 	UT_OBJECT_ERROR    = 5 // type T_OBJECT of type Error
+)
+
+// enum VALUE_UNIT_UNDEFINED
+const (
+	UT_NOTHING = 1
 )
 
 type ValueStringConvertType uint32

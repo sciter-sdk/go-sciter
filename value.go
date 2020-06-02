@@ -170,6 +170,25 @@ func (v *Value) IsFunction() bool {
 	return v.t == T_FUNCTION
 }
 
+// bool is_color() const { return t == T_COLOR; }
+func (v *Value) IsColor() bool {
+	return v.t == T_COLOR
+}
+
+// bool is_duration() const { return t == T_DURATION; }
+func (v *Value) IsDuration() bool {
+	return v.t == T_DURATION
+}
+// bool is_angle() const { return t == T_ANGLE; }
+func (v *Value) IsAngle() bool {
+	return v.t == T_ANGLE
+}
+
+// bool is_asset() const { return t == T_ASSET; }
+func (v *Value) IsAsset() bool {
+	return v.t == T_ASSET
+}
+
 // bool is_bytes() const { return t == T_BYTES; }
 func (v *Value) IsByte() bool {
 	return v.t == T_BYTES
@@ -224,6 +243,20 @@ func (v *Value) IsNull() bool {
 func NullValue() *Value {
 	v := new(Value)
 	v.t = T_NULL
+	v.init()
+	return v
+}
+
+// bool is_nothing() const { return t == T_UNDEFINED && u == UT_NOTHING; }
+func (v *Value) IsNothing() bool {
+	return v.t == T_UNDEFINED && v.u == UT_NOTHING
+}
+
+// static value nothing() { value n; n.t = T_UNDEFINED; n.u = UT_NOTHING; return n; }
+func NothingValue() *Value {
+	v := new(Value)
+	v.t = T_UNDEFINED
+	v.u = UT_NOTHING
 	v.init()
 	return v
 }
