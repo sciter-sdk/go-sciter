@@ -1511,7 +1511,7 @@ func goElementEventProc(tag unsafe.Pointer, he C.HELEMENT, evtg uint, params uns
 	case HANDLE_SOM:
 		if handler.OnSom != nil {
 			p := (*SomParams)(params)
-			handled := handler.OnSom(el, p)
+			handled = handler.OnSom(el, p)
 		}
 	default:
 		log.Panicf("Unhandled sciter event case: 0x%04X.\nCheck `EVENT_GROUPS` in sciter-x-behavior.h in the latest Sciter SDK", evtg)
