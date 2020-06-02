@@ -857,6 +857,30 @@ const (
 	 *
 	 **/
 	SC_POSTED_NOTIFICATION = 0x06
+
+	/**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
+	   Most probably bad gfx drivers.
+
+	 * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
+	 *
+	 **/
+	SC_GRAPHICS_CRITICAL_FAILURE = 0x07
+
+
+	/**This notification is sent when the engine needs keyboard to be present on screen
+	   E.g. when <input|text> gets focus
+
+	 * \param lParam #LPSCN_KEYBOARD_REQUEST
+	 *
+	 **/
+	SC_KEYBOARD_REQUEST = 0x08
+
+	/**This notification is sent when the engine needs some area to be redrawn
+
+	 * \param lParam #LPSCN_INVLIDATE_RECT
+	 *
+	 **/
+	SC_INVALIDATE_RECT = 0x09
 )
 
 // Notify structures
@@ -896,6 +920,26 @@ type ScnPostedNotification struct {
 	Wparam  *uint
 	Lparam  *uint
 	Lreturn *uint
+}
+
+/**This structure is used by #SC_GRAPHICS_CRITICAL_FAILURE notification.
+ *\copydoc SC_GRAPHICS_CRITICAL_FAILURE **/
+type ScnGraphicsCriticalFailure SciterCallbackNotification
+
+/**This structure is used by #SC_KEYBOARD_REQUEST notification.
+ *\copydoc SC_KEYBOARD_REQUEST **/
+type ScnKeyboardRequest struct {
+	SciterCallbackNotification
+	// 0 - hide keyboard, 1 ... - type of keyboard
+	keyboardMode uint
+}
+
+/**This structure is used by #SC_INVALIDATE_RECT notification.
+ *\copydoc SC_INVALIDATE_RECT **/
+type ScnInvalidateRect struct {
+	SciterCallbackNotification
+	// cumulative invalid rect
+	invalidRect Rect
 }
 
 /**This structure is used by #SCN_LOAD_DATA notification.
@@ -1202,6 +1246,29 @@ type CallbackHandler struct {
 	 *
 	 **/
 	OnPostedNotification func(params *ScnPostedNotification) int
+
+	/**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
+	   Most probably bad gfx drivers.
+
+	 * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
+	 *
+	 **/
+	OnGraphicsCriticalFailure func() int
+
+	/**This notification is sent when the engine needs keyboard to be present on screen
+	   E.g. when <input|text> gets focus
+
+	 * \param lParam #LPSCN_KEYBOARD_REQUEST
+	 *
+	 **/
+	OnKeyboardRequest func(params *ScnKeyboardRequest) int
+
+	/**This notification is sent when the engine needs some area to be redrawn
+
+	 * \param lParam #LPSCN_INVLIDATE_RECT
+	 *
+	 **/
+	OnInvalidateRect func(params *ScnInvalidateRect) int
 }
 
 // enum SCRIPT_RUNTIME_FEATURES
@@ -1251,6 +1318,13 @@ const (
 	// the same (modulo fonts) look-n-feel on all platforms.
 
 	SCITER_ALPHA_WINDOW = 12 //  hWnd, value - TRUE/FALSE - window uses per pixel alpha (e.g. WS_EX_LAYERED/UpdateLayeredWindow() window)
+
+	SCITER_SET_INIT_SCRIPT = 13   // hWnd - N/A , value LPCSTR - UTF-8 encoded script source to be loaded into each view before any other script execution.
+	                              //                             The engine copies this string inside the call.
+
+	SCITER_SET_MAIN_WINDOW = 14   //  hWnd, value - TRUE/FALSE - window is main, will destroy all other dependent windows on close
+
+	SCITER_SET_MAX_HTTP_DATA_LENGTH = 15 // hWnd - N/A , value - max request length in megabytes (1024*1024 bytes)
 )
 
 // * \param[in] placement \b UINT, values:

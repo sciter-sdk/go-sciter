@@ -191,10 +191,6 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 	phdr := (*SciterCallbackNotification)(ph)
 	handler := globalCallbackHandlers[int(uintptr(callbackParam))]
 	switch phdr.Code {
-	case SC_ENGINE_DESTROYED:
-		if handler.OnEngineDestroyed != nil {
-			return handler.OnEngineDestroyed()
-		}
 	case SC_LOAD_DATA:
 		if handler.OnLoadData != nil {
 			return handler.OnLoadData((*ScnLoadData)(unsafe.Pointer(phdr)))
@@ -203,7 +199,6 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 		if handler.OnDataLoaded != nil {
 			return handler.OnDataLoaded((*ScnDataLoaded)(unsafe.Pointer(phdr)))
 		}
-	// attach behavior
 	case SC_ATTACH_BEHAVIOR:
 		params := (*ScnAttachBehavior)(unsafe.Pointer(phdr))
 		key := params.BehaviorName()
@@ -218,6 +213,26 @@ func goSciterHostCallback(ph unsafe.Pointer, callbackParam unsafe.Pointer) int {
 			el.attachBehavior(behavior)
 		} else {
 			log.Printf("No such behavior <%s> found", key)
+		}
+	case SC_ENGINE_DESTROYED:
+		if handler.OnEngineDestroyed != nil {
+			return handler.OnEngineDestroyed()
+		}
+	case SC_POSTED_NOTIFICATION:
+		if handler.OnPostedNotification != nil {
+			return handler.OnPostedNotification((*ScnPostedNotification)(unsafe.Pointer(phdr)))
+		}
+	case SC_GRAPHICS_CRITICAL_FAILURE:
+		if handler.OnGraphicsCriticalFailure != nil {
+			return handler.OnGraphicsCriticalFailure()
+		}
+	case SC_KEYBOARD_REQUEST:
+		if handler.OnKeyboardRequest != nil {
+			return handler.OnKeyboardRequest((*ScnKeyboardRequest)(unsafe.Pointer(phdr)))
+		}
+	case SC_INVALIDATE_RECT:
+		if handler.OnInvalidateRect != nil {
+			return handler.OnInvalidateRect((*ScnInvalidateRect)(unsafe.Pointer(phdr)))
 		}
 	}
 	return 0
