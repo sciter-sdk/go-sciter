@@ -34,6 +34,30 @@ environment:
     VERGO: 113
     MGWVER: i686-6.3.0-posix-dwarf-rt_v5-rev1
 
+  - TARGET: Go 1.14.0
+    ARCH: 64
+    ARCHGO:
+    VERGO: 113
+    MGWVER: x86_64-7.2.0-posix-seh-rt_v5-rev1
+
+  - TARGET: Go 1.14.0
+    ARCH: 32
+    ARCHGO: -x86
+    VERGO: 113
+    MGWVER: i686-6.3.0-posix-dwarf-rt_v5-rev1
+
+  - TARGET: Go 1.15.0
+    ARCH: 64
+    ARCHGO:
+    VERGO: 113
+    MGWVER: x86_64-7.2.0-posix-seh-rt_v5-rev1
+
+  - TARGET: Go 1.15.0
+    ARCH: 32
+    ARCHGO: -x86
+    VERGO: 113
+    MGWVER: i686-6.3.0-posix-dwarf-rt_v5-rev1
+
 install:
   - cmd: echo Testing sciter%ARCH% with %TARGET%.
   - cmd: echo Current directory is %APPVEYOR_BUILD_FOLDER%
