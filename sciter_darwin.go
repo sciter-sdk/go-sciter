@@ -23,10 +23,10 @@ func CreateWindow(createFlags WindowCreationFlag, rect *Rect, delegate uintptr, 
 		(*C.RECT)(unsafe.Pointer(rect)),
 		nil,
 		(C.LPVOID)(delegateParam),
-		parent)
+		unsafe.Pointer(parent))
 	// in case of NULL
 	if int(uintptr(unsafe.Pointer(hwnd))) == 0 {
 		return BAD_HWINDOW
 	}
-	return hwnd
+	return (C.HWINDOW)(hwnd)
 }

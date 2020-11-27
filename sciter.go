@@ -111,7 +111,7 @@ func (s *Sciter) DataReady(uri string, data []byte) bool {
 	if len(data) > 0 {
 		pData = (C.LPCBYTE)(unsafe.Pointer(&data[0]))
 	}
-	ret := C.SciterDataReady(s.hwnd, StringToWcharPtr(uri), pData, C.UINT(len(data)))
+	ret := C.SciterDataReady(unsafe.Pointer(s.hwnd), StringToWcharPtr(uri), pData, C.UINT(len(data)))
 	if ret == 0 {
 		return false
 	}
@@ -144,7 +144,7 @@ func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointe
 	cdataLength := C.UINT(len(data))
 	crequestId := C.LPVOID(requestId)
 	// cgo call
-	ret := C.SciterDataReadyAsync(s.hwnd, curi, pData, cdataLength, crequestId)
+	ret := C.SciterDataReadyAsync(unsafe.Pointer(s.hwnd), curi, pData, cdataLength, crequestId)
 	if ret == 0 {
 		return false
 	}
@@ -154,7 +154,7 @@ func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId unsafe.Pointe
 // BOOL SciterLoadFile (HWINDOW hWndSciter, LPCWSTR filename) ;//{ return SAPI()->SciterLoadFile (hWndSciter,filename); }
 
 func (s *Sciter) LoadFile(filename string) error {
-	ret := C.SciterLoadFile(s.hwnd, StringToWcharPtr(filename))
+	ret := C.SciterLoadFile(unsafe.Pointer(s.hwnd), StringToWcharPtr(filename))
 	if ret == 0 {
 		return fmt.Errorf("LoadFile with: %s failed", filename)
 	}
@@ -177,7 +177,7 @@ func (s *Sciter) LoadHtml(html, baseUrl string) error {
 	csize := C.UINT(len(html))
 	cbaseUrl := StringToWcharPtr(baseUrl)
 	// cgo call
-	ret := C.SciterLoadHtml(s.hwnd, chtml, csize, cbaseUrl)
+	ret := C.SciterLoadHtml(unsafe.Pointer(s.hwnd), chtml, csize, cbaseUrl)
 	if ret == 0 {
 		return fmt.Errorf("LoadHtml with: %s failed", string(html))
 	}
@@ -260,7 +260,7 @@ func (s *Sciter) SetCallback(handler *CallbackHandler) {
 	idx := len(globalCallbackHandlers) - 1
 	cparam := C.LPVOID(unsafe.Pointer(uintptr(idx)))
 	// cgo call
-	C.SciterSetCallback(s.hwnd, sciterhostcallback, cparam)
+	C.SciterSetCallback(unsafe.Pointer(s.hwnd), sciterhostcallback, cparam)
 }
 
 // BOOL SciterSetMasterCSS (LPCBYTE utf8, UINT numBytes)
@@ -314,7 +314,7 @@ func (s *Sciter) SetCSS(css, baseUrl, mediaType string) (ok bool) {
 	cbaseUrl := StringToWcharPtr(baseUrl)
 	cmediaType := StringToWcharPtr(mediaType)
 	// cgo call
-	r := C.SciterSetCSS(s.hwnd, ccss, clen, cbaseUrl, cmediaType)
+	r := C.SciterSetCSS(unsafe.Pointer(s.hwnd), ccss, clen, cbaseUrl, cmediaType)
 	if r == 0 {
 		return false
 	}
@@ -337,7 +337,7 @@ func (s *Sciter) SetMediaType(mediaType string) (ok bool) {
 	// args
 	cmediaType := C.LPCWSTR(unsafe.Pointer(StringToWcharPtr(mediaType)))
 	// cgo call
-	r := C.SciterSetMediaType(s.hwnd, cmediaType)
+	r := C.SciterSetMediaType(unsafe.Pointer(s.hwnd), cmediaType)
 	if r == 0 {
 		return false
 	}
@@ -348,7 +348,7 @@ func (s *Sciter) SetMediaType(mediaType string) (ok bool) {
 
 // UINT SciterGetMinWidth (HWINDOW hWndSciter)
 func (s *Sciter) MinWidth() int {
-	r := C.SciterGetMinWidth(s.hwnd)
+	r := C.SciterGetMinWidth(unsafe.Pointer(s.hwnd))
 	return int(r)
 }
 
@@ -357,7 +357,7 @@ func (s *Sciter) MinHeight(width int) int {
 	// args
 	cwidth := C.UINT(width)
 	// cgo call
-	r := C.SciterGetMinHeight(s.hwnd, cwidth)
+	r := C.SciterGetMinHeight(unsafe.Pointer(s.hwnd), cwidth)
 	return int(r)
 }
 
@@ -383,7 +383,7 @@ func (s *Sciter) Call(functionName string, args ...*Value) (retval *Value, err e
 	}
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
-	r := C.SciterCall(s.hwnd, cfn, cargc, cargv, cretval)
+	r := C.SciterCall(unsafe.Pointer(s.hwnd), cfn, cargc, cargv, cretval)
 	if r == 0 {
 		err = fmt.Errorf("SciterCall failed with function: %s", functionName)
 	}
@@ -404,7 +404,7 @@ func (s *Sciter) Eval(script string) (retval *Value, ok bool) {
 	cscript := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	cretval := (*C.SCITER_VALUE)(unsafe.Pointer(retval))
 	// cgo call
-	r := C.SciterEval(s.hwnd, cscript, cscriptLength, cretval)
+	r := C.SciterEval(unsafe.Pointer(s.hwnd), cscript, cscriptLength, cretval)
 	if r == 0 {
 		ok = false
 	} else {
@@ -415,7 +415,7 @@ func (s *Sciter) Eval(script string) (retval *Value, ok bool) {
 
 // VOID SciterUpdateWindow(HWINDOW hwnd)
 func (s *Sciter) UpdateWindow() {
-	C.SciterUpdateWindow(s.hwnd)
+	C.SciterUpdateWindow(unsafe.Pointer(s.hwnd))
 }
 
 // #ifdef WINDOWS
@@ -428,7 +428,7 @@ func (s *Sciter) SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 	coption := C.UINT(option)
 	cvalue := C.UINT_PTR(value)
 	// cgo call
-	r := C.SciterSetOption(s.hwnd, coption, cvalue)
+	r := C.SciterSetOption(unsafe.Pointer(s.hwnd), coption, cvalue)
 	if r == 0 {
 		return false
 	}
@@ -440,7 +440,7 @@ func SetOption(option Sciter_RT_OPTIONS, value uint) (ok bool) {
 	coption := C.UINT(option)
 	cvalue := C.UINT_PTR(value)
 	hwnd := BAD_HWINDOW
-	r := C.SciterSetOption(hwnd, coption, cvalue)
+	r := C.SciterSetOption(unsafe.Pointer(hwnd), coption, cvalue)
 	if r == 0 {
 		return false
 	}
@@ -470,7 +470,7 @@ func (s *Sciter) SetHomeURL(baseUrl string) (ok bool) {
 	// args
 	cbaseUrl := C.LPCWSTR(unsafe.Pointer(StringToWcharPtr(baseUrl)))
 	// cgo call
-	r := C.SciterSetHomeURL(s.hwnd, cbaseUrl)
+	r := C.SciterSetHomeURL(unsafe.Pointer(s.hwnd), cbaseUrl)
 	if r == 0 {
 		return false
 	}
@@ -636,7 +636,7 @@ func (e *Element) finalize() {
 //   Root DOM object is always a 'HTML' element of the document.
 func (s *Sciter) GetRootElement() (*Element, error) {
 	var he C.HELEMENT
-	r := C.SciterGetRootElement(s.hwnd, &he)
+	r := C.SciterGetRootElement(unsafe.Pointer(s.hwnd), &he)
 	return WrapElement(he), wrapDomResult(r, "SciterGetRootElement")
 }
 
@@ -653,7 +653,7 @@ func (s *Sciter) GetRootElement() (*Element, error) {
 //   COMMENT: To set focus on element use SciterSetElementState(STATE_FOCUS,0)
 func (s *Sciter) GetFocusElement() (*Element, error) {
 	var he C.HELEMENT
-	r := C.SciterGetFocusElement(s.hwnd, &he)
+	r := C.SciterGetFocusElement(unsafe.Pointer(s.hwnd), &he)
 	return WrapElement(he), wrapDomResult(r, "SciterGetFocusElement")
 }
 
@@ -670,7 +670,7 @@ func (s *Sciter) GetFocusElement() (*Element, error) {
 func (s *Sciter) FindElement(pt Point) (*Element, error) {
 	var he C.HELEMENT
 	cpt := *(*C.POINT)(unsafe.Pointer(&pt))
-	r := C.SciterFindElement(s.hwnd, cpt, &he)
+	r := C.SciterFindElement(unsafe.Pointer(s.hwnd), cpt, &he)
 	return WrapElement(he), wrapDomResult(r, "SciterFindElement")
 }
 
@@ -1049,7 +1049,7 @@ func (e *Element) GetHwnd(rootWindow bool) (hwnd C.HWINDOW, err error) {
 		crootWindow = C.TRUE
 	}
 	// cgo call
-	r := C.SciterGetElementHwnd(e.handle, &hwnd, crootWindow)
+	r := C.SciterGetElementHwnd(e.handle, (C.HWINDOW_PTR)(unsafe.Pointer(&hwnd)), crootWindow)
 	err = wrapDomResult(r, "SciterGetElementHwnd")
 	return
 }
@@ -1205,7 +1205,7 @@ func (s *Sciter) GetElementByUID(uid uint) (*Element, error) {
 	cuid := C.UINT(uid)
 	var he C.HELEMENT
 	// cgo call
-	r := C.SciterGetElementByUID(s.hwnd, cuid, &he)
+	r := C.SciterGetElementByUID(unsafe.Pointer(s.hwnd), cuid, &he)
 	return WrapElement(he), wrapDomResult(r, "SciterGetElementByUID")
 }
 
@@ -1617,7 +1617,7 @@ func (s *Sciter) AttachWindowEventHandler(handler *EventHandler) error {
 	// subscription := handler.Subscription()
 	// subscription &= ^uint(DISABLE_INITIALIZATION & 0xffffffff)
 
-	r := C.SciterWindowAttachEventHandler(s.hwnd, element_event_proc, tag, HANDLE_ALL)
+	r := C.SciterWindowAttachEventHandler(unsafe.Pointer(s.hwnd), element_event_proc, tag, HANDLE_ALL)
 	return wrapDomResult(r, "SciterWindowAttachEventHandler")
 }
 
@@ -1629,7 +1629,7 @@ func (s *Sciter) DetachWindowEventHandler(handler *EventHandler) error {
 		return nil
 	}
 	tag := C.LPVOID(unsafe.Pointer(uintptr(idx)))
-	ret := C.SciterWindowDetachEventHandler(s.hwnd, element_event_proc, tag)
+	ret := C.SciterWindowDetachEventHandler(unsafe.Pointer(s.hwnd), element_event_proc, tag)
 	globalEventHandlers[idx] = nil
 	return wrapDomResult(ret, "SciterWindowDetachEventHandler")
 }
