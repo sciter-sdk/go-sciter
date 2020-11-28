@@ -1049,7 +1049,7 @@ func (e *Element) GetHwnd(rootWindow bool) (hwnd C.HWINDOW, err error) {
 		crootWindow = C.TRUE
 	}
 	// cgo call
-	r := C.SciterGetElementHwnd(e.handle, &hwnd, crootWindow)
+	r := C.SciterGetElementHwnd(e.handle, (C.HWINDOW_PTR)(unsafe.Pointer(&hwnd)), crootWindow)
 	err = wrapDomResult(r, "SciterGetElementHwnd")
 	return
 }

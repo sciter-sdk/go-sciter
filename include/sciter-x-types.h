@@ -381,6 +381,8 @@ typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE str, UINT num_bytes, LPVOID p
 
 #define STDCALL __stdcall
 
+typedef HWINDOW* HWINDOW_PTR;
+
 #ifdef __cplusplus
 
   #define EXTERN_C extern "C"
