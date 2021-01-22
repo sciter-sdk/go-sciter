@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -58,7 +59,12 @@ func main() {
 		log.Fatal(err)
 	}
 	//加载文件
-	w.LoadFile("demo6.html")
+	fullpath, err := filepath.Abs("demo6.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.LoadFile(fullpath")
 	//设置标题
 	w.SetTitle("元素加载内容")
 	//获取根元素
