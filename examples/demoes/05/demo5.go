@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-
+	"path/filepath"
+	
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -15,7 +16,12 @@ func main() {
 		log.Fatal(err)
 	}
 	//加载文件
-	w.LoadFile("demo5.html")
+	fullpath, err := filepath.Abs("demo5.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.LoadFile(fullpath)
 	//设置标题
 	w.SetTitle("固定大小窗口")
 	//显示窗口
