@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -86,8 +87,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	w.LoadFile("demo4.html")
+	fullpath, err := filepath.Abs("demo4.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.LoadFile(fullpath)
 	//设置标题
 	w.SetTitle("事件处理")
 
