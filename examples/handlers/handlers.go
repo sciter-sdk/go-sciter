@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"log"
-
+	"path/filepath"
+	
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/rice"
 	"github.com/sciter-sdk/go-sciter/window"
