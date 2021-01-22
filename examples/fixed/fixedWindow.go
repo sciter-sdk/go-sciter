@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"path/filepath"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -19,8 +20,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	w.LoadFile(flag.Arg(0))
+	fullpath, err := filepath.Abs(flag.Arg(0)) //if it's already an absolute path, it'll be returned as is.
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.LoadFile(fullpath)
 	w.Show()
 	w.Run()
 }
