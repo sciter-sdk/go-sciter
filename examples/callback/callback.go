@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-
+	"filepath"
+	
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -12,7 +13,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Create Window Error: ", err)
 	}
-	w.LoadFile("index.html")
+	fullpath, err := filepath.Abs("index.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.LoadFile(fullpath)
 	setEventHandler(w)
 	w.Show()
 	w.Run()
