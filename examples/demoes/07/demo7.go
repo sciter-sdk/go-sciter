@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
@@ -32,7 +33,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	w.LoadFile("demo7.html")
+	fullpath, err := filepath.Abs("demo7.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.LoadFile(fullpath)
 	w.SetTitle("tiscript脚本学习")
 	defFunc(w)
 	w.Show()
