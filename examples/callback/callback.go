@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"filepath"
+	"path/filepath"
 	
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
