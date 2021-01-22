@@ -128,7 +128,12 @@ func main() {
 		log.Println("set debug mode failed")
 	}
 	// load file
-	if err = w.LoadFile(flag.Arg(0)); err != nil {
+	fullpath, err := filepath.Abs(flag.Arg(0))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = w.LoadFile(fullpath); err != nil {
 		log.Println("LoadFile error:", err.Error())
 		return
 	}
