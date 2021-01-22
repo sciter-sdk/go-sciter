@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-
+	"path/filepath"
+	
 	"github.com/sciter-sdk/go-sciter"
 	"github.com/sciter-sdk/go-sciter/window"
 )
@@ -26,7 +27,11 @@ func main() {
 		log.Fatal(err)
 	}
 	//load file;加载文件
-	w.LoadFile("demo1.html")
+	fullpath, err := filepath.Abs("demo1.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.LoadFile(fullpath)
 	//set title; 设置标题
 	w.SetTitle("Hello, world")
 	//show;显示窗口
