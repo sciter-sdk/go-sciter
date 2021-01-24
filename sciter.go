@@ -827,7 +827,7 @@ func (e *Element) SetText(text string) error {
 	if err != nil {
 		return err
 	}
-	clength := C.UINT(len(u16))
+	clength := C.UINT(len(u16) + 1) //This addition is for the /x00 letter
 	ctext := C.LPCWSTR(unsafe.Pointer(&u16[0]))
 	// cgo call
 	r := C.SciterSetElementText(e.handle, ctext, clength)
