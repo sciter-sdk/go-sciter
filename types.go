@@ -86,11 +86,14 @@ const (
 	SUBSCRIPTIONS_REQUEST = 0xFFFFFFFF /** special value for getting subscription flags */
 )
 
+type PhaseMask uint32
+
 // enum PHASE_MASK
 const (
 	BUBBLING = 0      // bubbling (emersion) phase
 	SINKING  = 0x8000 // capture (immersion) phase, this flag is or'ed with EVENTS codes below
-	HANDLED  = 0x10000
+	HANDLED  = 0x10000 // a bubbling event consumed by some element
+	SINKING_HANDLED = 0x18000 // a sinking event consumed by some child element
 	// see: http://www.w3.org/TR/xml-events/Overview.html#s_intro
 )
 
@@ -586,7 +589,11 @@ type TimerParams struct {
 type BehaviorEventParams C.BEHAVIOR_EVENT_PARAMS
 
 func (b *BehaviorEventParams) Cmd() BehaviorEvent {
-	return BehaviorEvent(b.cmd)
+	return BehaviorEvent(b.cmd & 0xFFF)
+}
+
+func (b *BehaviorEventParams) Phase() PhaseMask {
+	return PhaseMask(b.cmd & 0xFFFFF000)
 }
 
 type MethodParams struct {
