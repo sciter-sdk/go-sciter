@@ -64,7 +64,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	w.LoadFile(fullpath")
+	w.LoadFile(fullpath)
 	//设置标题
 	w.SetTitle("元素加载内容")
 	//获取根元素
