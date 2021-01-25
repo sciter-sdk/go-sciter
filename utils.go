@@ -45,6 +45,7 @@ func StringToBytePtr(s string) *byte {
 	return &bs[0]
 }
 
+// returns a UTF-16 string, including the trailing zero
 func Utf16FromString(s string) ([]uint16, error) {
 	for i := 0; i < len(s); i++ {
 		if s[i] == 0 {
