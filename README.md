@@ -1,17 +1,3 @@
-# Attention!
-
-> :warning: [Crowdfunding campaign to Open Source Sciter and Sciter.JS engines is in effect right now on KickStarter](https://www.kickstarter.com/projects/c-smile/open-source-sciter-engine)
-
-Open Source version of Sciter opens opprtunity to use Sciter as CGO module (statically linked) in Go, so
-
-Please help to Open Source the Sciter by:
-
-* donating to the campaign or/and</li>
-* by spreading the word about the campaign.
-
-#### [Let's make it happen!](https://www.kickstarter.com/projects/c-smile/open-source-sciter-engine)
-
-
 # Go bindings for Sciter
 
 [![Build status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
