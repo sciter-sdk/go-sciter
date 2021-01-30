@@ -59,10 +59,11 @@ func (s *Window) Run() {
 	// defer win.OleUninitialize()
 	s.run()
 	// start main gui message loop
-	var msg win.MSG
-	for win.GetMessage(&msg, 0, 0, 0) > 0 {
-		win.TranslateMessage(&msg)
-		win.DispatchMessage(&msg)
+	msg := (*win.MSG)(unsafe.Pointer(win.GlobalAlloc(0, unsafe.Sizeof(win.MSG{}))))
+	defer win.GlobalFree(win.HGLOBAL(unsafe.Pointer(msg)))
+	for win.GetMessage(msg, 0, 0, 0) > 0 {
+		win.TranslateMessage(msg)
+		win.DispatchMessage(msg)
 	}
 }
 
