@@ -134,7 +134,7 @@ var (
 //  \param[in] data \b LPBYTE, pointer to data buffer.
 //  \param[in] requestId \b LPVOID, SCN_LOAD_DATA requestId.
 //  \return \b BOOL, TRUE if Sciter accepts the data or \c FALSE if error occured
-func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId C.LPVOID) bool {
+func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId C.HREQUEST) bool {
 	// args
 	var pData C.LPCBYTE
 	if len(data) > 0 {
@@ -142,9 +142,10 @@ func (s *Sciter) DataReadyAsync(uri string, data []byte, requestId C.LPVOID) boo
 	}
 	curi := StringToWcharPtr(uri)
 	cdataLength := C.UINT(len(data))
+	crequestId := C.LPVOID(requestId)
 
 	// cgo call
-	ret := C.SciterDataReadyAsync(s.hwnd, curi, pData, cdataLength, requestId)
+	ret := C.SciterDataReadyAsync(s.hwnd, curi, pData, cdataLength, crequestId)
 	if ret == 0 {
 		return false
 	}
