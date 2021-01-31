@@ -1008,6 +1008,10 @@ func (s *ScnLoadData) Uri() string {
 	return Utf16ToString((*uint16)(unsafe.Pointer(s.uri)))
 }
 
+func (s *ScnLoadData) RequestId() C.HREQUEST {
+	return s.RequestId
+}
+
 func (s *ScnLoadData) Data() []byte {
 	ret := ByteCPtrToBytes(s.outData, s.outDataSize)
 	return ret
