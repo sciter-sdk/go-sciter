@@ -1008,7 +1008,7 @@ func (s *ScnLoadData) Uri() string {
 	return Utf16ToString((*uint16)(unsafe.Pointer(s.uri)))
 }
 
-func (s *ScnLoadData) RequestId() C.LPVOID {
+func (s *ScnLoadData) RequestId() C.HREQUEST {
 	return s.requestId
 }
 
