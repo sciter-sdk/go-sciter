@@ -46,6 +46,6 @@ func NewRequest(requestId C.HREQUEST) *Request {
 
 func (r *Request) GetRequestType() uint {
 	var pType uint
-	C.RequestGetRequestType(C.HREQUEST(r.rq), (*C.REQUEST_RQ_TYPE)(unsafe.Pointer(&pType)))
+	C.RequestGetRequestType(r.rq, (*C.REQUEST_RQ_TYPE)(unsafe.Pointer(&pType)))
 	return pType
 }
