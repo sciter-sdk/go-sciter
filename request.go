@@ -3,7 +3,7 @@ package sciter
 /*
 #include "sciter-x.h"
 
-SCDOM_RESULT SCAPI RequestGetRequestType(HREQUEST rq, REQUEST_RQ_TYPE* pType);
+extern SCDOM_RESULT SCAPI RequestGetRequestType(HREQUEST rq, REQUEST_RQ_TYPE* pType);
 */
 import "C"
 import "unsafe"
