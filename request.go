@@ -36,6 +36,7 @@ import "C"
 import (
 	"fmt"
 	"runtime"
+	"time"
 	"unsafe"
 )
 
@@ -201,7 +202,7 @@ func (r *Request) NthParameterValue(idx uint) (string, error) {
 	return value, wrapRequestResult(ret, "")
 }
 
-/*func (r *Request) Times() (time.Time, time.Time, error) {
+func (r *Request) Times() (time.Time, time.Time, error) {
 	var started, ended uint
 	var tStarted, tEnded time.Time
 	// args
@@ -209,10 +210,10 @@ func (r *Request) NthParameterValue(idx uint) (string, error) {
 	cended := (*C.UINT)(unsafe.Pointer(&ended))
 	// cgo call
 	ret := C.RequestGetTimes(r.handle, cstarted, cended)
-	tStarted = time.Unix(0, int64(started*1000))
-	tEnded = time.Unix(0, int64(ended*1000))
+	tStarted = time.Unix(int64(started), 0)
+	tEnded = time.Unix(int64(ended), 0)
 	return tStarted, tEnded, wrapRequestResult(ret, "")
-}*/
+}
 
 func (r *Request) NumberOfRqHeaders() (uint, error) {
 	var num uint
