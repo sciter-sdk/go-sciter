@@ -1,7 +1,7 @@
 package sciter
 
 /*
-#include "sciter-x.h"
+#include <sciter-x.h>
 
 extern REQUEST_RESULT SCAPI RequestUse( HREQUEST rq );
 extern REQUEST_RESULT SCAPI RequestUnUse( HREQUEST rq );
