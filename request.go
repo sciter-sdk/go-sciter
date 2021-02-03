@@ -214,7 +214,6 @@ func (r *Request) NthParameterValue(idx uint) (string, error) {
 	return tStarted, tEnded, wrapRequestResult(ret, "")
 }*/
 
-// TODO: test headers
 func (r *Request) NumberOfRqHeaders() (uint, error) {
 	var num uint
 	// args
