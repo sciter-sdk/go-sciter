@@ -34,9 +34,12 @@ extern REQUEST_RESULT SCAPI RequestGetData( HREQUEST rq, LPCBYTE_RECEIVER* rcv, 
 */
 import "C"
 import (
+	"fmt"
 	"runtime"
 	"unsafe"
 )
+
+type REQUEST_RESULT int32
 
 // enum REQUEST_RESULT
 const (
@@ -66,9 +69,27 @@ const (
 	RS_FORCE_DWORD = 0xFFFFFFFF
 )
 
+type requestError struct {
+	Result  REQUEST_RESULT
+	Message string
+}
+
+func (e *requestError) Error() string {
+	return fmt.Sprintf("") // TODO: finish this
+}
+
+func newRequestError(ret REQUEST_RESULT, msg string) *requestError {
+	return &requestError{
+		Result:  ret,
+		Message: msg,
+	}
+}
+
 func wrapRequestResult(r C.REQUEST_RESULT, msg string) error {
-	// TODO: finish this
-	return nil
+	if r == C.REQUEST_RESULT(REQUEST_OK) {
+		return nil
+	}
+	return newRequestError(REQUEST_RESULT(r), msg)
 }
 
 var (
@@ -133,16 +154,14 @@ func (r *Request) RequestType() (uint, error) {
 	return requestType, wrapRequestResult(ret, "")
 }
 
-/*
-func (r *Request) RequestedDataType() (string, error) {
-	var str string
+func (r *Request) RequestedDataType() (SciterResourceType, error) {
+	var resourceType SciterResourceType
 	// args
-	cparam := C.LPVOID(unsafe.Pointer(&str))
+	cresourceType := (*C.SciterResourceType)(unsafe.Pointer(&resourceType))
 	// cgo call
-	ret := C.RequestGetRequestedDataType(r.handle, lpcstr_receiver, cparam)
-	return str, wrapRequestResult(ret, "")
+	ret := C.RequestGetRequestedDataType(r.handle, cresourceType)
+	return resourceType, wrapRequestResult(ret, "")
 }
-*/
 
 func (r *Request) ReceivedDataType() (string, error) {
 	var dataType string
