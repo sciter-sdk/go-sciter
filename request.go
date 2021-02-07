@@ -40,6 +40,25 @@ import (
 	"unsafe"
 )
 
+/** Resource data type.
+ *  Used by SciterDataReadyAsync() function.
+ **/
+type SciterResourceType uint32
+
+// typedef enum SciterResourceType
+const (
+	RT_DATA_HTML SciterResourceType = iota
+	RT_DATA_IMAGE
+	RT_DATA_STYLE
+	RT_DATA_CURSOR
+	RT_DATA_SCRIPT
+	RT_DATA_RAW
+	RT_DATA_FONT
+	RT_DATA_SOUND // wav bytes
+
+	RT_DATA_FORCE_DWORD = 0xffffffff
+)
+
 type REQUEST_RESULT int32
 
 // enum REQUEST_RESULT
