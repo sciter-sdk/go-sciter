@@ -83,7 +83,7 @@ func (v *Value) Assign(val interface{}) {
 		if val.(bool) {
 			i = 1
 		}
-		v.SetInt(i)
+		v.SetInt(int32(i))
 	case float32:
 		v.Assign(float64(val.(float32)))
 	case int:
