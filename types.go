@@ -90,9 +90,9 @@ type PhaseMask uint32
 
 // enum PHASE_MASK
 const (
-	BUBBLING = 0      // bubbling (emersion) phase
-	SINKING  = 0x8000 // capture (immersion) phase, this flag is or'ed with EVENTS codes below
-	HANDLED  = 0x10000 // a bubbling event consumed by some element
+	BUBBLING        = 0       // bubbling (emersion) phase
+	SINKING         = 0x8000  // capture (immersion) phase, this flag is or'ed with EVENTS codes below
+	HANDLED         = 0x10000 // a bubbling event consumed by some element
 	SINKING_HANDLED = 0x18000 // a sinking event consumed by some child element
 	// see: http://www.w3.org/TR/xml-events/Overview.html#s_intro
 )
@@ -461,7 +461,7 @@ const (
 	T_ANGLE      // double, radians
 	T_COLOR      // [unsigned] INT, ABGR
 	T_ENUM
-	T_ASSET      // sciter::om::iasset* add_ref'ed pointer
+	T_ASSET // sciter::om::iasset* add_ref'ed pointer
 )
 
 // enum VALUE_UNIT_TYPE
@@ -811,9 +811,10 @@ type GestureParams struct {
 }
 
 type SomEvents uint32
+
 const (
 	SOM_GET_PASSPORT = 0
-	SOM_GET_ASSET = 1
+	SOM_GET_ASSET    = 1
 )
 
 type SomParams C.SOM_PARAMS
@@ -887,20 +888,19 @@ const (
 	SC_POSTED_NOTIFICATION = 0x06
 
 	/**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
-	   Most probably bad gfx drivers.
+	  Most probably bad gfx drivers.
 
-	 * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
-	 *
-	 **/
+	* \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
+	*
+	**/
 	SC_GRAPHICS_CRITICAL_FAILURE = 0x07
 
-
 	/**This notification is sent when the engine needs keyboard to be present on screen
-	   E.g. when <input|text> gets focus
+	  E.g. when <input|text> gets focus
 
-	 * \param lParam #LPSCN_KEYBOARD_REQUEST
-	 *
-	 **/
+	* \param lParam #LPSCN_KEYBOARD_REQUEST
+	*
+	**/
 	SC_KEYBOARD_REQUEST = 0x08
 
 	/**This notification is sent when the engine needs some area to be redrawn
@@ -1021,21 +1021,6 @@ func (s *ScnLoadData) SetData(data []byte) {
 	s.outData = (C.LPCBYTE)(unsafe.Pointer((&data[0])))
 	s.outDataSize = C.UINT(len(data))
 }
-
-/** Resource data type.
- *  Used by SciterDataReadyAsync() function.
- **/
-type SciterResourceType uint32
-
-// typedef enum SciterResourceType
-const (
-	RT_DATA_HTML SciterResourceType = iota
-	RT_DATA_IMAGE
-	RT_DATA_STYLE
-	RT_DATA_CURSOR
-	RT_DATA_SCRIPT
-	RT_DATA_RAW
-)
 
 /**This structure is used by #SCN_DATA_LOADED notification.
  *\copydoc SCN_DATA_LOADED
@@ -1281,19 +1266,19 @@ type CallbackHandler struct {
 	OnPostedNotification func(params *ScnPostedNotification) int
 
 	/**This notification is sent when the engine encounters critical rendering error: e.g. DirectX gfx driver error.
-	   Most probably bad gfx drivers.
+	  Most probably bad gfx drivers.
 
-	 * \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
-	 *
-	 **/
+	* \param lParam #LPSCN_GRAPHICS_CRITICAL_FAILURE
+	*
+	**/
 	OnGraphicsCriticalFailure func() int
 
 	/**This notification is sent when the engine needs keyboard to be present on screen
-	   E.g. when <input|text> gets focus
+	  E.g. when <input|text> gets focus
 
-	 * \param lParam #LPSCN_KEYBOARD_REQUEST
-	 *
-	 **/
+	* \param lParam #LPSCN_KEYBOARD_REQUEST
+	*
+	**/
 	OnKeyboardRequest func(params *ScnKeyboardRequest) int
 
 	/**This notification is sent when the engine needs some area to be redrawn
@@ -1352,10 +1337,10 @@ const (
 
 	SCITER_ALPHA_WINDOW = 12 //  hWnd, value - TRUE/FALSE - window uses per pixel alpha (e.g. WS_EX_LAYERED/UpdateLayeredWindow() window)
 
-	SCITER_SET_INIT_SCRIPT = 13   // hWnd - N/A , value LPCSTR - UTF-8 encoded script source to be loaded into each view before any other script execution.
-	                              //                             The engine copies this string inside the call.
+	SCITER_SET_INIT_SCRIPT = 13 // hWnd - N/A , value LPCSTR - UTF-8 encoded script source to be loaded into each view before any other script execution.
+	//                             The engine copies this string inside the call.
 
-	SCITER_SET_MAIN_WINDOW = 14   //  hWnd, value - TRUE/FALSE - window is main, will destroy all other dependent windows on close
+	SCITER_SET_MAIN_WINDOW = 14 //  hWnd, value - TRUE/FALSE - window is main, will destroy all other dependent windows on close
 
 	SCITER_SET_MAX_HTTP_DATA_LENGTH = 15 // hWnd - N/A , value - max request length in megabytes (1024*1024 bytes)
 )
