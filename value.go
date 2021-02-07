@@ -66,7 +66,6 @@ func (v *Value) Release() {
 // Assign go value to Sciter Value
 // currently supported go types: bool integer float string and NativeFunctor
 func (v *Value) Assign(val interface{}) {
-	const is64Bit = uint64(^uintptr(0)) == ^uint64(0)
 	switch val.(type) {
 	case string:
 		s := val.(string)
@@ -74,9 +73,6 @@ func (v *Value) Assign(val interface{}) {
 	case int32:
 		i := val.(int32)
 		v.SetInt(i)
-	case int64:
-		i := val.(int64)
-		v.SetInt64(i)
 	case float64:
 		f := val.(float64)
 		// valueInit(this); valueFloatDataSet(this, v, T_FLOAT, 0)
@@ -91,19 +87,15 @@ func (v *Value) Assign(val interface{}) {
 	case float32:
 		v.Assign(float64(val.(float32)))
 	case int:
-		if is64Bit {
-			v.Assign(int64(val.(int)))
-		} else {
-			v.Assign(int32(val.(int)))
-		}
+		// TODO: should we check if it's too big?
+		v.Assign(int32(val.(int)))
 	case uint:
-		if is64Bit {
-			v.Assign(uint64(val.(uint)))
-		} else {
-			v.Assign(uint32(val.(uint)))
-		}
+		v.Assign(uint32(val.(uint)))
 	case uint32:
 		v.Assign(int32(val.(uint32)))
+	case int64:
+		// TODO: should we check if it's too big?
+		v.Assign(int32(val.(int64)))
 	case uint64:
 		v.Assign(int64(val.(uint64)))
 	case Value:
