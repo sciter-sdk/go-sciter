@@ -292,7 +292,15 @@ func (r *Request) NthRspHeaderValue(idx uint) (string, error) {
 	return val, wrapRequestResult(ret, "")
 }
 
-// TODO: RequestGetCompletionStatus
+func (r *Request) CompletionStatus() (uint, uint, error) {
+	var state, status uint
+	// args
+	cstate := (*C.REQUEST_STATE)(unsafe.Pointer(&state))
+	cstatus := (*C.UINT)(unsafe.Pointer(&status))
+	// cgo call
+	ret := C.RequestGetCompletionStatus(r.handle, cstate, cstatus)
+	return state, status, wrapRequestResult(ret, "")
+}
 
 func (r *Request) ProxyHost() (string, error) {
 	var host string
