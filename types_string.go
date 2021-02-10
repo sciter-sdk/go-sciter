@@ -273,3 +273,15 @@ func (i VALUE_RESULT) String() string {
 	}
 	return _VALUE_RESULT_name[_VALUE_RESULT_index[i]:_VALUE_RESULT_index[i+1]]
 }
+
+const _REQUEST_RESULT_name = "REQUEST_PANICREQUEST_OKREQUEST_BAD_PARAMREQUEST_FAILUREREQUEST_NOTSUPPORTED"
+
+var _REQUEST_RESULT_index = [...]uint8{0, 13, 23, 40, 55, 75}
+
+func (i REQUEST_RESULT) String() string {
+	i -= -1
+	if i < 0 || i+1 >= REQUEST_RESULT(len(_REQUEST_RESULT_index)) {
+		return fmt.Sprintf("REQUEST_RESULT(%d)", i+-1)
+	}
+	return _REQUEST_RESULT_name[_REQUEST_RESULT_index[i]:_REQUEST_RESULT_index[i+1]]
+}
