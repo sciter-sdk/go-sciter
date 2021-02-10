@@ -95,7 +95,7 @@ type requestError struct {
 }
 
 func (e *requestError) Error() string {
-	return fmt.Sprintf("") // TODO: finish this
+	return fmt.Sprintf("%s: %s", e.Result.String(), e.Message)
 }
 
 func newRequestError(ret REQUEST_RESULT, msg string) *requestError {
@@ -134,12 +134,12 @@ func WrapRequest(requestId C.HREQUEST) *Request {
 
 func (r *Request) use() error {
 	ret := C.RequestUse(r.handle)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestUse")
 }
 
 func (r *Request) unUse() error {
 	ret := C.RequestUnUse(r.handle)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestUnUse")
 }
 
 func (r *Request) finalize() {
@@ -153,7 +153,7 @@ func (r *Request) Url() (string, error) {
 	curl := C.LPVOID(unsafe.Pointer(&url))
 	// cgo call
 	ret := C.RequestUrl(r.handle, lpcstr_receiver, curl)
-	return url, wrapRequestResult(ret, "")
+	return url, wrapRequestResult(ret, "RequestUrl")
 }
 
 func (r *Request) ContentUrl() (string, error) {
@@ -162,7 +162,7 @@ func (r *Request) ContentUrl() (string, error) {
 	curl := C.LPVOID(unsafe.Pointer(&url))
 	// cgo call
 	ret := C.RequestContentUrl(r.handle, lpcstr_receiver, curl)
-	return url, wrapRequestResult(ret, "")
+	return url, wrapRequestResult(ret, "RequestContentUrl")
 }
 
 func (r *Request) RequestType() (uint, error) {
@@ -171,7 +171,7 @@ func (r *Request) RequestType() (uint, error) {
 	crequestType := (*C.REQUEST_RQ_TYPE)(unsafe.Pointer(&requestType))
 	// cgo call
 	ret := C.RequestGetRequestType(r.handle, crequestType)
-	return requestType, wrapRequestResult(ret, "")
+	return requestType, wrapRequestResult(ret, "RequestGetRequestType")
 }
 
 func (r *Request) RequestedDataType() (SciterResourceType, error) {
@@ -180,7 +180,7 @@ func (r *Request) RequestedDataType() (SciterResourceType, error) {
 	cresourceType := (*C.SciterResourceType)(unsafe.Pointer(&resourceType))
 	// cgo call
 	ret := C.RequestGetRequestedDataType(r.handle, cresourceType)
-	return resourceType, wrapRequestResult(ret, "")
+	return resourceType, wrapRequestResult(ret, "RequestGetRequestedDataType")
 }
 
 func (r *Request) ReceivedDataType() (string, error) {
@@ -189,7 +189,7 @@ func (r *Request) ReceivedDataType() (string, error) {
 	cdataType := C.LPVOID(unsafe.Pointer(&dataType))
 	// cgo call
 	ret := C.RequestGetReceivedDataType(r.handle, lpcstr_receiver, cdataType)
-	return dataType, wrapRequestResult(ret, "")
+	return dataType, wrapRequestResult(ret, "RequestGetReceivedDataType")
 }
 
 func (r *Request) NumberOfParameters() (uint, error) {
@@ -198,7 +198,7 @@ func (r *Request) NumberOfParameters() (uint, error) {
 	cnumParams := (*C.UINT)(unsafe.Pointer(&numParams))
 	// cgo call
 	ret := C.RequestGetNumberOfParameters(r.handle, cnumParams)
-	return numParams, wrapRequestResult(ret, "")
+	return numParams, wrapRequestResult(ret, "RequestGetNumberOfParameters")
 }
 
 func (r *Request) NthParameterName(idx uint) (string, error) {
@@ -208,7 +208,7 @@ func (r *Request) NthParameterName(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthParameterName(r.handle, cidx, lpcwstr_receiver, cname)
-	return name, wrapRequestResult(ret, "")
+	return name, wrapRequestResult(ret, "RequestGetNthParameterName")
 }
 
 func (r *Request) NthParameterValue(idx uint) (string, error) {
@@ -218,7 +218,7 @@ func (r *Request) NthParameterValue(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthParameterValue(r.handle, cidx, lpcwstr_receiver, cvalue)
-	return value, wrapRequestResult(ret, "")
+	return value, wrapRequestResult(ret, "RequestGetNthParameterValue")
 }
 
 func (r *Request) Times() (time.Time, time.Time, error) {
@@ -231,7 +231,7 @@ func (r *Request) Times() (time.Time, time.Time, error) {
 	ret := C.RequestGetTimes(r.handle, cstarted, cended)
 	tStarted = time.Unix(int64(started), 0)
 	tEnded = time.Unix(int64(ended), 0)
-	return tStarted, tEnded, wrapRequestResult(ret, "")
+	return tStarted, tEnded, wrapRequestResult(ret, "RequestGetTimes")
 }
 
 func (r *Request) NumberOfRqHeaders() (uint, error) {
@@ -240,7 +240,7 @@ func (r *Request) NumberOfRqHeaders() (uint, error) {
 	cnum := (*C.UINT)(unsafe.Pointer(&num))
 	// cgo call
 	ret := C.RequestGetNumberOfRqHeaders(r.handle, cnum)
-	return num, wrapRequestResult(ret, "")
+	return num, wrapRequestResult(ret, "RequestGetNumberOfRqHeaders")
 }
 
 func (r *Request) NthRqHeaderName(idx uint) (string, error) {
@@ -250,7 +250,7 @@ func (r *Request) NthRqHeaderName(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthRqHeaderName(r.handle, cidx, lpcwstr_receiver, cname)
-	return name, wrapRequestResult(ret, "")
+	return name, wrapRequestResult(ret, "RequestGetNthRqHeaderName")
 }
 
 func (r *Request) NthRqHeaderValue(idx uint) (string, error) {
@@ -260,7 +260,7 @@ func (r *Request) NthRqHeaderValue(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthRqHeaderValue(r.handle, cidx, lpcwstr_receiver, cvalue)
-	return val, wrapRequestResult(ret, "")
+	return val, wrapRequestResult(ret, "RequestGetNthRqHeaderValue")
 }
 
 func (r *Request) NumberOfRspHeaders() (uint, error) {
@@ -269,7 +269,7 @@ func (r *Request) NumberOfRspHeaders() (uint, error) {
 	cnum := (*C.UINT)(unsafe.Pointer(&num))
 	// cgo call
 	ret := C.RequestGetNumberOfRspHeaders(r.handle, cnum)
-	return num, wrapRequestResult(ret, "")
+	return num, wrapRequestResult(ret, "RequestGetNumberOfRspHeaders")
 }
 
 func (r *Request) NthRspHeaderName(idx uint) (string, error) {
@@ -279,7 +279,7 @@ func (r *Request) NthRspHeaderName(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthRspHeaderName(r.handle, cidx, lpcwstr_receiver, cname)
-	return name, wrapRequestResult(ret, "")
+	return name, wrapRequestResult(ret, "RequestGetNthRspHeaderName")
 }
 
 func (r *Request) NthRspHeaderValue(idx uint) (string, error) {
@@ -289,7 +289,7 @@ func (r *Request) NthRspHeaderValue(idx uint) (string, error) {
 	cidx := C.UINT(idx)
 	// cgo call
 	ret := C.RequestGetNthRspHeaderValue(r.handle, cidx, lpcwstr_receiver, cvalue)
-	return val, wrapRequestResult(ret, "")
+	return val, wrapRequestResult(ret, "RequestGetNthRspHeaderValue")
 }
 
 func (r *Request) CompletionStatus() (uint, uint, error) {
@@ -299,7 +299,7 @@ func (r *Request) CompletionStatus() (uint, uint, error) {
 	cstatus := (*C.UINT)(unsafe.Pointer(&status))
 	// cgo call
 	ret := C.RequestGetCompletionStatus(r.handle, cstate, cstatus)
-	return state, status, wrapRequestResult(ret, "")
+	return state, status, wrapRequestResult(ret, "RequestGetCompletionStatus")
 }
 
 func (r *Request) ProxyHost() (string, error) {
@@ -308,7 +308,7 @@ func (r *Request) ProxyHost() (string, error) {
 	chost := C.LPVOID(unsafe.Pointer(&host))
 	// cgo call
 	ret := C.RequestGetProxyHost(r.handle, lpcstr_receiver, chost)
-	return host, wrapRequestResult(ret, "")
+	return host, wrapRequestResult(ret, "RequestGetProxyHost")
 }
 
 func (r *Request) ProxyPort() (uint, error) {
@@ -317,7 +317,7 @@ func (r *Request) ProxyPort() (uint, error) {
 	cportno := (*C.UINT)(unsafe.Pointer(&portno))
 	// cgo call
 	ret := C.RequestGetProxyPort(r.handle, cportno)
-	return portno, wrapRequestResult(ret, "")
+	return portno, wrapRequestResult(ret, "RequestGetProxyPort")
 }
 
 func (r *Request) SetSucceeded(status uint, data []byte) error {
@@ -331,7 +331,7 @@ func (r *Request) SetSucceeded(status uint, data []byte) error {
 
 	//cgo call
 	ret := C.RequestSetSucceeded(r.handle, cstatus, pData, cdataLength)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetSucceeded")
 }
 
 func (r *Request) SetFailed(status uint, data []byte) error {
@@ -345,7 +345,7 @@ func (r *Request) SetFailed(status uint, data []byte) error {
 
 	//cgo call
 	ret := C.RequestSetFailed(r.handle, cstatus, pData, cdataLength)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetFailed")
 }
 
 func (r *Request) AppendDataChunk(data []byte) error {
@@ -358,7 +358,7 @@ func (r *Request) AppendDataChunk(data []byte) error {
 
 	//cgo call
 	ret := C.RequestAppendDataChunk(r.handle, pData, cdataLength)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestAppendDataChunk")
 }
 
 func (r *Request) SetRqHeader(name, value string) error {
@@ -367,7 +367,7 @@ func (r *Request) SetRqHeader(name, value string) error {
 	cvalue := C.LPCWSTR(unsafe.Pointer(StringToWcharPtr(value)))
 	// cgo call
 	ret := C.RequestSetRqHeader(r.handle, cname, cvalue)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetRqHeader")
 }
 
 func (r *Request) SetRspHeader(name, value string) error {
@@ -376,7 +376,7 @@ func (r *Request) SetRspHeader(name, value string) error {
 	cvalue := C.LPCWSTR(unsafe.Pointer(StringToWcharPtr(value)))
 	// cgo call
 	ret := C.RequestSetRspHeader(r.handle, cname, cvalue)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetRspHeader")
 }
 
 func (r *Request) SetReceivedDataType(dataType string) error {
@@ -384,7 +384,7 @@ func (r *Request) SetReceivedDataType(dataType string) error {
 	cdataType := C.LPCSTR(unsafe.Pointer(StringToBytePtr(dataType)))
 	// cgo call
 	ret := C.RequestSetReceivedDataType(r.handle, cdataType)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetReceivedDataType")
 }
 
 func (r *Request) RequestSetReceivedDataEncoding(encoding string) error {
@@ -392,7 +392,7 @@ func (r *Request) RequestSetReceivedDataEncoding(encoding string) error {
 	cencoding := C.LPCSTR(unsafe.Pointer(StringToBytePtr(encoding)))
 	// cgo call
 	ret := C.RequestSetReceivedDataEncoding(r.handle, cencoding)
-	return wrapRequestResult(ret, "")
+	return wrapRequestResult(ret, "RequestSetReceivedDataEncoding")
 }
 
 func (r *Request) Data() ([]byte, error) {
@@ -401,5 +401,5 @@ func (r *Request) Data() ([]byte, error) {
 	cbuf := C.LPVOID(unsafe.Pointer(&buf))
 	// cgo call
 	ret := C.RequestGetData(r.handle, lpcbyte_receiver, cbuf)
-	return buf, wrapRequestResult(ret, "")
+	return buf, wrapRequestResult(ret, "RequestGetData")
 }
