@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <style>
+            html {
+                size: max-content;
+            }
+
+            body {
+                padding: 10dip;
+                flow: vertical;
+            }
+            
+            #img-container {
+                width: 1*;
+                flow: grid(1 3 5, 2 4 6);
+                border-spacing: 10dip;
+            }
+
+            img { size: 150dip; }
+        </style>
+    </head>
+    <body>
+        <h2>Normal Condition</h2>
+        <div#img-container>
+            <label>Synchronous</label>
+            <img src="sync://lighthouse.jpg" />
+            <label>Asynchronous</label>
+            <img src="async://lighthouse.jpg" />
+            <label>Chunked</label>
+            <img src="chunked://lighthouse.jpg" />
+        </div>
+        <h2>Fail Condition</h2>
+        <div#img-container>
+            <label>Synchronous</label>
+            <img src="sync://non-existent.jpg" />
+            <label>Asynchronous</label>
+            <img src="async://non-existent.jpg" />
+            <label>Chunked</label>
+            <img src="chunked://non-existent.jpg" />
+        </div>
+    </body>
+</html>
