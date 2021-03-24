@@ -107,7 +107,7 @@ enum GFX_LAYER
 
   #if defined(WINDOWLESS)
     #define HWINDOW LPVOID
-  #else 
+  #else
   #define HWINDOW HWND
   #endif
 
@@ -154,10 +154,10 @@ enum GFX_LAYER
   typedef void* LPVOID;
   typedef const void* LPCVOID;
 
-  #define SCAPI  
+  #define SCAPI
   #define SCFN(name) (*name)
-  #define SC_CALLBACK 
-  #define CALLBACK 
+  #define SC_CALLBACK
+  #define CALLBACK
 
   typedef struct tagRECT
   {
@@ -191,14 +191,14 @@ enum GFX_LAYER
     #if defined(WINDOWLESS)
       #define SCITER_DLL_NAME "sciter-lite-64.dylib"
     #else
-    #define SCITER_DLL_NAME "sciter-osx-64.dylib"
+    #define SCITER_DLL_NAME "libsciter.dylib"
     #endif
   #else
     #define TARGET_32
     #if defined(WINDOWLESS)
       #define SCITER_DLL_NAME "sciter-lite-32.dylib"
     #else
-      #define SCITER_DLL_NAME "sciter-osx-64.dylib"
+      #define SCITER_DLL_NAME "libsciter.dylib"
     #endif
   #endif
 
@@ -261,11 +261,11 @@ enum GFX_LAYER
   } SIZE, *PSIZE, *LPSIZE;
 
 #if defined(WINDOWLESS)
-  #define HWINDOW void * 
-#else 
+  #define HWINDOW void *
+#else
   #define HWINDOW GtkWidget* //
 #endif
-  
+
   #define HINSTANCE LPVOID //
   #define LRESULT long
   #define HDC LPVOID       // cairo_t
