@@ -49,7 +49,7 @@ before_cache:
 install:
   - export SDK_PATH=https://raw.githubusercontent.com/c-smile/sciter-sdk/master
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter-gtk.so" $SDK_PATH/bin.lnx/x64/libsciter-gtk.so; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx"   ]; then curl -so "$TRAVIS_BUILD_DIR/sciter-osx-64.dylib" $SDK_PATH/bin.osx/sciter-osx-64.dylib; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx"   ]; then curl -so "$TRAVIS_BUILD_DIR/libsciter.dylib" $SDK_PATH/bin.osx/libsciter.dylib; fi
 
 # - go get golang.org/x/lint/golint
 
@@ -58,7 +58,7 @@ install:
 
 before_script:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:$TRAVIS_BUILD_DIR"; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cp "$TRAVIS_BUILD_DIR/sciter-osx-64.dylib" "$TRAVIS_BUILD_DIR/libsciter-osx-64.dylib"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then cp "$TRAVIS_BUILD_DIR/libsciter.dylib" "$TRAVIS_BUILD_DIR/liblibsciter.dylib"; fi
 
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$TRAVIS_BUILD_DIR"; fi
 
