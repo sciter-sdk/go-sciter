@@ -54,7 +54,7 @@ func (e *eventMapper) addMethod(name string, nf func(args ...*Value) *Value) {
 
 func (e *eventMapper) onClick(fn func()) {
 	e.behaviorEventHandlerList = append(e.behaviorEventHandlerList, func(he *Element, params *BehaviorEventParams) bool {
-		if params.Cmd() == BUTTON_CLICK {
+		if params.Cmd() == BUTTON_CLICK && params.Phase() == SINKING {
 			fn()
 		}
 		return false
