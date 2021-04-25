@@ -34,7 +34,7 @@ typedef enum SCITER_X_MSG_CODE {
 
 /** #SCITER_X_MSG common header of message structures passed to SciterProcX */
 typedef struct SCITER_X_MSG
-{ 
+{
   UINT msg;     /**< [in]  one of the codes of #SCITER_X_MSG_CODE.*/
 #ifdef __cplusplus
   SCITER_X_MSG(UINT m) : msg(m) {}
@@ -47,7 +47,7 @@ typedef struct SCITER_X_MSG_CREATE
           UINT backend;
           SBOOL transparent;
 #ifdef __cplusplus
-   SCITER_X_MSG_CREATE(UINT backendType = GFX_LAYER_SKIA_OPENGL, SBOOL isTransparent = TRUE ) 
+   SCITER_X_MSG_CREATE(UINT backendType = GFX_LAYER_SKIA_OPENGL, SBOOL isTransparent = TRUE )
      : header(SXM_CREATE), backend(backendType), transparent(isTransparent) {}
 #endif
 } SCITER_X_MSG_CREATE;
@@ -78,9 +78,9 @@ typedef struct SCITER_X_MSG_RESOLUTION {
 
 typedef struct SCITER_X_MSG_MOUSE {
   SCITER_X_MSG    header;
-  MOUSE_EVENTS    event;
-  MOUSE_BUTTONS   button;
-  KEYBOARD_STATES modifiers;
+  enum MOUSE_EVENTS    event;
+  enum MOUSE_BUTTONS   button;
+  enum KEYBOARD_STATES modifiers;
   POINT           pos;
 #ifdef __cplusplus
   SCITER_X_MSG_MOUSE(MOUSE_EVENTS e, MOUSE_BUTTONS b, KEYBOARD_STATES mods, POINT p) : header(SXM_MOUSE), event(e), button(b), modifiers(mods), pos(p) {}
@@ -89,9 +89,9 @@ typedef struct SCITER_X_MSG_MOUSE {
 
 typedef struct SCITER_X_MSG_KEY {
   SCITER_X_MSG    header;
-  KEY_EVENTS      event;
+  enum KEY_EVENTS      event;
   UINT            code;
-  KEYBOARD_STATES modifiers;
+  enum KEYBOARD_STATES modifiers;
 #ifdef __cplusplus
   SCITER_X_MSG_KEY(KEY_EVENTS e, UINT c, KEYBOARD_STATES mods) : header(SXM_KEY), event(e), code(c), modifiers(mods) {}
 #endif
@@ -127,8 +127,8 @@ typedef VOID SC_CALLBACK ELEMENT_BITMAP_RECEIVER(LPCBYTE rgba, INT x, INT y, UIN
 
 /** #SCITER_X_MSG_PAINT target identifier. */
 typedef enum SCITER_PAINT_TARGET_TYPE {
-  SPT_DEFAULT   = 0,  /**< default rendering target - window surface */    
-  SPT_RECEIVER  = 1,  /**< target::receiver fields are valid */    
+  SPT_DEFAULT   = 0,  /**< default rendering target - window surface */
+  SPT_RECEIVER  = 1,  /**< target::receiver fields are valid */
   SPT_SURFACE   = 2,  /**< target::pSurface is valid */
   //SPT_OPENGL    = 3,  /**< target is not used - caller shall set current context on its side  */
   //SPT_OPENGLES  = 4,  /**< target is not used - caller shall set current context on its side  */
@@ -138,7 +138,7 @@ typedef enum SCITER_PAINT_TARGET_TYPE {
 typedef struct SCITER_X_MSG_PAINT {
   SCITER_X_MSG header;
       HELEMENT element;    /**< [in] layer #HELEMENT, can be NULL if whole tree (document) needs to be rendered.*/
-      SBOOL     isFore;     /**< [in] if element is not null tells if that element is fore-layer.*/    
+      SBOOL     isFore;     /**< [in] if element is not null tells if that element is fore-layer.*/
       UINT     targetType; /**< [in] one of #SCITER_PAINT_TARGET_TYPE values */
       union {
         LPVOID pSurface;   /**< [in] must be IDXGISurface* */

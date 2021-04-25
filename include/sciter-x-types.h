@@ -353,6 +353,7 @@ typedef VOID SC_CALLBACK LPCSTR_RECEIVER( LPCSTR str, UINT str_length, LPVOID pa
 typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE str, UINT num_bytes, LPVOID param );
 
 #define STDCALL __stdcall
+#define HWINDOW_PTR HWINDOW*
 
 #ifdef __cplusplus
 

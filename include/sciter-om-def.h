@@ -29,7 +29,7 @@ typedef SBOOL(*som_any_prop_setter_t)(som_asset_t* thing, UINT64 propSymbol, con
 typedef SBOOL(*som_method_t)(som_asset_t* thing, UINT argc, const SOM_VALUE* argv, SOM_VALUE* p_result);
 typedef void(*som_dispose_t)(som_asset_t* thing);
 
-struct som_property_def_t {
+typedef struct som_property_def_t {
   void*             reserved;
   som_atom_t        name;
   som_prop_getter_t getter;
@@ -37,9 +37,9 @@ struct som_property_def_t {
 #ifdef __cplusplus
   som_property_def_t(const char* n, som_prop_getter_t pg, som_prop_setter_t ps = nullptr) : name(SciterAtomValue(n)), getter(pg), setter(ps) {}
 #endif
-};
+} som_property_def_t;
 
-struct som_method_def_t {
+typedef struct som_method_def_t {
   void*        reserved;
   som_atom_t   name;
   size_t       params;
@@ -47,7 +47,7 @@ struct som_method_def_t {
 #ifdef __cplusplus
   som_method_def_t(const char* n, size_t p, som_method_t f) : name(SciterAtomValue(n)), params(p), func(f) {}
 #endif
-};
+} som_method_def_t;
 
 enum som_passport_flags {
   SOM_SEALED_OBJECT = 0x00,    // not extendable
@@ -56,7 +56,7 @@ enum som_passport_flags {
 
 // definiton of object (the thing) access interface
 // this structure should be statically allocated - at least survive last instance of the engine
-struct som_passport_t {
+typedef struct som_passport_t {
   UINT64             flags;
   som_atom_t         name;         // class name
   const som_property_def_t* properties; size_t n_properties; // virtual property thunks
@@ -67,7 +67,7 @@ struct som_passport_t {
   // any property "inteceptors"
   som_any_prop_getter_t  prop_getter;  // var prop_val = thing.k;
   som_any_prop_setter_t  prop_setter;  // thing.k = prop_val;
-};
+} som_passport_t;
 
 #ifdef CPP11
 
@@ -533,7 +533,7 @@ namespace sciter {
       };
 
       template <class Type> struct prop_get_accessor;
-            
+
 
       // bool get_any_prop(const std::string& name, TV& val);
       template <class Type, class TV>

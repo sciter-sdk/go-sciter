@@ -601,7 +601,7 @@ SBOOL SCAPI SciterRenderOnDirectXTexture(HWINDOW hwnd, HELEMENT elementToRenderO
  *
  **/
 
- SBOOL SCAPI     SciterDWFactory(void** /*IDWriteFactory ***/ ppf);
+ SBOOL SCAPI     SciterDWFactory(IUnknown** /*IDWriteFactory ***/ ppf);
 
 #endif
 
