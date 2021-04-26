@@ -31,7 +31,7 @@
 
   typedef uint16_t char16_t;
   typedef uint32_t char32_t;
-
+  
 #endif
 
 enum GFX_LAYER
@@ -48,6 +48,13 @@ enum GFX_LAYER
   #define WINDOWLESS
 #endif
 
+#ifndef SBOOL
+  typedef int SBOOL;
+#endif
+#ifndef TRUE
+  #define TRUE (1)
+  #define FALSE (0)
+#endif
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -73,7 +80,7 @@ enum GFX_LAYER
   #endif
 #elif defined(__linux__)
   #ifndef LINUX
-  #define LINUX
+    #define LINUX
   #endif
 #else
   #error "This platform is not supported yet"
@@ -88,15 +95,14 @@ enum GFX_LAYER
 
   #if defined(_MSC_VER) && _MSC_VER < 1900
   // Microsoft has finally implemented snprintf in Visual Studio 2015.
-  # define snprintf _snprintf_s
-  # define vsnprintf vsnprintf_s
+    #define snprintf _snprintf_s
+    #define vsnprintf vsnprintf_s
   #endif
 
-  #if __STDC_WANT_SECURE_LIB__
-  // use the safe version of `wcsncpy` if wanted
-  # define wcsncpy wcsncpy_s
-  #endif
-
+  //#if __STDC_WANT_SECURE_LIB__
+  //// use the safe version of `wcsncpy` if wanted
+  //  #define wcsncpy wcsncpy_s
+  //#endif
 
   #ifdef STATIC_LIB
     void SciterInit( bool start);
@@ -107,8 +113,8 @@ enum GFX_LAYER
 
   #if defined(WINDOWLESS)
     #define HWINDOW LPVOID
-  #else
-  #define HWINDOW HWND
+  #else 
+    #define HWINDOW HWND  
   #endif
 
   #define SC_CALLBACK __stdcall
@@ -128,13 +134,6 @@ enum GFX_LAYER
   //#ifdef __OBJC__
   //  #define char16_t uint16_t
   //#endif
-  #ifndef BOOL
-    typedef signed char BOOL;
-  #endif
-  #ifndef TRUE
-    #define TRUE (1)
-    #define FALSE (0)
-  #endif
 
   typedef unsigned int UINT;
   typedef int INT;
@@ -182,25 +181,11 @@ enum GFX_LAYER
 
   #define HWINDOW LPVOID   // NSView*
   #define HINSTANCE LPVOID // NSApplication*
-  #define HDC void*       // CGContextRef
+  #define HDC void*        // CGContextRef
 
   #define LRESULT long
 
-  #ifdef __LP64__
-    #define TARGET_64
-    #if defined(WINDOWLESS)
-      #define SCITER_DLL_NAME "sciter-lite-64.dylib"
-    #else
-    #define SCITER_DLL_NAME "libsciter.dylib"
-    #endif
-  #else
-    #define TARGET_32
-    #if defined(WINDOWLESS)
-      #define SCITER_DLL_NAME "sciter-lite-32.dylib"
-    #else
-      #define SCITER_DLL_NAME "libsciter.dylib"
-    #endif
-  #endif
+  #define SCITER_DLL_NAME "libsciter.dylib"
 
 #elif defined(LINUX)
 
@@ -210,13 +195,6 @@ enum GFX_LAYER
   #include <string.h>
   #include <wctype.h>
 
-#ifndef BOOL
-    typedef signed char BOOL;
-  #endif
-  #ifndef TRUE
-    #define TRUE (1)
-    #define FALSE (0)
-  #endif
   typedef unsigned int UINT;
   typedef int INT;
   typedef unsigned int UINT32;
@@ -261,11 +239,11 @@ enum GFX_LAYER
   } SIZE, *PSIZE, *LPSIZE;
 
 #if defined(WINDOWLESS)
-  #define HWINDOW void *
-#else
+  #define HWINDOW void * 
+#else 
   #define HWINDOW GtkWidget* //
 #endif
-
+  
   #define HINSTANCE LPVOID //
   #define LRESULT long
   #define HDC LPVOID       // cairo_t
@@ -288,11 +266,11 @@ enum GFX_LAYER
 
   #define WINDOWLESS
 
-  #include <uchar.h>
+  //#include <uchar.h>
   #include <string.h>
 
-  #ifndef BOOL
-  typedef signed char        BOOL;
+  #ifndef SBOOL
+  typedef signed int        SBOOL;
   #endif
   #ifndef TRUE
   #define TRUE (1)
@@ -380,7 +358,6 @@ typedef VOID SC_CALLBACK LPCSTR_RECEIVER( LPCSTR str, UINT str_length, LPVOID pa
 typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE str, UINT num_bytes, LPVOID param );
 
 #define STDCALL __stdcall
-
 #define HWINDOW_PTR HWINDOW*
 
 #ifdef __cplusplus
@@ -390,7 +367,7 @@ typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE str, UINT num_bytes, LPVOID p
   namespace std {
     typedef basic_string<WCHAR> ustring;
   }
-
+  
   // Note: quote here is a string literal!
   #ifdef WINDOWS
     #define _WSTR(quote) L##quote
@@ -415,7 +392,7 @@ typedef VOID SC_CALLBACK LPCBYTE_RECEIVER( LPCBYTE str, UINT num_bytes, LPVOID p
     std::string* s = (std::string*)param;
     *s = std::string(str, str_length);
   }
-
+  
 #else
   #define EXTERN_C extern
 #endif /* __cplusplus **/
