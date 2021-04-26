@@ -26,7 +26,12 @@
 #else
 
   #include <stdbool.h>
+  #include <stddef.h>
+  #include <stdint.h>
 
+  typedef uint16_t char16_t;
+  typedef uint32_t char32_t;
+  
 #endif
 
 enum GFX_LAYER
