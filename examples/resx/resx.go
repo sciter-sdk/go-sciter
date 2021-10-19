@@ -2,10 +2,10 @@ package resx
 
 import (
 	"embed"
-	"log"
-
 	"github.com/sciter-sdk/go-sciter"
+	"github.com/sciter-sdk/go-sciter/resx"
 	"github.com/sciter-sdk/go-sciter/window"
+	"log"
 )
 
 //go:embed html/*
