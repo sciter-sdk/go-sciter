@@ -16,6 +16,7 @@ The ownership of project is transferred to this new organization.
 Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, but the package name is still `sciter`.
 
 If you want to use this source
+
 go.mod
 ```
 module yourxxx
