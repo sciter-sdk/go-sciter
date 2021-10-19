@@ -15,12 +15,15 @@ Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other l
 The ownership of project is transferred to this new organization.
 Thus the `import path` for golang should now be `github.com/sciter-sdk/go-sciter`, but the package name is still `sciter`.
 
-
-`
+If you want to use this source
+go.mod
+```
+module yourxxx
+ 
 require github.com/sciter-sdk/go-sciter latest
 
-replace github.com/sciter-sdk/go-sciter latest => ../go-sciter latest
-`
+replace github.com/sciter-sdk/go-sciter latest => github.com/wj008/go-sciter latest
+```
 # Introduction
 
 This package provides a Golang bindings of [Sciter][] using cgo.
