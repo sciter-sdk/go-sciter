@@ -1,10 +1,10 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- *
+ * 
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- *
+ * 
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -49,7 +49,7 @@
 #endif
 
 //#include <string>
-#include "tiscript.h"
+//#include "tiscript.h"
 
 #pragma warning(disable:4786) //identifier was truncated...
 #pragma warning(disable:4100) //unreferenced formal parameter
@@ -81,9 +81,9 @@
   struct METHOD_PARAMS {
     UINT methodID;
   };
-  struct REQUEST_PARAM {
-    LPCWSTR name;
-    LPCWSTR value;
+  struct REQUEST_PARAM { 
+    LPCWSTR name; 
+    LPCWSTR value; 
   };
 
   typedef struct METHOD_PARAMS METHOD_PARAMS;
@@ -173,12 +173,12 @@ SCDOM_RESULT SCAPI SciterGetParentElement(HELEMENT he, HELEMENT* p_parent_he);
 
 /** Get html representation of the element.
  * \param[in] he \b #HELEMENT
- * \param[in] outer \b BOOL, if TRUE will return outer HTML otherwise inner.
+ * \param[in] outer \b SBOOL, if TRUE will return outer HTML otherwise inner.
  * \param[in] rcv \b pointer to function receiving UTF8 encoded HTML.
  * \param[in] rcv_param \b parameter that passed to rcv as it is.
  * \return \b #SCDOM_RESULT SCAPI
  */
-SCDOM_RESULT SCAPI SciterGetElementHtmlCB(HELEMENT he, BOOL outer, LPCBYTE_RECEIVER* rcv, LPVOID rcv_param);
+SCDOM_RESULT SCAPI SciterGetElementHtmlCB(HELEMENT he, SBOOL outer, LPCBYTE_RECEIVER* rcv, LPVOID rcv_param);
 
  /**Get inner text of the element as LPWSTR (utf16 words).
  * \param[in] he \b #HELEMENT
@@ -307,13 +307,13 @@ SCDOM_RESULT SCAPI SciterSetStyleAttribute(HELEMENT he, LPCSTR name, LPCWSTR val
 /*Get bounding rectangle of the element.
  * \param[in] he \b #HELEMENT
  * \param[out] p_location \b LPRECT, receives bounding rectangle of the element
- * \param[in] rootRelative \b BOOL, if TRUE function returns location of the
+ * \param[in] rootRelative \b SBOOL, if TRUE function returns location of the
  * element relative to Sciter window, otherwise the location is given
  * relative to first scrollable container.
  * \return \b #SCDOM_RESULT SCAPI
  **/
 
-enum ELEMENT_AREAS
+typedef enum ELEMENT_AREAS
 {
   ROOT_RELATIVE = 0x01,       // - or this flag if you want to get Sciter window relative coordinates,
                               //   otherwise it will use nearest windowed container e.g. popup window.
@@ -332,15 +332,15 @@ enum ELEMENT_AREAS
 
   SCROLLABLE_AREA = 0x60,   // scroll_area - scrollable area in content box
 
-};
+} ELEMENT_AREAS;
 
 SCDOM_RESULT SCAPI SciterGetElementLocation(HELEMENT he, LPRECT p_location, UINT areas /*ELEMENT_AREAS*/);
 
-enum SCITER_SCROLL_FLAGS
+typedef enum SCITER_SCROLL_FLAGS
 {
   SCROLL_TO_TOP = 0x01,
   SCROLL_SMOOTH = 0x10,
-};
+} SCITER_SCROLL_FLAGS;
 
 /*Scroll to view.
  * \param[in] he \b #HELEMENT
@@ -352,10 +352,10 @@ SCDOM_RESULT SCAPI SciterScrollToView(HELEMENT he, UINT SciterScrollFlags);
 
 /**Apply changes and refresh element area in its window.
  * \param[in] he \b #HELEMENT
- * \param[in] andForceRender \b BOOL, TRUE to force UpdateWindow() call.
+ * \param[in] andForceRender \b SBOOL, TRUE to force UpdateWindow() call.
  * \return \b #SCDOM_RESULT SCAPI
  **/
-SCDOM_RESULT SCAPI SciterUpdateElement(HELEMENT he, BOOL andForceRender);
+SCDOM_RESULT SCAPI SciterUpdateElement(HELEMENT he, SBOOL andForceRender);
 
 /**refresh element area in its window.
  * \param[in] he \b #HELEMENT
@@ -377,12 +377,12 @@ SCDOM_RESULT SCAPI SciterReleaseCapture(HELEMENT he);
 /**Get HWINDOW of containing window.
  * \param[in] he \b #HELEMENT
  * \param[out] p_hwnd \b HWINDOW*, variable to receive window handle
- * \param[in] rootWindow \b BOOL, handle of which window to get:
+ * \param[in] rootWindow \b SBOOL, handle of which window to get:
  * - TRUE - Sciter window
  * - FALSE - nearest parent element having overflow:auto or :scroll
  * \return \b #SCDOM_RESULT SCAPI
  **/
-SCDOM_RESULT SCAPI SciterGetElementHwnd(HELEMENT he, HWINDOW* p_hwnd, BOOL rootWindow);
+SCDOM_RESULT SCAPI SciterGetElementHwnd(HELEMENT he, HWINDOW* p_hwnd, SBOOL rootWindow);
 
 
 
@@ -400,7 +400,7 @@ SCDOM_RESULT SCAPI SciterGetElementHwnd(HELEMENT he, HWINDOW* p_hwnd, BOOL rootW
 SCDOM_RESULT SCAPI SciterCombineURL(HELEMENT he, LPWSTR szUrlBuffer, UINT UrlBufferSize);
 
 /**Callback function used with #SciterVisitElement().*/
-typedef BOOL SC_CALLBACK SciterElementCallback( HELEMENT he, LPVOID param );
+typedef SBOOL SC_CALLBACK SciterElementCallback( HELEMENT he, LPVOID param );
 
 /**Call specified function for every element in a DOM that meets specified
  * CSS selectors.
@@ -456,7 +456,7 @@ SCDOM_RESULT SCAPI SciterSelectParentW(
           /*out*/ HELEMENT* heFound);
 
 
-enum SET_ELEMENT_HTML
+typedef enum SET_ELEMENT_HTML
 {
   SIH_REPLACE_CONTENT     = 0,
   SIH_INSERT_AT_START     = 1,
@@ -464,7 +464,7 @@ enum SET_ELEMENT_HTML
   SOH_REPLACE             = 3,
   SOH_INSERT_BEFORE       = 4,
   SOH_INSERT_AFTER        = 5
-};
+} SET_ELEMENT_HTML;
 
 /**Set inner or outer html of the element.
  * \param[in] he \b #HELEMENT
@@ -555,32 +555,32 @@ SCDOM_RESULT SCAPI SciterHidePopup(HELEMENT he);
  * \return TRUE if event was handled, FALSE otherwise.
  **/
 
-typedef BOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
+typedef SBOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
 typedef ElementEventProc* LPELEMENT_EVENT_PROC;
 
-enum ELEMENT_STATE_BITS
+typedef enum ELEMENT_STATE_BITS
 {
-   STATE_LINK             = 0x00000001,
-   STATE_HOVER            = 0x00000002,
-   STATE_ACTIVE           = 0x00000004,
-   STATE_FOCUS            = 0x00000008,
-   STATE_VISITED          = 0x00000010,
-   STATE_CURRENT          = 0x00000020,  // current (hot) item
-   STATE_CHECKED          = 0x00000040,  // element is checked (or selected)
-   STATE_DISABLED         = 0x00000080,  // element is disabled
-   STATE_READONLY         = 0x00000100,  // readonly input element
-   STATE_EXPANDED         = 0x00000200,  // expanded state - nodes in tree view
-   STATE_COLLAPSED        = 0x00000400,  // collapsed state - nodes in tree view - mutually exclusive with
-   STATE_INCOMPLETE       = 0x00000800,  // one of fore/back images requested but not delivered
-   STATE_ANIMATING        = 0x00001000,  // is animating currently
-   STATE_FOCUSABLE        = 0x00002000,  // will accept focus
-   STATE_ANCHOR           = 0x00004000,  // anchor in selection (used with current in selects)
-   STATE_SYNTHETIC        = 0x00008000,  // this is a synthetic element - don't emit it's head/tail
-   STATE_OWNS_POPUP       = 0x00010000,  // this is a synthetic element - don't emit it's head/tail
-   STATE_TABFOCUS         = 0x00020000,  // focus gained by tab traversal
-   STATE_EMPTY            = 0x00040000,  // empty - element is empty (text.size() == 0 && subs.size() == 0)
+   STATE_LINK             = 0x00000001,  // :link pseudo-class in CSS
+   STATE_HOVER            = 0x00000002,  // :hover pseudo-class in CSS
+   STATE_ACTIVE           = 0x00000004,  // :active pseudo-class in CSS
+   STATE_FOCUS            = 0x00000008,  // :focus pseudo-class in CSS
+   STATE_VISITED          = 0x00000010,  // :visited pseudo-class in CSS
+   STATE_CURRENT          = 0x00000020,  // :current, current (hot) item
+   STATE_CHECKED          = 0x00000040,  // :checked, element is checked (or selected)
+   STATE_DISABLED         = 0x00000080,  // :disabled, element is disabled
+   STATE_READONLY         = 0x00000100,  // :read-only, readonly input element
+   STATE_EXPANDED         = 0x00000200,  // :expanded, expanded state - nodes in tree view
+   STATE_COLLAPSED        = 0x00000400,  // :collapsed, collapsed state - nodes in tree view - mutually exclusive with
+   STATE_INCOMPLETE       = 0x00000800,  // :incomplete, fore (content) image was requested but not delivered
+   STATE_ANIMATING        = 0x00001000,  // :animating, is animating currently
+   STATE_FOCUSABLE        = 0x00002000,  // :focusable, will accept focus
+   STATE_ANCHOR           = 0x00004000,  // :anchor, anchor in selection (used with current in selects)
+   STATE_SYNTHETIC        = 0x00008000,  // :synthetic, this is a synthetic element - don't emit it's head/tail
+   STATE_OWNS_POPUP       = 0x00010000,  // :owns-popup, has visible popup element (tooltip, menu, etc.) 
+   STATE_TABFOCUS         = 0x00020000,  // :tab-focus, focus gained by tab traversal
+   STATE_EMPTY            = 0x00040000,  // :empty, empty - element is empty (text.size() == 0 && subs.size() == 0)
                                          //  if element has behavior attached then the behavior is responsible for the value of this flag.
-   STATE_BUSY             = 0x00080000,  // busy; loading
+   STATE_BUSY             = 0x00080000,  // :busy, busy doing something (e.g. loading data)
 
    STATE_DRAG_OVER        = 0x00100000,  // drag over the block that can accept it (so is current drop target). Flag is set for the drop target block
    STATE_DROP_TARGET      = 0x00200000,  // active drop target.
@@ -591,12 +591,12 @@ enum ELEMENT_STATE_BITS
 
    STATE_PRESSED          = 0x04000000,  // pressed - close to active but has wider life span - e.g. in MOUSE_UP it
                                          //   is still on; so behavior can check it in MOUSE_UP to discover CLICK condition.
-   STATE_POPUP            = 0x08000000,  // this element is out of flow - popup
+   STATE_POPUP            = 0x08000000,  // :popup, this element is out of flow - shown as popup
 
    STATE_IS_LTR           = 0x10000000,  // the element or one of its containers has dir=ltr declared
    STATE_IS_RTL           = 0x20000000,  // the element or one of its containers has dir=rtl declared
 
-};
+} ELEMENT_STATE_BITS;
 
   /** Get/set state bits, stateBits*** accept or'ed values above
    **/
@@ -604,7 +604,7 @@ SCDOM_RESULT SCAPI SciterGetElementState( HELEMENT he, UINT* pstateBits);
 
 /**
  **/
-SCDOM_RESULT SCAPI SciterSetElementState( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, BOOL updateView);
+SCDOM_RESULT SCAPI SciterSetElementState( HELEMENT he, UINT stateBitsToSet, UINT stateBitsToClear, SBOOL updateView);
 
 /** Create new element, the element is disconnected initially from the DOM.
     Element created with ref_count = 1 thus you \b must call Sciter_UnuseElement on returned handler.
@@ -675,12 +675,12 @@ SCDOM_RESULT SCAPI SciterWindowDetachEventHandler( HWINDOW hwndLayout, LPELEMENT
  * \param[in] appEventCode \b UINT, event ID, see: #BEHAVIOR_EVENTS
  * \param[in] heSource \b HELEMENT, optional handle of the source element, e.g. some list item
  * \param[in] reason \b UINT, notification specific event reason code
- * \param[out] handled \b BOOL*, variable to receive TRUE if any handler handled it, FALSE otherwise.
+ * \param[out] handled \b SBOOL*, variable to receive TRUE if any handler handled it, FALSE otherwise.
 
  **/
 
 SCDOM_RESULT SCAPI SciterSendEvent(
-          HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason, /*out*/ BOOL* handled);
+          HELEMENT he, UINT appEventCode, HELEMENT heSource, UINT_PTR reason, /*out*/ SBOOL* handled);
 
 /** SciterPostEvent - post sinking/bubbling event to the child/parent chain of he element.
  *  Function will return immediately posting event into input queue of the application.
@@ -700,12 +700,12 @@ SCDOM_RESULT SCAPI SciterPostEvent( HELEMENT he, UINT appEventCode, HELEMENT heS
     Then from element to its root on parents chain without SINKING flag (bubbling phase).
 
  * \param[in] evt \b BEHAVIOR_EVENT_PARAMS, pointer to event param block
- * \param[in] post \b BOOL, \c TRUE to post event asynchronously, \c FALSE otherwise
- * \param[out] handled \b BOOL*, variable to receive TRUE if any handler handled it, FALSE otherwise.
+ * \param[in] post \b SBOOL, \c TRUE to post event asynchronously, \c FALSE otherwise
+ * \param[out] handled \b SBOOL*, variable to receive TRUE if any handler handled it, FALSE otherwise.
 
  **/
 
-SCDOM_RESULT SCAPI SciterFireEvent( const struct BEHAVIOR_EVENT_PARAMS* evt, BOOL post, BOOL *handled);
+SCDOM_RESULT SCAPI SciterFireEvent( const struct BEHAVIOR_EVENT_PARAMS* evt, SBOOL post, SBOOL *handled);
 
 /** SciterCallMethod - calls behavior specific method.
  * \param[in] he \b HELEMENT, element - source of the event.
@@ -736,13 +736,13 @@ SCDOM_RESULT SCAPI SciterRequestElementData(
  *
  **/
 
-enum REQUEST_TYPE
+typedef enum REQUEST_TYPE
 {
   GET_ASYNC,  // async GET
   POST_ASYNC, // async POST
   GET_SYNC,   // synchronous GET
   POST_SYNC   // synchronous POST
-};
+} REQUEST_TYPE;
 
 //struct REQUEST_PARAM { LPCWSTR name; LPCWSTR value; };
 
@@ -768,11 +768,11 @@ SCDOM_RESULT SCAPI SciterGetScrollInfo(
 /** SciterSetScrollPos  - set scroll position of element with overflow:scroll or auto.
  * \param[in] he \b HELEMENT, element.
  * \param[in] scrollPos \b POINT, new scroll position.
- * \param[in] smooth \b BOOL, TRUE - do smooth scroll.
+ * \param[in] smooth \b SBOOL, TRUE - do smooth scroll.
  **/
 
 SCDOM_RESULT SCAPI SciterSetScrollPos(
-         HELEMENT he, POINT scrollPos, BOOL smooth );
+         HELEMENT he, POINT scrollPos, SBOOL smooth );
 
 /** SciterGetElementIntrinsicWidths  - get min-intrinsic and max-intrinsic widths of the element.
  * \param[in] he \b HELEMENT, element.
@@ -794,7 +794,7 @@ SCDOM_RESULT SCAPI SciterGetElementIntrinsicHeight( HELEMENT he, INT forWidth, I
  * \param[out] pVisible \b LPBOOL, visibility state.
  **/
 
-SCDOM_RESULT SCAPI SciterIsElementVisible( HELEMENT he, BOOL* pVisible);
+SCDOM_RESULT SCAPI SciterIsElementVisible( HELEMENT he, SBOOL* pVisible);
 
 /** SciterIsElementEnabled - deep enable state, determines if element enabled - is not disabled by itself or no one
     of its parents is disabled.
@@ -802,7 +802,7 @@ SCDOM_RESULT SCAPI SciterIsElementVisible( HELEMENT he, BOOL* pVisible);
  * \param[out] pEnabled \b LPBOOL, enabled state.
  **/
 
-SCDOM_RESULT SCAPI SciterIsElementEnabled( HELEMENT he, BOOL* pEnabled );
+SCDOM_RESULT SCAPI SciterIsElementEnabled( HELEMENT he, SBOOL* pEnabled );
 
 /**Callback comparator function used with #SciterSortElements().
    Shall return -1,0,+1 values to indicate result of comparison of two elements
@@ -834,11 +834,11 @@ SCDOM_RESULT SCAPI SciterSwapElements(
 /** SciterTraverseUIEvent - traverse (sink-and-bubble) MOUSE or KEY event.
  * \param[in] evt \b EVENT_GROUPS, either HANDLE_MOUSE or HANDLE_KEY code.
  * \param[in] eventCtlStruct \b LPVOID, pointer on either MOUSE_PARAMS or KEY_PARAMS structure.
- * \param[out] bOutProcessed \b LPBOOL, pointer to BOOL receiving TRUE if event was processed by some element and FALSE otherwise.
+ * \param[out] bOutProcessed \b LPBOOL, pointer to SBOOL receiving TRUE if event was processed by some element and FALSE otherwise.
  **/
 
 SCDOM_RESULT SCAPI SciterTraverseUIEvent(
-         UINT evt, LPVOID eventCtlStruct, BOOL* bOutProcessed );
+         UINT evt, LPVOID eventCtlStruct, SBOOL* bOutProcessed );
 
 /** CallScriptingMethod - calls scripting method defined for the element.
  * \param[in] he \b HELEMENT, element which method will be callled.
@@ -879,7 +879,7 @@ SCDOM_RESULT SCAPI SciterAttachHwndToElement(HELEMENT he, HWINDOW hwnd);
 enum CTL_TYPE
 {
   CTL_NO = 0,               ///< This dom element has no behavior at all.
-    CTL_UNKNOWN = 1,      ///< This dom element has behavior but its type is unknown.
+  CTL_UNKNOWN = 1,      ///< This dom element has behavior but its type is unknown.
 
   CTL_EDIT = 2,             ///< Single line edit box.
   CTL_NUMERIC = 3,          ///< Numeric input with optional spin buttons.
@@ -894,7 +894,7 @@ enum CTL_TYPE
   CTL_HTMLAREA = 12,         ///< HTML selection behavior.
   CTL_PASSWORD = 13,         ///< Password input element.
   CTL_PROGRESS = 14,         ///< Progress element.
-  CTL_SLIDER = 15,           ///< Slider input element.
+  CTL_SLIDER = 15,           ///< Slider input element.  
   CTL_DECIMAL = 16,          ///< Decimal number input element.
   CTL_CURRENCY = 17,         ///< Currency input element.
   CTL_SCROLLBAR = 18,
@@ -927,7 +927,7 @@ enum CTL_TYPE
   CTL_WINDOW = 37,           ///< has HWND attached to it
 
   CTL_LABEL = 38,
-  CTL_IMAGE = 39,            ///< image/video object.
+  CTL_IMAGE = 39,            ///< image/video object.  
   CTL_PLAINTEXT = 40,        ///< Multiline TextBox + colorizer.
 
 };
@@ -958,22 +958,22 @@ SCDOM_RESULT SCAPI SciterSetValue( HELEMENT he, const VALUE* pval );
  *  that is assigned to the DOM element. 'expando' could be null as they are created on demand by script.
  * \param[in] he \b HELEMENT, element which expando will be retrieved.
  * \param[out] pval \b VALUE*, pointer to VALUE that will get value of type T_OBJECT/UT_OBJECT_NATIVE or null.
- * \param[in] forceCreation \b BOOL, if there is no expando then when forceCreation==TRUE the function will create it.
+ * \param[in] forceCreation \b SBOOL, if there is no expando then when forceCreation==TRUE the function will create it.
  *  ATTN: if you are not using json::value wrapper then you shall call ValueClear aginst the returned value
  *        otherwise it will leak memory.
  **/
-SCDOM_RESULT SCAPI SciterGetExpando( HELEMENT he, VALUE* pval, BOOL forceCreation );
+SCDOM_RESULT SCAPI SciterGetExpando( HELEMENT he, VALUE* pval, SBOOL forceCreation );
 
 /** SciterGetObject - get 'expando' object of the element. 'expando' is a scripting object (of class Element)
  *  that is assigned to the DOM element. 'expando' could be null as they are created on demand by script.
  * \param[in] he \b HELEMENT, element which expando will be retrieved.
  * \param[out] pval \b tiscript::value*, pointer to tiscript::value that will get reference to the scripting object associated wuth the element or null.
- * \param[in] forceCreation \b BOOL, if there is no expando then when forceCreation==TRUE the function will create it.
+ * \param[in] forceCreation \b SBOOL, if there is no expando then when forceCreation==TRUE the function will create it.
  *
  *  ATTN!: if you plan to store the reference or use it inside code that calls script VM functions
  *         then you should use tiscript::pinned holder for the value.
  **/
-SCDOM_RESULT SCAPI SciterGetObject( HELEMENT he, tiscript_value* pval, BOOL forceCreation );
+SCDOM_RESULT SCAPI SciterGetObject( HELEMENT he, void* pval, SBOOL forceCreation );
 
 /** SciterGetElementNamespace - get namespace of document of the DOM element.
  * \param[in] he \b HELEMENT, element which expando will be retrieved.
@@ -983,7 +983,7 @@ SCDOM_RESULT SCAPI SciterGetObject( HELEMENT he, tiscript_value* pval, BOOL forc
  *         then you should use tiscript::pinned holder for the value.
  **/
 
-SCDOM_RESULT SCAPI SciterGetElementNamespace(  HELEMENT he, tiscript_value* pval);
+SCDOM_RESULT SCAPI SciterGetElementNamespace(  HELEMENT he, void* pval);
 
 // get/set highlighted element. Used for debugging purposes.
 SCDOM_RESULT SCAPI SciterGetHighlightedElement(HWINDOW hwnd, HELEMENT* phe);
@@ -1034,7 +1034,7 @@ enum NODE_INS_TARGET
 
 SCDOM_RESULT SCAPI SciterNodeInsert(HNODE hnode, UINT where /*NODE_INS_TARGET*/, HNODE what);
 // remove the node from the DOM, use finalize=FALSE if you plan to attach the node to the DOM later.
-SCDOM_RESULT SCAPI SciterNodeRemove(HNODE hnode, BOOL finalize);
+SCDOM_RESULT SCAPI SciterNodeRemove(HNODE hnode, SBOOL finalize);
 
 // ATTENTION: node handles returned by these two functions are AddRef'ed
 SCDOM_RESULT SCAPI SciterCreateTextNode(LPCWSTR text, UINT textLength, HNODE* phnode);

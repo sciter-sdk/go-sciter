@@ -11,11 +11,11 @@ package sciter
 
 #include "sciter-x.h"
 
-extern BOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param);
+extern SBOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param);
 extern VOID SC_CALLBACK LPCSTR_RECEIVER_cgo( LPCSTR str, UINT str_length, LPVOID param );
 extern VOID SC_CALLBACK LPCWSTR_RECEIVER_cgo( LPCWSTR str, UINT str_length, LPVOID param );
 extern VOID SC_CALLBACK LPCBYTE_RECEIVER_cgo( LPCBYTE bytes, UINT num_bytes, LPVOID param );
-extern BOOL SC_CALLBACK ElementEventProc_cgo(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
+extern SBOOL SC_CALLBACK ElementEventProc_cgo(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
 extern UINT SC_CALLBACK SciterHostCallback_cgo( LPSCITER_CALLBACK_NOTIFICATION pns, LPVOID callbackParam );
 // native functor
 extern VOID NATIVE_FUNCTOR_INVOKE_cgo( VOID* tag, UINT argc, const VALUE* argv, VALUE* retval);
@@ -23,15 +23,15 @@ extern VOID NATIVE_FUNCTOR_RELEASE_cgo( VOID* tag );
 // cmp
 extern INT SC_CALLBACK ELEMENT_COMPARATOR_cgo( HELEMENT he1, HELEMENT he2, LPVOID param );
 // ValueEnumElements
-extern BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval );
+extern SBOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval );
 
 extern const char * SCITER_DLL_PATH;
 
 extern HSARCHIVE SCAPI SciterOpenArchive (LPCBYTE archiveData, UINT archiveDataLength);
 
-extern BOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength);
+extern SBOOL SCAPI SciterGetArchiveItem (HSARCHIVE harc, LPCWSTR path, LPCBYTE* pdata, UINT* pdataLength);
 
-extern BOOL SCAPI SciterCloseArchive (HSARCHIVE harc);
+extern SBOOL SCAPI SciterCloseArchive (HSARCHIVE harc);
 
 */
 import "C"
@@ -73,9 +73,9 @@ func ClassName() string {
 func Version(major bool) uint {
 	var v C.UINT
 	if major {
-		v = C.SciterVersion(C.BOOL(1))
+		v = C.SciterVersion(C.SBOOL(1))
 	} else {
-		v = C.SciterVersion(C.BOOL(0))
+		v = C.SciterVersion(C.SBOOL(0))
 	}
 	return uint(v)
 }
@@ -788,9 +788,9 @@ var (
 func (e *Element) Html(outer bool) (string, error) {
 	var bs []byte
 	// args
-	couter := C.BOOL(C.FALSE)
+	couter := C.SBOOL(C.FALSE)
 	if outer {
-		couter = C.BOOL(C.TRUE)
+		couter = C.SBOOL(C.TRUE)
 	}
 	cparam := C.LPVOID(unsafe.Pointer(&bs))
 	// cgo call
@@ -1013,7 +1013,7 @@ func (e *Element) ScrollToView(flag SCITER_SCROLL_FLAGS) error {
 //   \return \b #SCDOM_RESULT SCAPI
 func (e *Element) Update(forceRender bool) error {
 	// args
-	var cforceRender C.BOOL = C.FALSE
+	var cforceRender C.SBOOL = C.FALSE
 	if forceRender {
 		cforceRender = C.TRUE
 	}
@@ -1045,7 +1045,7 @@ func (e *Element) ReleaseCapture() error {
 // Get HWINDOW of containing window.
 func (e *Element) GetHwnd(rootWindow bool) (hwnd C.HWINDOW, err error) {
 	// args
-	var crootWindow C.BOOL = C.FALSE
+	var crootWindow C.SBOOL = C.FALSE
 	if rootWindow {
 		crootWindow = C.TRUE
 	}
@@ -1273,7 +1273,7 @@ func (e *Element) SetState(bitsToSet, bitsToClear ElementState, updateView bool)
 	// args
 	cbitsToSet := C.UINT(bitsToSet)
 	cbitsToClear := C.UINT(bitsToClear)
-	var cupdateView C.BOOL = C.FALSE
+	var cupdateView C.SBOOL = C.FALSE
 	if updateView {
 		cupdateView = C.TRUE
 	}
@@ -1726,7 +1726,7 @@ func (e *Element) HttpRequest(url string, dataType SciterResourceType, requestTy
 //  \param[out] pVisible \b LPBOOL, visibility state.
 func (e *Element) IsVisible() bool {
 	// args
-	var v C.BOOL
+	var v C.SBOOL
 	// cgo call
 	C.SciterIsElementVisible(e.handle, &v)
 	if v == C.TRUE {
@@ -1743,7 +1743,7 @@ func (e *Element) IsVisible() bool {
 // \param[out] pEnabled \b LPBOOL, enabled state.
 func (e *Element) IsEnabled() bool {
 	// args
-	var v C.BOOL
+	var v C.SBOOL
 	// cgo call
 	C.SciterIsElementEnabled(e.handle, &v)
 	if v == C.TRUE {

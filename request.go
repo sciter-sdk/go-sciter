@@ -2,7 +2,6 @@ package sciter
 
 /*
 #include <sciter-x.h>
-
 extern REQUEST_RESULT SCAPI RequestUse( HREQUEST rq );
 extern REQUEST_RESULT SCAPI RequestUnUse( HREQUEST rq );
 extern REQUEST_RESULT SCAPI RequestUrl( HREQUEST rq, LPCSTR_RECEIVER* rcv, LPVOID rcv_param );

@@ -1,3 +1,4 @@
+//go:build darwin
 // +build darwin
 
 package window
@@ -46,8 +47,6 @@ import "C"
 import (
 	"fmt"
 	"unsafe"
-
-	"github.com/sciter-sdk/go-sciter"
 )
 
 func New(creationFlags sciter.WindowCreationFlag, rect *sciter.Rect) (*Window, error) {

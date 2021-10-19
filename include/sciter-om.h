@@ -1,37 +1,59 @@
 #pragma once
 
-#include <string.h>
-#include <assert.h>
+#ifndef __SCITER_OM_H__
+#define __SCITER_OM_H__
+
+#include "sciter-x-primitives.h"
+#include "sciter-x-value.h"
 
 struct som_passport_t;
 
 typedef UINT64 som_atom_t;
 
-
-struct som_asset_class_t;
-
 typedef struct som_asset_t {
   struct som_asset_class_t* isa;
 } som_asset_t;
 
-struct som_asset_class_t {
+typedef struct som_asset_class_t {
   long(*asset_add_ref)(som_asset_t* thing);
   long(*asset_release)(som_asset_t* thing);
   long(*asset_get_interface)(som_asset_t* thing, const char* name, void** out);
   struct som_passport_t* (*asset_get_passport)(som_asset_t* thing);
-};
+} som_asset_class_t;
 
+inline struct som_asset_class_t* som_asset_get_class(const struct som_asset_t* pass)
+{
+#ifdef __cplusplus
+  return pass ? pass->isa : nullptr;
+#else
+  return pass ? pass->isa : NULL;
+#endif
+}
+
+som_atom_t SCAPI SciterAtomValue(const char* name);
 
 #ifdef CPP11
 
+#include <cstring>
+#include <cassert>
 #include <atomic>
 
 namespace sciter {
+
+  class atom {
+    som_atom_t _atom;
+  public:
+    atom(const char* name) { _atom = SciterAtomValue(name); }
+    atom(const atom& other) { _atom = other._atom; }
+    operator som_atom_t() const { return _atom; }
+  };
 
   namespace om {
 
     template <class R> class hasset;
 
+    // implementation of som_asset_t ISA
+    // note: does not define asset_add_ref()/asset_release() as they shall be defined in specializations 
     template <class A>
     class iasset : public som_asset_t
     {
@@ -47,8 +69,8 @@ namespace sciter {
         if (out) { this->asset_add_ref(); *out = this; }
         return true;
       }
-      virtual som_passport_t* asset_get_passport() const {
-        return nullptr;
+      virtual som_passport_t* asset_get_passport() const { 
+        return nullptr; 
       }
 
       static som_asset_class_t* get_asset_class() {
@@ -69,8 +91,7 @@ namespace sciter {
       static const char* interface_name() { return "asset.sciter.com"; }
       //template<class C> hasset<C> interface_of() { hasset<C> p; get_interface(C::interface_name(), p.target()); return p; }
     };
-
-
+    
     inline long asset_add_ref(som_asset_t *ptr) {
       assert(ptr);
       assert(ptr->isa);
@@ -89,7 +110,7 @@ namespace sciter {
       assert(ptr->isa->asset_get_interface);
       return ptr->isa->asset_get_interface(ptr, name, out);
     }
-
+    
     inline som_passport_t* asset_get_passport(som_asset_t *ptr) {
       assert(ptr);
       assert(ptr->isa);
@@ -97,8 +118,13 @@ namespace sciter {
       return ptr->isa->asset_get_passport(ptr);
     }
 
+    inline som_asset_class_t* asset_get_class(som_asset_t *ptr) {
+      assert(ptr);
+      return ptr->isa;
+    }
+    
     //hasset - yet another shared_ptr
-    //         R here is something derived from the iasset (om::iasset) above
+    //         R here is an entity derived from som_asset_t
     template <class R> class hasset
     {
     protected:
@@ -108,10 +134,10 @@ namespace sciter {
       typedef R asset_t;
 
       hasset() :p(nullptr) {}
-      hasset(R* lp) :p(nullptr) { if (lp) (p = lp)->asset_add_ref(); }
-      hasset(const hasset<R>& cp) :p(nullptr) { if (cp.p) (p = cp.p)->asset_add_ref(); }
+      hasset(R* lp) :p(nullptr) { if (lp) asset_add_ref(p = lp); }
+      hasset(const hasset<R>& cp) :p(nullptr) { if (cp.p) asset_add_ref(p = cp.p); }
 
-      ~hasset() { if (p)	p->asset_release(); }
+      ~hasset() { if (p)	asset_release(p); }
       operator R*() const { return p; }
       R* operator->() const { assert(p != 0); return p; }
 
@@ -121,7 +147,7 @@ namespace sciter {
       bool operator==(R* pR) const { return p == pR; }
 
       // release the interface and set it to NULL
-      void release() { if (p) { R* pt = p; p = 0; pt->asset_release(); } }
+      void release() { if (p) { R* pt = p; p = 0; asset_release(pt); } }
 
       // attach to an existing interface (does not AddRef)
       void attach(R* p2) { asset_release(p); p = p2; }
@@ -130,8 +156,8 @@ namespace sciter {
 
       static R* assign(R* &pp, R* lp)
       {
-        if (lp != 0) lp->asset_add_ref();
-        if (pp) pp->asset_release();
+        if (lp != 0) asset_add_ref(lp);
+        if (pp) asset_release(pp);
         pp = lp;
         return lp;
       }
@@ -142,11 +168,9 @@ namespace sciter {
       void** target() { release(); return (void**)&p; }
 
     };
-
-
-    // intrusive add_ref/release counter
-
-   template<class C>
+    
+    // reference counted asset, uses intrusive add_ref/release counter
+    template<class C> 
       class asset : public iasset<asset<C>>
     {
       std::atomic<long> _ref_cntr;
@@ -179,11 +203,20 @@ namespace sciter {
         delete static_cast<C*>(this);
       }
     };
-
-
   }
+
+  template <class AT>
+  inline AT* value::get_asset() const {
+    som_asset_t* pass = get_asset();
+    if (pass && (som_asset_get_class(pass) == AT::get_asset_class()))
+      return static_cast<AT*>(pass);
+    return nullptr;
+  }
+
 }
 
 #endif
 
 #include "sciter-om-def.h"
+
+#endif
