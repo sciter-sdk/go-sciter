@@ -104,6 +104,17 @@
   //  #define char16_t uint16_t
   //#endif
 
+  #include <stddef.h>
+  #ifndef _UINT16_T
+  #define _UINT16_T
+  typedef unsigned short uint16_t;
+  #endif
+
+  #ifndef _CHAR16_T
+  #define _CHAR16_T
+  typedef uint16_t char16_t;
+  #endif
+
   typedef unsigned int UINT;
   typedef int INT;
   typedef unsigned int UINT32;
