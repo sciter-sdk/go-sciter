@@ -1,0 +1,5 @@
+html {
+    width: 300px; /* preferred/initial width */
+    height: 240px; /* content will not overflow, no vertical scrollbars on the window */
+    background-color: #E5B783;
+}
