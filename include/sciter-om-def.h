@@ -16,7 +16,7 @@
 #endif
 
 UINT64 SCAPI SciterAtomValue(const char* name);
-SBOOL  SCAPI SciterAtomNameCB(UINT64 atomv, LPCSTR_RECEIVER* rcv, LPVOID rcv_param);
+//SBOOL  SCAPI SciterAtomNameCB(UINT64 atomv, LPCSTR_RECEIVER* rcv, LPVOID rcv_param);
 
 typedef SBOOL(*som_prop_getter_t)(som_asset_t* thing, SOM_VALUE* p_value);
 typedef SBOOL(*som_prop_setter_t)(som_asset_t* thing, const SOM_VALUE* p_value);
