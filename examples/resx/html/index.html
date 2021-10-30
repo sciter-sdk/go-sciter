@@ -1,0 +1,36 @@
+<html lang="zh-cn" window-resizable="false" window-icon="resx://html/icon/i32.png">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="resx://html/css/main.css">
+    <script src="resx://html/js/zepto.js"></script>
+    <script src="resx://html/js/util.js"></script>
+</head>
+<body>
+<div class="main">
+    <div>
+        <button id="btn1">btn1</button>
+        <button id="btn2">btn2</button>
+    </div>
+    <div style="margin-top: 30px;">
+        <textarea id="out"></textarea>
+    </div>
+</div>
+</body>
+
+<script>
+    //Center the current window
+    util.moveCenter(800, 500);
+    util.ready(function (view) {
+        $('#btn1').on('click', function () {
+            $('#out').val("click-> btn1")
+        });
+        $('#btn2').on('click', function () {
+            $('#out').val("click-> btn1")
+        });
+    })
+</script>
+
+</html>

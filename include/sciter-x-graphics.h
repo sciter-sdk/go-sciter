@@ -55,7 +55,7 @@ typedef struct SC_COLOR_STOP
 {
   SC_COLOR color;
   float offset; // 0.0 ... 1.0
-}SC_COLOR_STOP;
+} SC_COLOR_STOP;
 
 typedef enum GRAPHIN_RESULT
 {
@@ -64,14 +64,14 @@ typedef enum GRAPHIN_RESULT
   GRAPHIN_BAD_PARAM = 1,  // bad parameter
   GRAPHIN_FAILURE = 2,    // operation failed, e.g. restore() without save()
   GRAPHIN_NOTSUPPORTED = 3 // the platform does not support requested feature
-}GRAPHIN_RESULT;
+} GRAPHIN_RESULT;
 
 typedef enum DRAW_PATH_MODE
 {
   DRAW_FILL_ONLY = 1,
   DRAW_STROKE_ONLY = 2,
   DRAW_FILL_AND_STROKE = 3,
-}DRAW_PATH_MODE;
+} DRAW_PATH_MODE;
 
 typedef enum SCITER_LINE_JOIN_TYPE
 {
@@ -79,14 +79,14 @@ typedef enum SCITER_LINE_JOIN_TYPE
   SCITER_JOIN_ROUND = 1,
   SCITER_JOIN_BEVEL = 2,
   SCITER_JOIN_MITER_OR_BEVEL = 3,
-}SCITER_LINE_JOIN_TYPE;
+} SCITER_LINE_JOIN_TYPE;
 
 typedef enum SCITER_LINE_CAP_TYPE
 {
   SCITER_LINE_CAP_BUTT = 0,
   SCITER_LINE_CAP_SQUARE = 1,
   SCITER_LINE_CAP_ROUND = 2,
-}SCITER_LINE_CAP_TYPE;
+} SCITER_LINE_CAP_TYPE;
 
 /*typedef enum SCITER_TEXT_ALIGNMENT
 {
@@ -94,7 +94,7 @@ typedef enum SCITER_LINE_CAP_TYPE
   TEXT_ALIGN_START,
   TEXT_ALIGN_END,
   TEXT_ALIGN_CENTER,
-}SCITER_TEXT_ALIGNMENT;
+} SCITER_TEXT_ALIGNMENT;
 
 typedef enum SCITER_TEXT_DIRECTION
 {
@@ -116,7 +116,7 @@ typedef enum SCITER_IMAGE_ENCODING
 {
     LPWSTR                fontFamily;
     UINT                  fontWeight; // 100...900, 400 - normal, 700 - bold
-    BOOL                  fontItalic;
+    SBOOL                  fontItalic;
     float                 fontSize;   // dips
     float                 lineHeight; // dips
     SCITER_TEXT_DIRECTION textDirection;
@@ -126,7 +126,7 @@ typedef enum SCITER_IMAGE_ENCODING
 } SCITER_TEXT_FORMAT; */
 
 // imageSave callback:
-typedef BOOL SCAPI image_write_function(LPVOID prm, const BYTE* data, UINT data_length);
+typedef SBOOL SCAPI image_write_function(LPVOID prm, const BYTE* data, UINT data_length);
 // imagePaint callback:
 typedef VOID SCAPI image_paint_function(LPVOID prm, HGFX hgfx, UINT width, UINT height);
 
@@ -134,12 +134,12 @@ struct SciterGraphicsAPI
 {
 // image primitives
   GRAPHIN_RESULT
-        SCFN(imageCreate)( HIMG* poutImg, UINT width, UINT height, BOOL withAlpha );
+        SCFN(imageCreate)( HIMG* poutImg, UINT width, UINT height, SBOOL withAlpha );
 
   // construct image from B[n+0],G[n+1],R[n+2],A[n+3] data.
   // Size of pixmap data is pixmapWidth*pixmapHeight*4
   GRAPHIN_RESULT
-        SCFN(imageCreateFromPixmap)( HIMG* poutImg, UINT pixmapWidth, UINT pixmapHeight, BOOL withAlpha, const BYTE* pixmap );
+        SCFN(imageCreateFromPixmap)( HIMG* poutImg, UINT pixmapWidth, UINT pixmapHeight, SBOOL withAlpha, const BYTE* pixmap );
 
   GRAPHIN_RESULT
         SCFN(imageAddRef)( HIMG himg );
@@ -151,7 +151,7 @@ struct SciterGraphicsAPI
         SCFN(imageGetInfo)( HIMG himg,
              UINT* width,
              UINT* height,
-             BOOL* usesAlpha );
+             SBOOL* usesAlpha );
 
   //GRAPHIN_RESULT
   //      SCFN(imageGetPixels)( HIMG himg,
@@ -169,7 +169,7 @@ struct SciterGraphicsAPI
           image_write_function* pfn, void* prm, /* function and its param passed "as is" */
           UINT encoding, // SCITER_IMAGE_ENCODING
           UINT quality /* if webp or jpeg:, 10 - 100 */ );
-
+  
   // SECTION: graphics primitives and drawing operations
 
   // create SC_COLOR value
@@ -229,19 +229,19 @@ struct SciterGraphicsAPI
         SCFN(pathRelease) ( HPATH path );
 
   GRAPHIN_RESULT
-        SCFN(pathMoveTo) ( HPATH path, SC_POS x, SC_POS y, BOOL relative );
+        SCFN(pathMoveTo) ( HPATH path, SC_POS x, SC_POS y, SBOOL relative );
 
   GRAPHIN_RESULT
-        SCFN(pathLineTo) ( HPATH path, SC_POS x, SC_POS y, BOOL relative );
+        SCFN(pathLineTo) ( HPATH path, SC_POS x, SC_POS y, SBOOL relative );
 
   GRAPHIN_RESULT
-        SCFN(pathArcTo) ( HPATH path, SC_POS x, SC_POS y, SC_ANGLE angle, SC_DIM rx, SC_DIM ry, BOOL is_large_arc, BOOL clockwise, BOOL relative );
+        SCFN(pathArcTo) ( HPATH path, SC_POS x, SC_POS y, SC_ANGLE angle, SC_DIM rx, SC_DIM ry, SBOOL is_large_arc, SBOOL clockwise, SBOOL relative );
 
   GRAPHIN_RESULT
-        SCFN(pathQuadraticCurveTo) ( HPATH path, SC_POS xc, SC_POS yc, SC_POS x, SC_POS y, BOOL relative );
+        SCFN(pathQuadraticCurveTo) ( HPATH path, SC_POS xc, SC_POS yc, SC_POS x, SC_POS y, SBOOL relative );
 
   GRAPHIN_RESULT
-        SCFN(pathBezierCurveTo) ( HPATH path, SC_POS xc1, SC_POS yc1, SC_POS xc2, SC_POS yc2, SC_POS x, SC_POS y, BOOL relative );
+        SCFN(pathBezierCurveTo) ( HPATH path, SC_POS xc1, SC_POS yc1, SC_POS xc2, SC_POS yc2, SC_POS x, SC_POS y, SBOOL relative );
 
   GRAPHIN_RESULT
         SCFN(pathClosePath) ( HPATH path );
@@ -324,7 +324,7 @@ struct SciterGraphicsAPI
         SCFN(gFillGradientRadial)( HGFX hgfx, SC_POS x, SC_POS y, SC_DIM rx, SC_DIM ry, const SC_COLOR_STOP* stops, UINT nstops );
 
   GRAPHIN_RESULT
-        SCFN(gFillMode) ( HGFX hgfx, BOOL even_odd /* false - fill_non_zero */ );
+        SCFN(gFillMode) ( HGFX hgfx, SBOOL even_odd /* false - fill_non_zero */ );
 
 // SECTION: text
 
@@ -382,7 +382,7 @@ struct SciterGraphicsAPI
   // pop clip layer previously set by gPushClipBox or gPushClipPath
   GRAPHIN_RESULT
         SCFN(gPopClip) ( HGFX hgfx);
-
+    
   // image painter
 
     GRAPHIN_RESULT
@@ -395,7 +395,7 @@ struct SciterGraphicsAPI
 
   GRAPHIN_RESULT
         SCFN(vWrapImage) ( HIMG himg, VALUE* toValue);
-
+  
   GRAPHIN_RESULT
         SCFN(vWrapPath) ( HPATH hpath, VALUE* toValue);
 
@@ -407,7 +407,7 @@ struct SciterGraphicsAPI
 
   GRAPHIN_RESULT
         SCFN(vUnWrapImage) ( const VALUE* fromValue, HIMG *phimg );
-
+  
   GRAPHIN_RESULT
         SCFN(vUnWrapPath) ( const VALUE* fromValue, HPATH *phpath);
 

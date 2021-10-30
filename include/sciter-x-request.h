@@ -10,7 +10,7 @@
 
  /*
  * Sciter's get resource request object - represents requests made by Element/View.request() functions.
- *
+ * 
  */
 
 
@@ -19,7 +19,7 @@
 
 #include "sciter-x-types.h"
 
-#if defined(__cplusplus)
+#if defined(__cplusplus) 
   namespace html
   {
     struct request;
@@ -121,11 +121,11 @@ struct SciterRequestAPI
   REQUEST_RESULT
         SCFN(RequestGetNumberOfRqHeaders)( HREQUEST rq, UINT* pNumber );
 
-  // get nth request header name
+  // get nth request header name 
   REQUEST_RESULT
         SCFN(RequestGetNthRqHeaderName)( HREQUEST rq, UINT n, LPCWSTR_RECEIVER* rcv, LPVOID rcv_param );
 
-  // get nth request header value
+  // get nth request header value 
   REQUEST_RESULT
         SCFN(RequestGetNthRqHeaderValue)( HREQUEST rq, UINT n, LPCWSTR_RECEIVER* rcv, LPVOID rcv_param );
 
@@ -133,11 +133,11 @@ struct SciterRequestAPI
   REQUEST_RESULT
         SCFN(RequestGetNumberOfRspHeaders)( HREQUEST rq, UINT* pNumber );
 
-  // get nth response header name
+  // get nth response header name 
   REQUEST_RESULT
         SCFN(RequestGetNthRspHeaderName)( HREQUEST rq, UINT n, LPCWSTR_RECEIVER* rcv, LPVOID rcv_param );
 
-  // get nth response header value
+  // get nth response header value 
   REQUEST_RESULT
         SCFN(RequestGetNthRspHeaderValue)( HREQUEST rq, UINT n, LPCWSTR_RECEIVER* rcv, LPVOID rcv_param );
 
@@ -153,15 +153,15 @@ struct SciterRequestAPI
   REQUEST_RESULT
         SCFN(RequestGetProxyPort)( HREQUEST rq, UINT* pPort );
 
-  // mark reequest as complete with status and data
+  // mark reequest as complete with status and data 
   REQUEST_RESULT
         SCFN(RequestSetSucceeded)( HREQUEST rq, UINT status, LPCBYTE dataOrNull, UINT dataLength);
-
-  // mark reequest as complete with failure and optional data
+  
+  // mark reequest as complete with failure and optional data 
   REQUEST_RESULT
         SCFN(RequestSetFailed)( HREQUEST rq, UINT status, LPCBYTE dataOrNull, UINT dataLength );
 
-  // append received data chunk
+  // append received data chunk 
   REQUEST_RESULT
         SCFN(RequestAppendDataChunk)( HREQUEST rq, LPCBYTE data, UINT dataLength );
 

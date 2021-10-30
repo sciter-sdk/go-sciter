@@ -14,7 +14,7 @@ import (
 // LRESULT  SciterProcND (HWINDOW hwnd, UINT msg, WPARAM wParam, LPARAM lParam, BOOL* pbHandled) ;//{ return SAPI()->SciterProcND (hwnd,msg,wParam,lParam,pbHandled); }
 
 func ProcND(hwnd win.HWND, msg uint, wParam uintptr, lParam uintptr) (ret int, handled bool) {
-	var bHandled C.BOOL
+	var bHandled C.SBOOL
 	// ret = uintptr(syssciterProcND(HWND(hwnd), msg, wParam, lParam, &bHandled))
 	ret = int(C.SciterProcND(C.HWINDOW(unsafe.Pointer(hwnd)), C.UINT(msg), C.WPARAM(wParam), C.LPARAM(lParam), &bHandled))
 	if bHandled == 0 {

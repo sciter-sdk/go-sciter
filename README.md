@@ -9,6 +9,16 @@ Check [this page](http://sciter.com/developers/sciter-sdk-bindings/) for other l
 
 ----
 
+If you want to use this source
+
+go.mod
+```
+module yourxxx
+ 
+require github.com/sciter-sdk/go-sciter latest
+
+replace github.com/sciter-sdk/go-sciter latest => github.com/wj008/go-sciter latest
+```
 
 # Attention
 

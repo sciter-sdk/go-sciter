@@ -1,13 +1,13 @@
 <div>
     <button id="btn">Click Me</button>
 </div>
-<script type="text/tiscript">
-function callback(abc){
-    view.msgbox(#information,abc);
-}
-
-$(#btn).on("click",function(){
-    var obj = {num:100, str:"Hello World"};
-    view.getNetInformation(1,"test",callback, obj);
-});
+<script type="text/javascript">
+    function callback(abc){
+        console.log(abc);
+    }
+    document.on('click','#btn',function (ev){
+        var obj = {num:100, str:"Hello World"};
+        var view=Window.this;
+        view.xcall('getNetInformation',1,"test",callback, obj);
+    })
 </script>
