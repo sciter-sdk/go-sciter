@@ -36,8 +36,8 @@ enum VALUE_TYPE
     T_FUNCTION = 11,   // named tuple , like array but with name tag
     T_BYTES = 12,      // sequence of bytes - e.g. image data
     T_OBJECT = 13,     // scripting object proxy (TISCRIPT/SCITER)
-    T_DOM_OBJECT = 14,  // DOM object, use get_object_data to get HELEMENT 
-    //T_RESOURCE = 15,  // 15 - other thing derived from tool::resource
+    //T_DOM_OBJECT = 14,  // DOM object, use get_object_data to get HELEMENT 
+    T_RESOURCE = 15,  // 15 - other thing derived from tool::resource
     //T_RANGE = 16,     // 16 - N..M, integer range.
     T_DURATION = 17,   // double, seconds
     T_ANGLE = 18,      // double, radians
@@ -94,7 +94,7 @@ enum VALUE_UNIT_UNDEFINED {
 enum VALUE_UNIT_TYPE_STRING
 {
     UT_STRING_STRING = 0,        // string
-    UT_STRING_ERROR  = 1,         // is an error string
+    UT_STRING_ERROR  = 1,        // is an error string
     UT_STRING_SECURE = 2,        // secure string ("wiped" on destroy)
     UT_STRING_SYMBOL = 0xffff,   // symbol in tiscript sense
 };
@@ -221,7 +221,7 @@ UINT SCAPI ValueNthElementValueSet( VALUE* pval, INT n, const VALUE* pval_to_set
 /**Callback function used with #ValueEnumElements().
  * return TRUE to continue enumeration
  */
-typedef BOOL SC_CALLBACK KeyValueCallback( LPVOID param, const VALUE* pkey, const VALUE* pval );
+typedef SBOOL SC_CALLBACK KeyValueCallback( LPVOID param, const VALUE* pkey, const VALUE* pval );
 
 /**
  * ValueEnumElements - enumeartes key/value pairs of T_MAP, T_FUNCTION and T_OBJECT values
@@ -307,7 +307,7 @@ UINT SCAPI ValueNativeFunctorSet( VALUE* pval,
     NATIVE_FUNCTOR_RELEASE* prelease /* = NULL*/,
     VOID* tag /* = NULL*/ );
 
-BOOL SCAPI ValueIsNativeFunctor( const VALUE* pval);
+SBOOL SCAPI ValueIsNativeFunctor( const VALUE* pval);
 
 
 #if defined(__cplusplus) && !defined(__value_hpp__) && !defined(PLAIN_API_ONLY)

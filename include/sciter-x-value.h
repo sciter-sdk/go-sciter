@@ -1,10 +1,10 @@
 /*
  * The Sciter Engine of Terra Informatica Software, Inc.
  * http://sciter.com
- *
+ * 
  * The code and information provided "as-is" without
  * warranty of any kind, either expressed or implied.
- *
+ * 
  * (C) 2003-2015, Terra Informatica Software, Inc.
  */
 
@@ -28,7 +28,5 @@
 #else
   typedef VALUE SCITER_VALUE;
 #endif
-
- typedef void SCAPI SciterLibraryInitFunc(SCITER_VALUE* plibobject);
-
+   
 #endif

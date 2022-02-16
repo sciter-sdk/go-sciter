@@ -45,7 +45,7 @@
                                                  a.k.a. notifications from intrinsic behaviors */
       HANDLE_METHOD_CALL           = 0x0200, /**< behavior specific methods */
       HANDLE_SCRIPTING_METHOD_CALL = 0x0400, /**< behavior specific methods */
-      HANDLE_TISCRIPT_METHOD_CALL  = 0x0800, /**< behavior specific methods using direct tiscript::value's */
+      //HANDLE_TISCRIPT_METHOD_CALL  = 0x0800, /**< behavior specific methods using direct tiscript::value's */
 
       HANDLE_EXCHANGE              = 0x1000, /**< system drag-n-drop */
       HANDLE_GESTURE               = 0x2000, /**< touch input events */
@@ -65,10 +65,10 @@
  * \return true if event was handled, false otherwise.
  **/
 
-typedef  BOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
+typedef  SBOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms );
 typedef  ElementEventProc * LPElementEventProc;
 // signature of the function exported from external behavior/dll.
-typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEventProc*, LPVOID* );
+typedef SBOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEventProc*, LPVOID* );
 
   enum PHASE_MASK
   {
@@ -139,20 +139,28 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       MOUSE_MOVE,
       MOUSE_UP,
       MOUSE_DOWN,
-      MOUSE_DCLICK,
+      MOUSE_DCLICK, // double click
       MOUSE_WHEEL,
       MOUSE_TICK, // mouse pressed ticks
       MOUSE_IDLE, // mouse stay idle for some time
 
-      DROP        = 9,   // item dropped, target is that dropped item
-      DRAG_ENTER  = 0xA, // drag arrived to the target element that is one of current drop targets.
-      DRAG_LEAVE  = 0xB, // drag left one of current drop targets. target is the drop target element.
-      DRAG_REQUEST = 0xC,  // drag src notification before drag start. To cancel - return true from handler.
+      /*OBSOLETE*/ DROP        = 9,   // item dropped, target is that dropped item
+      /*OBSOLETE*/ DRAG_ENTER  = 0xA, // drag arrived to the target element that is one of current drop targets.
+      /*OBSOLETE*/ DRAG_LEAVE  = 0xB, // drag left one of current drop targets. target is the drop target element.
+      /*OBSOLETE*/ DRAG_REQUEST = 0xC,  // drag src notification before drag start. To cancel - return true from handler.
 
-      MOUSE_CLICK = 0xFF, // mouse click event
+      MOUSE_TCLICK = 0xF, // tripple click
 
-      DRAGGING = 0x100, // This flag is 'ORed' with MOUSE_ENTER..MOUSE_DOWN codes if dragging operation is in effect.
-                        // E.g. event DRAGGING | MOUSE_MOVE is sent to underlying DOM elements while dragging.
+      MOUSE_TOUCH_START = 0xFC, // touch device pressed somehow
+      MOUSE_TOUCH_END = 0xFD,   // touch device depressed - clear, nothing on it
+
+      MOUSE_DRAG_REQUEST = 0xFE, // mouse drag start detected event
+
+      MOUSE_CLICK = 0xFF,        // mouse click event
+
+      /*OBSOLETE*/ DRAGGING = 0x100, // ORed with MOUSE_ENTER...MOUSE_DOWN codes above
+
+      MOUSE_HIT_TEST = 0xFFE,    // sent to element, allows to handle elements with non-trivial shapes.
 
   };
 
@@ -165,7 +173,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       UINT      button_state; // MOUSE_BUTTONS
       UINT      alt_state;    // KEYBOARD_STATES
       UINT      cursor_type;  // CURSOR_TYPE to set, see CURSOR_TYPE
-      BOOL      is_on_icon;   // mouse is over icon (foreground-image, foreground-repeat:no-repeat)
+      SBOOL      is_on_icon;   // mouse is over icon (foreground-image, foreground-repeat:no-repeat)
 
       HELEMENT  dragging;     // element that is being dragged over, this field is not NULL if (cmd & DRAGGING) != 0
       UINT      dragging_mode;// see DRAGGING_TYPE.
@@ -243,7 +251,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       HELEMENT  target;         /**< target element, for #FOCUS_LOST it is a handle of new focus element
                                      and for #FOCUS_GOT it is a handle of old focus element, can be NULL */
       UINT      cause;          /**< focus cause params or FOCUS_CMD_TYPE for FOCUS_ADVANCE_REQUEST */
-      BOOL      cancel;         /**< in #FOCUS_REQUEST and #FOCUS_LOST phase setting this field to true will cancel transfer focus from old element to the new one. */
+      SBOOL      cancel;         /**< in #FOCUS_REQUEST and #FOCUS_LOST phase setting this field to true will cancel transfer focus from old element to the new one. */
   };
 
 // parameters of evtg == HANDLE_SCROLL
@@ -261,6 +269,9 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       SCROLL_CORNER_PRESSED,
       SCROLL_CORNER_RELEASED,
       SCROLL_SLIDER_PRESSED,
+
+    SCROLL_ANIMATION_START,
+    SCROLL_ANIMATION_END,
   };
 
   enum SCROLL_SOURCE {
@@ -287,19 +298,24 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       UINT      cmd;          // SCROLL_EVENTS
       HELEMENT  target;       // target element
       INT       pos;          // scroll position if SCROLL_POS
-      BOOL      vertical;     // true if from vertical scrollbar
+      SBOOL      vertical;     // true if from vertical scrollbar
       UINT      source;       // SCROLL_SOURCE
       UINT      reason;       // key or scrollbar part
   };
 
   enum GESTURE_CMD
   {
-    GESTURE_REQUEST = 0, // return true and fill flags if it will handle gestures.
-    GESTURE_ZOOM,        // The zoom gesture.
-    GESTURE_PAN,         // The pan gesture.
-    GESTURE_ROTATE,      // The rotation gesture.
-    GESTURE_TAP1,        // The tap gesture.
-    GESTURE_TAP2,        // The two-finger tap gesture.
+    GESTURE_START = 0,
+    GESTURE_MOVE = 1,
+    GESTURE_END = 2,
+
+    // logical events
+    GESTURE_PAN,    // The pan gesture.
+    GESTURE_ZOOM,   // The zoom gesture.
+    GESTURE_ROTATE, // The rotation gesture.
+    GESTURE_TAP1,   // The tap gesture, a.k.a. click
+    GESTURE_TAP2,   // The two-finger tap gesture, a.k.a. right-click
+    GESTURE_DOUBLE_TAP
   };
   enum GESTURE_STATE
   {
@@ -399,7 +415,8 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       EDIT_VALUE_CHANGING = 3,       // before text change
       EDIT_VALUE_CHANGED = 4,        // after text change
       SELECT_SELECTION_CHANGED = 5,  // selection in <select> changed
-      SELECT_STATE_CHANGED = 6,      // node in select expanded/collapsed, heTarget is the node
+      SELECT_VALUE_CHANGED = 6,      // value of <select> changed
+      SELECT_STATE_CHANGED = SELECT_VALUE_CHANGED, // OBSOLETE, alias of SELECT_VALUE_CHANGED
 
       POPUP_REQUEST   = 7,           // request to show popup just received,
                                      //     here DOM of popup element can be modifed.
@@ -435,29 +452,11 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       // "grey" event codes  - notfications from behaviors from this SDK
       HYPERLINK_CLICK = 0x80,        // hyperlink click
 
-      //TABLE_HEADER_CLICK,            // click on some cell in table header,
-      //                               //     target = the cell,
-      //                               //     reason = index of the cell (column number, 0..n)
-      //TABLE_ROW_CLICK,               // click on data row in the table, target is the row
-      //                               //     target = the row,
-      //                               //     reason = index of the row (fixed_rows..n)
-      //TABLE_ROW_DBL_CLICK,           // mouse dbl click on data row in the table, target is the row
-      //                               //     target = the row,
-      //                               //     reason = index of the row (fixed_rows..n)
-
       ELEMENT_COLLAPSED = 0x90,      // element was collapsed, so far only behavior:tabs is sending these two to the panels
       ELEMENT_EXPANDED = 0x91,       // element was expanded,
 
       ACTIVATE_CHILD = 0x92,         // activate (select) child,
                                      // used for example by accesskeys behaviors to send activation request, e.g. tab on behavior:tabs.
-
-      //DO_SWITCH_TAB = ACTIVATE_CHILD,// command to switch tab programmatically, handled by behavior:tabs
-      //                               // use it as SciterPostEvent(tabsElementOrItsChild, DO_SWITCH_TAB, tabElementToShow, 0);
-
-      //INIT_DATA_VIEW,                // request to virtual grid to initialize its view
-
-      //ROWS_DATA_REQUEST,             // request from virtual grid to data source behavior to fill data in the table
-      //                               // parameters passed throug DATA_ROWS_PARAMS structure.
 
       UI_STATE_CHANGED = 0x95,       // ui state changed, observers shall update their visual states.
                                      // is sent for example by behavior:richtext when caret position/selection has changed.
@@ -597,19 +596,11 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
 
   typedef struct SCRIPTING_METHOD_PARAMS
   {
-      LPCSTR        name;   ///< method name
+      LPCSTR              name;   ///< method name
       const SCITER_VALUE* argv;   ///< vector of arguments
-      UINT          argc;   ///< argument count
-      SCITER_VALUE  result; ///< return value
+      UINT                argc;   ///< argument count
+      SCITER_VALUE        result; ///< return value
   } SCRIPTING_METHOD_PARAMS;
-
-  typedef struct TISCRIPT_METHOD_PARAMS
-  {
-      tiscript_VM*   vm;
-      tiscript_value tag;    ///< method id (symbol)
-      tiscript_value result; ///< return value
-      // parameters are accessible through tiscript::args.
-  } TISCRIPT_METHOD_PARAMS;
 
   // GET_VALUE/SET_VALUE methods params
   struct VALUE_PARAMS
@@ -656,23 +647,12 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
 
   namespace sciter
   {
-
-    // event handler which can be attached to any DOM element.
-    // event handler can be attached to the element as a "behavior" (see below)
-    // or by sciter::dom::element::attach( event_handler* eh )
-
-#ifdef CPP11
-    struct event_handler : public sciter::om::asset<event_handler>
-#else
-    struct event_handler
-#endif
+    struct event_handler_raw // "raw", non-reference counted event handler
     {
-      event_handler() // EVENT_GROUPS flags
-      {
-      }
+      event_handler_raw() {}
 
       virtual void detached  (HELEMENT /*he*/ ) { }
-      virtual void attached  (HELEMENT /*he*/ ) { }
+      virtual void attached(HELEMENT /*he*/) { }
 
       // defines list of event groups this event_handler is subscribed to
       virtual bool subscription( HELEMENT he, UINT& event_groups )
@@ -680,12 +660,6 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
          event_groups = HANDLE_ALL;
          return true;
       }
-
-      // lifecycle of the event handler is determined by owner element, so:
-      virtual long asset_add_ref() { return 0; }
-      virtual long asset_release() { return 0; }
-
-      virtual som_passport_t* asset_get_passport() const { return nullptr; }
 
       // handlers with extended interface
       // by default they are calling old set of handlers (for compatibility with legacy code)
@@ -753,6 +727,8 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
           return on_method_call(he, UINT(params.methodID), &params );
         }
 
+      virtual bool handle_som(HELEMENT he, SOM_PARAMS& params) { return false; }
+
       // notification events from builtin behaviors - synthesized events: BUTTON_CLICK, VALUE_CHANGED
       // see enum BEHAVIOR_EVENTS
       virtual bool handle_event (HELEMENT he, BEHAVIOR_EVENT_PARAMS& params )
@@ -769,11 +745,6 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       virtual bool handle_scripting_call(HELEMENT he, SCRIPTING_METHOD_PARAMS& params )
         {
           return on_script_call(he, params.name, params.argc, params.argv, params.result);
-        }
-
-      virtual bool handle_scripting_call(HELEMENT he, TISCRIPT_METHOD_PARAMS& params )
-        {
-          return on_script_call(he, params.vm, params.tag, params.result);
         }
 
 
@@ -799,10 +770,6 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       // where argv[0] will be 1 and argv[1] will be "one".
       virtual bool on_script_call(HELEMENT he, LPCSTR name, UINT argc, const SCITER_VALUE* argv, SCITER_VALUE& retval) { return false; }
 
-      // Calls from TIScript. Override this if you want your own methods accessible directly from tiscript engine.
-      // Use tiscript::args to access parameters.
-      virtual bool on_script_call(HELEMENT he, tiscript_VM* pvm, tiscript_value tag, tiscript_value& retval) { return false; }
-
       // notification events from builtin behaviors - synthesized events: BUTTON_CLICK, VALUE_CHANGED
       // see enum BEHAVIOR_EVENTS
       virtual bool on_event (HELEMENT he, HELEMENT target, BEHAVIOR_EVENTS type, UINT_PTR reason ) { return false; }
@@ -810,14 +777,14 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
       // notification event: data requested by SciterRequestElementData just delivered
       virtual bool on_data_arrived (HELEMENT he, HELEMENT initiator, LPCBYTE data, UINT dataSize, UINT dataType ) { return false; }
 
-      virtual bool on_scroll( HELEMENT he, HELEMENT target, SCROLL_EVENTS cmd, INT pos, BOOL isVertical ) { return false; }
+      virtual bool on_scroll( HELEMENT he, HELEMENT target, SCROLL_EVENTS cmd, INT pos, SBOOL isVertical ) { return false; }
 
       // ElementEventProc implementeation
-      static BOOL SC_CALLBACK  element_proc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms )
+      static SBOOL SC_CALLBACK  element_proc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms )
       {
-        event_handler* pThis = static_cast<event_handler*>(tag);
+        event_handler_raw* pThis = static_cast<event_handler_raw*>(tag);
         if( pThis ) switch( evtg )
-          {
+        {
             case SUBSCRIPTIONS_REQUEST:
               {
                 UINT *p = (UINT *)prms;
@@ -834,16 +801,7 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
                 }
                 return true;
               }
-            case HANDLE_SOM:
-              {
-                SOM_PARAMS *p = (SOM_PARAMS *)prms;
-                if (p->cmd == SOM_GET_PASSPORT)
-                  p->data.passport = pThis->asset_get_passport();
-                else if (p->cmd == SOM_GET_ASSET)
-                  p->data.asset = static_cast<som_asset_t*>(pThis); // note: no add_ref
-                return true;
-              }
-
+            case HANDLE_SOM:   {  SOM_PARAMS *p = (SOM_PARAMS *)prms; return pThis->handle_som(he, *p);  }
             case HANDLE_MOUSE: {  MOUSE_PARAMS *p = (MOUSE_PARAMS *)prms; return pThis->handle_mouse( he, *p );  }
             case HANDLE_KEY:   {  KEY_PARAMS *p = (KEY_PARAMS *)prms; return pThis->handle_key( he, *p ); }
             case HANDLE_FOCUS: {  FOCUS_PARAMS *p = (FOCUS_PARAMS *)prms; return pThis->handle_focus( he, *p ); }
@@ -856,17 +814,39 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
             case HANDLE_SIZE:  {  pThis->handle_size(he); return false; }
             // call using sciter::value's (from CSSS!)
             case HANDLE_SCRIPTING_METHOD_CALL: { SCRIPTING_METHOD_PARAMS* p = (SCRIPTING_METHOD_PARAMS *)prms; return pThis->handle_scripting_call(he, *p ); }
-            // call using tiscript::value's (from the script)
-            case HANDLE_TISCRIPT_METHOD_CALL: { TISCRIPT_METHOD_PARAMS* p = (TISCRIPT_METHOD_PARAMS *)prms; return pThis->handle_scripting_call(he, *p ); }
+            //OBSOLETE: case HANDLE_TISCRIPT_METHOD_CALL: { TISCRIPT_METHOD_PARAMS* p = (TISCRIPT_METHOD_PARAMS *)prms; return pThis->handle_scripting_call(he, *p ); }
 			      case HANDLE_GESTURE :  { GESTURE_PARAMS *p = (GESTURE_PARAMS *)prms; return pThis->handle_gesture(he, *p ); }
             case HANDLE_EXCHANGE: { EXCHANGE_PARAMS *p = (EXCHANGE_PARAMS *)prms; return pThis->handle_exchange(he, *p); }
-			default:
+			      default:
               assert(false);
-          }
+        }
         return false;
       }
     };
 
+#ifdef CPP11
+    // reference counted event handler
+    struct event_handler : public event_handler_raw, public sciter::om::asset<event_handler>
+    {
+      event_handler() { asset_add_ref(); }
+      virtual void detached(HELEMENT /*he*/) override { asset_release(); }
+
+      virtual som_passport_t* asset_get_passport() const override { return nullptr; }
+
+      virtual bool handle_som(HELEMENT he, SOM_PARAMS& params)
+      {
+        if (params.cmd == SOM_GET_PASSPORT)
+          params.data.passport = asset_get_passport();
+        else if (params.cmd == SOM_GET_ASSET)
+          params.data.asset = static_cast<som_asset_t*>(this); // note: no add_ref
+        else
+          return false;
+        return true;
+      }
+    };
+#else
+    typedef event_handler event_handler_raw;
+#endif
 
     //
     // "behavior" is a named event_handler
@@ -911,14 +891,14 @@ typedef BOOL SC_CALLBACK SciterBehaviorFactory( LPCSTR, HELEMENT, LPElementEvent
 
     };
 
-    inline void attach_dom_event_handler(HWINDOW hwnd, event_handler* ph)
+    inline void attach_dom_event_handler(HWINDOW hwnd, event_handler_raw* ph)
     {
-      int r = SciterWindowAttachEventHandler( hwnd, &event_handler::element_proc, ph, HANDLE_ALL );
+      int r = SciterWindowAttachEventHandler( hwnd, &event_handler_raw::element_proc, static_cast<event_handler_raw*>(ph), HANDLE_ALL );
       assert(r == SCDOM_OK); (void)r;
     }
-    inline void detach_dom_event_handler(HWINDOW hwnd, event_handler* ph)
+    inline void detach_dom_event_handler(HWINDOW hwnd, event_handler_raw* ph)
     {
-      int r = SciterWindowDetachEventHandler( hwnd, &event_handler::element_proc, ph );
+      int r = SciterWindowDetachEventHandler( hwnd, &event_handler_raw::element_proc, static_cast<event_handler_raw*>(ph));
       assert(r == SCDOM_OK); (void)r;
     }
 

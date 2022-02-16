@@ -24,7 +24,7 @@ const (
     </form>
   </div>
   <div id="output">
-    
+
   </div>
 </body>
 </html>

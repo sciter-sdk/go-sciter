@@ -1,7 +1,7 @@
 # Go bindings for Sciter
 
-[![Build status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
-[![Build Status](https://img.shields.io/travis/sciter-sdk/go-sciter/master.svg)](https://travis-ci.org/sciter-sdk/go-sciter)
+[![AppVeyor status](https://ci.appveyor.com/api/projects/status/rphv883klffw9em9/branch/master?svg=true)](https://ci.appveyor.com/project/pravic/go-sciter)
+[![Travis Status](https://travis-ci.com/sciter-sdk/go-sciter.svg?branch=master)](https://travis-ci.com/sciter-sdk/go-sciter)
 [![License](https://img.shields.io/github/license/sciter-sdk/go-sciter.svg)](https://github.com/sciter-sdk/go-sciter)
 [![Join the forums at https://sciter.com/forums](https://img.shields.io/badge/forum-sciter.com-orange.svg)](https://sciter.com/forums)
 

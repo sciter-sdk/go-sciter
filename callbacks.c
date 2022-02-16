@@ -1,9 +1,9 @@
 #include "sciter-x.h"
 #include "_cgo_export.h"
 
-// typedef BOOL SC_CALLBACK SciterElementCallback(HELEMENT he, LPVOID param);
+// typedef SBOOL SC_CALLBACK SciterElementCallback(HELEMENT he, LPVOID param);
 
-BOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param)
+SBOOL SC_CALLBACK SciterElementCallback_cgo(HELEMENT he, LPVOID param)
 {
     return goSciterElementCallback(he, param);
 }
@@ -26,8 +26,8 @@ VOID SC_CALLBACK LPCSTR_RECEIVER_cgo(LPCSTR str, UINT str_length, LPVOID param)
     goLPCSTR_RECEIVER(str, str_length, param);
 }
 
-// typedef BOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms);
-BOOL SC_CALLBACK ElementEventProc_cgo(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms)
+// typedef SBOOL SC_CALLBACK ElementEventProc(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms);
+SBOOL SC_CALLBACK ElementEventProc_cgo(LPVOID tag, HELEMENT he, UINT evtg, LPVOID prms)
 {
     return goElementEventProc(tag, he, evtg, prms);
 }
@@ -57,9 +57,9 @@ INT SC_CALLBACK ELEMENT_COMPARATOR_cgo(HELEMENT he1, HELEMENT he2, LPVOID param)
     return goELEMENT_COMPARATOR(he1, he2, param);
 }
 
-// typedef BOOL SC_CALLBACK KeyValueCallback(LPVOID param, const VALUE* pkey, const VALUE* pval);
+// typedef SBOOL SC_CALLBACK KeyValueCallback(LPVOID param, const VALUE* pkey, const VALUE* pval);
 
-BOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval)
+SBOOL SC_CALLBACK KeyValueCallback_cgo(LPVOID param, const VALUE* pkey, const VALUE* pval)
 {
     return goKeyValueCallback(param, (VALUE*)pkey, (VALUE*)pval);
 }
