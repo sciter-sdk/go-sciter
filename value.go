@@ -70,8 +70,8 @@ func (v *Value) Assign(val interface{}) {
 	case string:
 		s := val.(string)
 		v.SetString(s)
-	case int:
-		i := val.(int)
+	case int32:
+		i := val.(int32)
 		v.SetInt(i)
 	case float64:
 		f := val.(float64)
@@ -83,19 +83,21 @@ func (v *Value) Assign(val interface{}) {
 		if val.(bool) {
 			i = 1
 		}
-		v.SetInt(i)
+		v.SetInt(int32(i))
 	case float32:
 		v.Assign(float64(val.(float32)))
+	case int:
+		// TODO: should we check if it's too big?
+		v.Assign(int32(val.(int)))
 	case uint:
-		v.Assign(int(val.(uint)))
+		v.Assign(uint32(val.(uint)))
 	case uint32:
-		v.Assign(int(val.(uint32)))
-	case uint64:
-		v.Assign(int(val.(uint64)))
-	case int32:
-		v.Assign(int(val.(int32)))
+		v.Assign(int32(val.(uint32)))
 	case int64:
-		v.Assign(int(val.(int64)))
+		// TODO: should we check if it's too big?
+		v.Assign(int32(val.(int64)))
+	case uint64:
+		v.Assign(int64(val.(uint64)))
 	case Value:
 		vf := val.(Value)
 		v.Copy(&vf)

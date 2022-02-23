@@ -25,7 +25,7 @@ func setEventHandler(w *window.Window) {
 		return rval
 	})
 	w.DefineFunction("sumall", func(args ...*sciter.Value) *sciter.Value {
-		sum := 0
+		sum := int32(0)
 		for i := 0; i < len(args); i++ {
 			sum += args[i].Int()
 		}

@@ -2051,9 +2051,9 @@ func NewSymbol(sym string) *Value {
 }
 
 // UINT  ValueIntData ( const VALUE* pval, INT* pData ) ;//{ return SAPI()->ValueIntData ( pval, pData ); }
-func (pdst *Value) Int() int {
+func (pdst *Value) Int() int32 {
 	cpdst := (*C.VALUE)(unsafe.Pointer(pdst))
-	var data int = 0
+	var data int32 = 0
 	pData := (*C.INT)(unsafe.Pointer(&data))
 	ret := VALUE_RESULT(C.ValueIntData(cpdst, pData))
 	if ret == HV_OK {
@@ -2063,7 +2063,7 @@ func (pdst *Value) Int() int {
 }
 
 // UINT  ValueIntDataSet ( VALUE* pval, INT data, UINT type, UINT units ) ;//{ return SAPI()->ValueIntDataSet ( pval, data,type,units ); }
-func (pdst *Value) SetInt(data int) error {
+func (pdst *Value) SetInt(data int32) error {
 	cpdst := (*C.VALUE)(unsafe.Pointer(pdst))
 	// args
 	return wrapValueResult(VALUE_RESULT(C.ValueIntDataSet(cpdst, C.INT(data), T_INT, 0)), "ValueIntDataSet")
