@@ -79,11 +79,7 @@ func (v *Value) Assign(val interface{}) {
 		v.SetFloat(f)
 	case bool:
 		// value( bool v )           { valueInit(this); valueIntDataSet(this, v?1:0, T_BOOL, 0); }
-		i := 0
-		if val.(bool) {
-			i = 1
-		}
-		v.SetInt(i)
+		v.SetBool(val.(bool))
 	case float32:
 		v.Assign(float64(val.(float32)))
 	case uint:
