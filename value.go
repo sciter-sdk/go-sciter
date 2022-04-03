@@ -238,8 +238,8 @@ func (v *Value) IsNull() bool {
 // // static value null() { value n; n.t = T_NULL; return n; }
 func NullValue() *Value {
 	v := new(Value)
-	v.t = T_NULL
 	v.init()
+	v.t = T_NULL
 	return v
 }
 
@@ -251,8 +251,8 @@ func (v *Value) IsNothing() bool {
 // static value nothing() { value n; n.t = T_UNDEFINED; n.u = UT_NOTHING; return n; }
 func NothingValue() *Value {
 	v := new(Value)
+	v.init()
 	v.t = T_UNDEFINED
 	v.u = UT_NOTHING
-	v.init()
 	return v
 }
