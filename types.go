@@ -1343,6 +1343,14 @@ const (
 	SCITER_SET_MAIN_WINDOW = 14 //  hWnd, value - TRUE/FALSE - window is main, will destroy all other dependent windows on close
 
 	SCITER_SET_MAX_HTTP_DATA_LENGTH = 15 // hWnd - N/A , value - max request length in megabytes (1024*1024 bytes)
+	 
+	SCITER_SET_PX_AS_DIP = 16 // value 1 - 1px in CSS is treated as 1dip, value 0 - default behavior - 1px is a physical pixel 
+ 
+	SCITER_ENABLE_UIAUTOMATION = 17 // hWnd - N/A , TRUE/FALSE, enables UIAutomation support. 
+ 
+	SCITER_USE_INTERNAL_HTTP_CLIENT = 18 // hWnd - N/A , TRUE - use internal HTTP client
+                                         //              FALSE - use system HTTP client (on platforms that has it: Win,Mac,Lin)
+	SCITER_EXTENDED_TOUCHPAD_SUPPORT = 19 // hWnd - N/A , TRUE/FALSE, enables/disables extended touchpad support, TRUE by default   
 )
 
 // * \param[in] placement \b UINT, values:
